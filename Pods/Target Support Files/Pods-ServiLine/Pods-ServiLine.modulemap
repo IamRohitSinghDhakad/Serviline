@@ -1,0 +1,6 @@
+framework module Pods_ServiLine {
+  umbrella header "Pods-ServiLine-umbrella.h"
+
+  export *
+  module * { export * }
+}
