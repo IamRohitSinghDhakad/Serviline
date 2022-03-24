@@ -34,11 +34,11 @@ class AppSideMenuViewController: UIViewController {
     private let menus: [SideMenuOptions] = [SideMenuOptions(menuName: "HOME", menuImageName: "home", menuSelectedImageName: "home_selected"),
                                             SideMenuOptions(menuName: "PROFILE", menuImageName: "profile", menuSelectedImageName: "user_selected"),
                                             SideMenuOptions(menuName: "MESSAGE", menuImageName: "msh", menuSelectedImageName: "chat_selected"),
-                                            SideMenuOptions(menuName: "FAVORITE", menuImageName: "star", menuSelectedImageName: "afilication_selected"),
+                                            SideMenuOptions(menuName: "FAVORITE", menuImageName: "favorite", menuSelectedImageName: "afilication_selected"),
                                             SideMenuOptions(menuName: "NOTIFICATION", menuImageName: "noti", menuSelectedImageName: "lock_selected"),
                                             SideMenuOptions(menuName: "BLOCKED", menuImageName: "blocked", menuSelectedImageName: "noti_selected"),
                                             SideMenuOptions(menuName: "MESSAGE SETTING", menuImageName: "setting_msg", menuSelectedImageName: "setting_selected"),
-                                            SideMenuOptions(menuName: "REPORT", menuImageName: "blog Side_menu", menuSelectedImageName: "blog_selected"),
+                                            SideMenuOptions(menuName: "REPORT", menuImageName: "report", menuSelectedImageName: "blog_selected"),
                                             SideMenuOptions(menuName: "SETTING", menuImageName: "adjust", menuSelectedImageName: "top2"),
                                             SideMenuOptions(menuName: "LOGOUT", menuImageName: "logout", menuSelectedImageName: "logout_selected")]
     
@@ -215,8 +215,9 @@ extension AppSideMenuViewController: UITableViewDelegate, UITableViewDataSource 
         if row == 9 {
             sideMenuController?.hideMenu()
             
-            objAlert.showAlertCallBack(alertLeftBtn: "No", alertRightBtn: "si", title: "Cerrar Sesión", message: "¿Quieres cerrar sesión??", controller: self) {
-                self.call_WSLogout(strUserID: objAppShareData.UserDetail.strUserId)
+            objAlert.showAlertCallBack(alertLeftBtn: "No", alertRightBtn: "Yes", title: "Logout?", message: "Are you sure you want to logout?", controller: self) {
+               // self.call_WSLogout(strUserID: objAppShareData.UserDetail.strUserId)
+                AppSharedData.sharedObject().signOut()
             }
             
         }

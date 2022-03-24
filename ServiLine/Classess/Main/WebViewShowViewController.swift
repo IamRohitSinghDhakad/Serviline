@@ -17,7 +17,7 @@ class WebViewShowViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.loadUrl(strUrl: "https://aiaqar.com/pagies/homepage.php")
+        self.loadUrl(strUrl: "https://www.google.com")
         
     }
     

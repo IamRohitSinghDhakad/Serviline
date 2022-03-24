@@ -9,8 +9,8 @@ import Foundation
 import UIKit
 
 
-//let BASE_URL = "http://ambitious.in.net/Shubham/paing/index.php/api/"//Local
-let BASE_URL = "https://paing-spain.com/admin/index.php/api/"//Live
+let BASE_URL = "https://ambitious.in.net/Arun/serviline/index.php/api/"//Local
+//let BASE_URL = "https://paing-spain.com/admin/index.php/api/"//Live
 
 struct WsUrl{
     
@@ -18,6 +18,7 @@ struct WsUrl{
     static let url_SocialLogin  = BASE_URL + "social_login"
     static let url_getSubCategory = BASE_URL + "get_sub_category?"
     static let url_Login  = BASE_URL + "login"
+    static let url_GetNation = BASE_URL + "get_nation"
     static let url_getCountry = BASE_URL + "get_country"
     static let url_getStates = BASE_URL + "get_state?"
     static let url_getCity = BASE_URL + "get_city?"

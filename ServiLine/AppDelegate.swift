@@ -59,12 +59,19 @@ extension AppDelegate {
         self.window?.makeKeyAndVisible()
     }
     
+//    func settingRootController() {
+//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//        /*let vc */ navController = UIStoryboard(name: "Auth", bundle: nil).instantiateViewController(withIdentifier: "AuthNav") as? UINavigationController
+//        appDelegate.window?.rootViewController = navController
+//        self.window?.makeKeyAndVisible()
+//
+//    }
+    
     func settingRootController() {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        /*let vc */ navController = UIStoryboard(name: "Auth", bundle: nil).instantiateViewController(withIdentifier: "AuthNav") as? UINavigationController
-        appDelegate.window?.rootViewController = navController
-        self.window?.makeKeyAndVisible()
-
+        let vc = UIStoryboard(name: "Auth", bundle: nil).instantiateViewController(withIdentifier: "WelcomeViewController") as! WelcomeViewController
+        //        let navController = UINavigationController(rootViewController: setViewController)
+        appDelegate.window?.rootViewController = vc
     }
     
 }

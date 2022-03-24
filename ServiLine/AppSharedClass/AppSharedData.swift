@@ -73,11 +73,10 @@ class AppSharedData: NSObject {
         UserDefaults.standard.removeObject(forKey: UserDefaults.KeysDefault.userInfo)
         UserDetail = userDetailModel(dict: [:])
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        
-//        let vc = (UIStoryboard(name: "Auth", bundle: nil).instantiateViewController(withIdentifier: "WelcomeViewController") as? WelcomeViewController)!
-//        let navController = UINavigationController(rootViewController: vc)
-//        navController.isNavigationBarHidden = true
-//        appDelegate.window?.rootViewController = navController
+        let vc = (UIStoryboard(name: "Auth", bundle: nil).instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController)!
+        let navController = UINavigationController(rootViewController: vc)
+        navController.isNavigationBarHidden = true
+        appDelegate.window?.rootViewController = navController
     }
     
 }

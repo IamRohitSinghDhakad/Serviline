@@ -10,6 +10,9 @@
 		736FCA542AD8B73958046694 /* Pods_ServiLine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85671479CBA6FE70C734D833 /* Pods_ServiLine.framework */; };
 		F93993FA27DA7DDB0063E262 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93993F927DA7DDB0063E262 /* SignUpViewController.swift */; };
 		F93993FC27DA7DED0063E262 /* PopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93993FB27DA7DED0063E262 /* PopUpViewController.swift */; };
+		F94B61AF27EAF875008B6505 /* OptionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94B61AE27EAF875008B6505 /* OptionsTableViewCell.swift */; };
+		F94B61B127EB0137008B6505 /* OptionsModelClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94B61B027EB0137008B6505 /* OptionsModelClass.swift */; };
+		F94DC82327DF4F59003D30B0 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94DC82227DF4F59003D30B0 /* WelcomeViewController.swift */; };
 		F97A47F227DE672C00B88927 /* SelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97A47F127DE672C00B88927 /* SelectLocationViewController.swift */; };
 		F97A47F427DE6A5000B88927 /* NewSectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97A47F327DE6A5000B88927 /* NewSectorViewController.swift */; };
 		F97A47F627DE6F6C00B88927 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97A47F527DE6F6C00B88927 /* EditProfileViewController.swift */; };
@@ -80,6 +83,9 @@
 		AADFCBF87DF7EE65686DABF5 /* Pods-ServiLine.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ServiLine.debug.xcconfig"; path = "Target Support Files/Pods-ServiLine/Pods-ServiLine.debug.xcconfig"; sourceTree = "<group>"; };
 		F93993F927DA7DDB0063E262 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		F93993FB27DA7DED0063E262 /* PopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpViewController.swift; sourceTree = "<group>"; };
+		F94B61AE27EAF875008B6505 /* OptionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsTableViewCell.swift; sourceTree = "<group>"; };
+		F94B61B027EB0137008B6505 /* OptionsModelClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsModelClass.swift; sourceTree = "<group>"; };
+		F94DC82227DF4F59003D30B0 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		F97A47F127DE672C00B88927 /* SelectLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
 		F97A47F327DE6A5000B88927 /* NewSectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSectorViewController.swift; sourceTree = "<group>"; };
 		F97A47F527DE6F6C00B88927 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
@@ -241,6 +247,7 @@
 			children = (
 				F9CD369427DA1DB400486920 /* SignUpModel.swift */,
 				F9CD369527DA1DB400486920 /* UserModel.swift */,
+				F94B61B027EB0137008B6505 /* OptionsModelClass.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -379,6 +386,8 @@
 				F93993F927DA7DDB0063E262 /* SignUpViewController.swift */,
 				F93993FB27DA7DED0063E262 /* PopUpViewController.swift */,
 				F97A47F727DE757100B88927 /* ForgotPasswordViewController.swift */,
+				F94DC82227DF4F59003D30B0 /* WelcomeViewController.swift */,
+				F94B61AE27EAF875008B6505 /* OptionsTableViewCell.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -542,11 +551,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F94DC82327DF4F59003D30B0 /* WelcomeViewController.swift in Sources */,
 				F9CD36EC27DA30A900486920 /* LoginViewController.swift in Sources */,
 				F982232E27DCFD7000043B02 /* RatingViewController.swift in Sources */,
 				F9CD36CB27DA1DB400486920 /* SideMenuController.swift in Sources */,
 				F9CD36C627DA1DB400486920 /* Delegate.swift in Sources */,
 				F9CD36C227DA1DB400486920 /* WebServiceHelper.swift in Sources */,
+				F94B61AF27EAF875008B6505 /* OptionsTableViewCell.swift in Sources */,
 				F97A47F227DE672C00B88927 /* SelectLocationViewController.swift in Sources */,
 				F9CD36C827DA1DB400486920 /* UIViewController+Container.swift in Sources */,
 				F9AAAA1B27DBBB000035FFC7 /* NotificationViewController.swift in Sources */,
@@ -602,6 +613,7 @@
 				F9CD36C927DA1DB400486920 /* Segue.swift in Sources */,
 				F9CD36BD27DA1DB400486920 /* UserDefaultExtension.swift in Sources */,
 				F93993FA27DA7DDB0063E262 /* SignUpViewController.swift in Sources */,
+				F94B61B127EB0137008B6505 /* OptionsModelClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -751,14 +763,24 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7J79HT2HBV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ServiLine/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "ServiLínea";
+				INFOPLIST_KEY_CFBundleDisplayName = "Servi Line";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "ServiLine app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes permissions library, which references this permission in its code.";
+				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "ServiLine would like to make data available to nearby bluetooth devices even when you're not using the app.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(ServiLine) App requires access to the photo library to upload your profile photo.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "$(ServiLine)\"We need access to your location to show you relevant search results";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(ServiLine)\"We need access to your location to show you relevant search results, Your current location will be used for search nearby users and provide you best result.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(ServiLine)\"App need access to microphone to record video for upload on your profile.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "$(ServiLine)\"We need access to your Gallery so you can save images on your device.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "$(ServiLine)\"We need access to your Gallery so you can save images on your device.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -781,14 +803,24 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7J79HT2HBV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ServiLine/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "ServiLínea";
+				INFOPLIST_KEY_CFBundleDisplayName = "Servi Line";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "ServiLine app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes permissions library, which references this permission in its code.";
+				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "ServiLine would like to make data available to nearby bluetooth devices even when you're not using the app.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(ServiLine) App requires access to the photo library to upload your profile photo.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "$(ServiLine)\"We need access to your location to show you relevant search results";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(ServiLine)\"We need access to your location to show you relevant search results, Your current location will be used for search nearby users and provide you best result.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(ServiLine)\"App need access to microphone to record video for upload on your profile.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "$(ServiLine)\"We need access to your Gallery so you can save images on your device.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "$(ServiLine)\"We need access to your Gallery so you can save images on your device.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
