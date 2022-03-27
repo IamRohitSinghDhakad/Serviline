@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		736FCA542AD8B73958046694 /* Pods_ServiLine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85671479CBA6FE70C734D833 /* Pods_ServiLine.framework */; };
+		F900CB5827EF7FE100E3A8BA /* UserImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F900CB5727EF7FE100E3A8BA /* UserImageModel.swift */; };
 		F93993FA27DA7DDB0063E262 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93993F927DA7DDB0063E262 /* SignUpViewController.swift */; };
 		F93993FC27DA7DED0063E262 /* PopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93993FB27DA7DED0063E262 /* PopUpViewController.swift */; };
 		F94B61AF27EAF875008B6505 /* OptionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94B61AE27EAF875008B6505 /* OptionsTableViewCell.swift */; };
@@ -24,6 +25,9 @@
 		F982232C27DCFCD500043B02 /* ReportUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F982232B27DCFCD500043B02 /* ReportUserViewController.swift */; };
 		F982232E27DCFD7000043B02 /* RatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F982232D27DCFD7000043B02 /* RatingViewController.swift */; };
 		F982233027DDBFB700043B02 /* WebViewShowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F982232F27DDBFB700043B02 /* WebViewShowViewController.swift */; };
+		F993057227F0D16A00699C26 /* ConversationListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F993057127F0D16A00699C26 /* ConversationListModel.swift */; };
+		F993057427F0D71900699C26 /* FavoriteListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F993057327F0D71900699C26 /* FavoriteListModel.swift */; };
+		F993057627F0D8EB00699C26 /* FavoriteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F993057527F0D8EB00699C26 /* FavoriteTableViewCell.swift */; };
 		F9A276BD27DBDED900D9DCAB /* ViewProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A276BC27DBDED900D9DCAB /* ViewProfileCollectionViewCell.swift */; };
 		F9A276BF27DBE8DD00D9DCAB /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A276BE27DBE8DD00D9DCAB /* MessageTableViewCell.swift */; };
 		F9AAAA1327DB72B00035FFC7 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AAAA1227DB72B00035FFC7 /* HomeViewController.swift */; };
@@ -81,6 +85,7 @@
 		85671479CBA6FE70C734D833 /* Pods_ServiLine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ServiLine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EBB094790B342CDC4756288 /* Pods-ServiLine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ServiLine.release.xcconfig"; path = "Target Support Files/Pods-ServiLine/Pods-ServiLine.release.xcconfig"; sourceTree = "<group>"; };
 		AADFCBF87DF7EE65686DABF5 /* Pods-ServiLine.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ServiLine.debug.xcconfig"; path = "Target Support Files/Pods-ServiLine/Pods-ServiLine.debug.xcconfig"; sourceTree = "<group>"; };
+		F900CB5727EF7FE100E3A8BA /* UserImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserImageModel.swift; sourceTree = "<group>"; };
 		F93993F927DA7DDB0063E262 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		F93993FB27DA7DED0063E262 /* PopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpViewController.swift; sourceTree = "<group>"; };
 		F94B61AE27EAF875008B6505 /* OptionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsTableViewCell.swift; sourceTree = "<group>"; };
@@ -97,6 +102,9 @@
 		F982232B27DCFCD500043B02 /* ReportUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportUserViewController.swift; sourceTree = "<group>"; };
 		F982232D27DCFD7000043B02 /* RatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingViewController.swift; sourceTree = "<group>"; };
 		F982232F27DDBFB700043B02 /* WebViewShowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewShowViewController.swift; sourceTree = "<group>"; };
+		F993057127F0D16A00699C26 /* ConversationListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListModel.swift; sourceTree = "<group>"; };
+		F993057327F0D71900699C26 /* FavoriteListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListModel.swift; sourceTree = "<group>"; };
+		F993057527F0D8EB00699C26 /* FavoriteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewCell.swift; sourceTree = "<group>"; };
 		F9A276BC27DBDED900D9DCAB /* ViewProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewProfileCollectionViewCell.swift; sourceTree = "<group>"; };
 		F9A276BE27DBE8DD00D9DCAB /* MessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
 		F9AAAA1227DB72B00035FFC7 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -192,6 +200,7 @@
 				F9A276BC27DBDED900D9DCAB /* ViewProfileCollectionViewCell.swift */,
 				F9A276BE27DBE8DD00D9DCAB /* MessageTableViewCell.swift */,
 				F982232927DCF89D00043B02 /* SettingTableViewCell.swift */,
+				F993057527F0D8EB00699C26 /* FavoriteTableViewCell.swift */,
 			);
 			path = CellClasses;
 			sourceTree = "<group>";
@@ -248,6 +257,9 @@
 				F9CD369427DA1DB400486920 /* SignUpModel.swift */,
 				F9CD369527DA1DB400486920 /* UserModel.swift */,
 				F94B61B027EB0137008B6505 /* OptionsModelClass.swift */,
+				F900CB5727EF7FE100E3A8BA /* UserImageModel.swift */,
+				F993057127F0D16A00699C26 /* ConversationListModel.swift */,
+				F993057327F0D71900699C26 /* FavoriteListModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -553,6 +565,7 @@
 			files = (
 				F94DC82327DF4F59003D30B0 /* WelcomeViewController.swift in Sources */,
 				F9CD36EC27DA30A900486920 /* LoginViewController.swift in Sources */,
+				F993057627F0D8EB00699C26 /* FavoriteTableViewCell.swift in Sources */,
 				F982232E27DCFD7000043B02 /* RatingViewController.swift in Sources */,
 				F9CD36CB27DA1DB400486920 /* SideMenuController.swift in Sources */,
 				F9CD36C627DA1DB400486920 /* Delegate.swift in Sources */,
@@ -583,8 +596,10 @@
 				F9CD36E827DA222900486920 /* AppSideMenuTableViewCell.swift in Sources */,
 				F9AAAA2327DBBB4F0035FFC7 /* SettingViewController.swift in Sources */,
 				F9CD36CC27DA1DB400486920 /* BasicTransitionAnimator.swift in Sources */,
+				F993057227F0D16A00699C26 /* ConversationListModel.swift in Sources */,
 				F9CD36D727DA1DB400486920 /* ValidationManager.swift in Sources */,
 				F9AAAA1D27DBBB1D0035FFC7 /* BlockedViewController.swift in Sources */,
+				F900CB5827EF7FE100E3A8BA /* UserImageModel.swift in Sources */,
 				F9A276BD27DBDED900D9DCAB /* ViewProfileCollectionViewCell.swift in Sources */,
 				F9CD36C727DA1DB400486920 /* TransitionContext.swift in Sources */,
 				F9CD36D327DA1DB400486920 /* LocationPickerViewController.swift in Sources */,
@@ -596,6 +611,7 @@
 				F9CD36C427DA1DB400486920 /* StatusBar.swift in Sources */,
 				F9CD36DA27DA1DB400486920 /* TableViewExtension.swift in Sources */,
 				F9CD36CF27DA1DB400486920 /* SWRevealViewController+Extensions.swift in Sources */,
+				F993057427F0D71900699C26 /* FavoriteListModel.swift in Sources */,
 				F9CD36BF27DA1DB400486920 /* SignUpModel.swift in Sources */,
 				F9CD36C527DA1DB400486920 /* Preferences.swift in Sources */,
 				F982232827DC6F4A00043B02 /* ChatDetailTVCell.swift in Sources */,

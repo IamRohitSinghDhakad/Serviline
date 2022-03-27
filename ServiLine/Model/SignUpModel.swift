@@ -48,10 +48,12 @@ class userDetailModel: NSObject {
     var strCountry      :String = ""
     var strLookingFor      :String = ""
     var strAge      :String = ""
+    var strWebsite      :String = ""
+    var strUserType         :String = ""
     
     var strAboutMe :String = ""
     var strSpecialInstruction :String = ""
-    var strHairColor :String = ""
+    var strMunicipality :String = ""
     var strAllowSex :String = ""
     var strAllowCountry :String = ""
     var strAllowCity :String = ""
@@ -59,15 +61,16 @@ class userDetailModel: NSObject {
     var strCinema :String = ""
     var strEye :String = ""
     var strHeight :String = ""
-    var strMusic :String = ""
-    var strSkinTone :String = ""
-    var strSport :String = ""
+    var strCommunity :String = ""
+    var strProvince :String = ""
+    var strNation :String = ""
     var strRelStatus: String = ""
     var valLikedStatus: Int = 0
     var valBlockedStatus: Int = 0
     var strBlockedBy: String = ""
     var strVisibilityStatus: String = ""
     var strMembershipStats:String = ""
+    
     
     init(dict : [String:Any]) {
         
@@ -99,25 +102,25 @@ class userDetailModel: NSObject {
             self.strPassword = password
         }
         
-        if let short_bio = dict["short_bio"] as? String{
-            self.strAboutMe = short_bio.decodeEmoji
+        if let bio = dict["bio"] as? String{
+            self.strAboutMe = bio.decodeEmoji
         }
       
         
-        if let hairColor = dict["hair"] as? String{
-            self.strHairColor = hairColor.decodeEmoji
+        if let municipality_name = dict["municipality_name"] as? String{
+            self.strMunicipality = municipality_name
         }
         
-        if let skin = dict["skin"] as? String{
-            self.strSkinTone = skin.decodeEmoji
+        if let province_name = dict["province_name"] as? String{
+            self.strProvince = province_name
         }
         
-        if let sport = dict["sport"] as? String{
-            self.strSport = sport.decodeEmoji
+        if let nation_name = dict["nation_name"] as? String{
+            self.strNation = nation_name
         }
         
-        if let music = dict["music"] as? String{
-            self.strMusic = music.decodeEmoji
+        if let community_name = dict["community_name"] as? String{
+            self.strCommunity = community_name
         }
         
         if let name = dict["name"] as? String{
@@ -157,8 +160,8 @@ class userDetailModel: NSObject {
         }
         
         
-        if let height = dict["height"] as? String{
-            self.strHeight = height
+        if let website = dict["website"] as? String{
+            self.strWebsite = website
         }
         
         
@@ -170,8 +173,8 @@ class userDetailModel: NSObject {
             self.strCinema = cinema
         }
         
-        if let eye = dict["eye"] as? String{
-            self.strEye = eye
+        if let type = dict["type"] as? String{
+            self.strUserType = type
         }
         
         if let highlight_info = dict["highlight_info"] as? String{

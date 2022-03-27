@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MEW-R2-C9h">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MEW-R2-C9h">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -1530,6 +1530,7 @@
                         <outlet property="tfEmail" destination="eL7-01-Skg" id="SnO-Hc-iz9"/>
                         <outlet property="tfName" destination="7yg-GQ-qCe" id="ljl-Ft-PGz"/>
                         <outlet property="tfPassword" destination="uBI-uv-Il4" id="vhh-Rh-Izu"/>
+                        <outlet property="vwServiceSector" destination="9MG-cG-Dev" id="lNC-vp-2Si"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kcn-Om-vdC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1729,20 +1730,20 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cEp-ru-Hdz">
-                                                <rect key="frame" x="0.0" y="72" width="295" height="100"/>
+                                                <rect key="frame" x="0.0" y="72" width="295" height="80"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b4D-N2-F8y">
-                                                        <rect key="frame" x="10" y="10" width="275" height="80"/>
+                                                        <rect key="frame" x="10" y="10" width="275" height="60"/>
                                                         <subviews>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="search" translatesAutoresizingMaskIntoConstraints="NO" id="4Jb-qZ-2cD">
-                                                                <rect key="frame" x="8" y="25" width="30" height="30"/>
+                                                                <rect key="frame" x="8" y="15" width="30" height="30"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="30" id="BwQ-iP-PBV"/>
                                                                     <constraint firstAttribute="width" secondItem="4Jb-qZ-2cD" secondAttribute="height" id="lKI-id-cSL"/>
                                                                 </constraints>
                                                             </imageView>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cZO-Ie-Olc">
-                                                                <rect key="frame" x="48" y="23" width="217" height="34"/>
+                                                                <rect key="frame" x="48" y="13" width="217" height="34"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="34" id="u0k-v9-pCW"/>
                                                                 </constraints>
@@ -1776,15 +1777,15 @@
                                                     <constraint firstAttribute="bottom" secondItem="b4D-N2-F8y" secondAttribute="bottom" constant="10" id="Jk7-UB-Q0z"/>
                                                     <constraint firstItem="b4D-N2-F8y" firstAttribute="leading" secondItem="cEp-ru-Hdz" secondAttribute="leading" constant="10" id="LLz-7q-Hbz"/>
                                                     <constraint firstItem="b4D-N2-F8y" firstAttribute="top" secondItem="cEp-ru-Hdz" secondAttribute="top" constant="10" id="Rjp-t5-Yxe"/>
-                                                    <constraint firstAttribute="height" constant="100" id="cDY-jY-fGg"/>
+                                                    <constraint firstAttribute="height" constant="80" id="cDY-jY-fGg"/>
                                                     <constraint firstAttribute="trailing" secondItem="b4D-N2-F8y" secondAttribute="trailing" constant="10" id="xXj-I9-AbY"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qki-E0-84O">
-                                                <rect key="frame" x="0.0" y="172" width="295" height="435"/>
+                                                <rect key="frame" x="0.0" y="152" width="295" height="455"/>
                                                 <subviews>
-                                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Kp1-p5-Fl2">
-                                                        <rect key="frame" x="0.0" y="0.0" width="295" height="435"/>
+                                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Kp1-p5-Fl2">
+                                                        <rect key="frame" x="0.0" y="0.0" width="295" height="455"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <prototypes>
                                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OptionsTableViewCell" rowHeight="64" id="zoG-xW-c4U" customClass="OptionsTableViewCell" customModule="ServiLine" customModuleProvider="target">
@@ -1802,7 +1803,7 @@
                                                                                     <subviews>
                                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QTn-oD-seD">
                                                                                             <rect key="frame" x="10" y="0.0" width="255" height="54"/>
-                                                                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                                                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
                                                                                             <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                             <nil key="highlightedColor"/>
                                                                                         </label>
@@ -1846,6 +1847,7 @@
                                                                 </tableViewCellContentView>
                                                                 <connections>
                                                                     <outlet property="lblTitle" destination="QTn-oD-seD" id="RT6-9M-cUk"/>
+                                                                    <outlet property="vwBorder" destination="wKj-Rr-Bv6" id="2RI-Nx-121"/>
                                                                 </connections>
                                                             </tableViewCell>
                                                         </prototypes>

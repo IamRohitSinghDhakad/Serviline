@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class SideMenuOptions: Codable {
     var menuName: String = ""
@@ -25,6 +26,8 @@ class Preferences {
 
 class AppSideMenuViewController: UIViewController {
     
+    @IBOutlet var imgVwUser: UIImageView!
+    @IBOutlet var lblName: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var selectionMenuTrailingConstraint: NSLayoutConstraint!
     
@@ -62,6 +65,14 @@ class AppSideMenuViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("badge count update")
+        
+        let profilePic = objAppShareData.UserDetail.strProfilePicture
+        if profilePic != "" {
+            let url = URL(string: profilePic)
+            self.imgVwUser.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo"))
+        }
+        
+        self.lblName.text = objAppShareData.UserDetail.strUserName
         
         self.tableView.updateRow(row: 5)
         

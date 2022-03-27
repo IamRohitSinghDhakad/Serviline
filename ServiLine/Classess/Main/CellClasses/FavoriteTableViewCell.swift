@@ -1,20 +1,20 @@
 //
-//  MessageTableViewCell.swift
+//  FavoriteTableViewCell.swift
 //  ServiLine
 //
-//  Created by Rohit Singh Dhakad on 12/03/22.
+//  Created by Rohit Singh Dhakad on 27/03/22.
 //
 
 import UIKit
 
-class MessageTableViewCell: UITableViewCell {
-
+class FavoriteTableViewCell: UITableViewCell {
+    
     @IBOutlet var imgVwUser: UIImageView!
     @IBOutlet var lblUserName: UILabel!
-    @IBOutlet var lblMsg: UILabel!
-    @IBOutlet var lblTimeAgo: UILabel!
+    @IBOutlet var lblDesc: UILabel!
+    @IBOutlet var btnRemove: UIButton!
     
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -27,5 +27,3 @@ class MessageTableViewCell: UITableViewCell {
     }
 
 }
-
-

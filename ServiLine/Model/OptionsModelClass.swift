@@ -11,6 +11,7 @@ class OptionsModelClass: NSObject {
     
     var strName:String = ""
     var strID:String = ""
+    var isSelected:Bool?
     
     init(dict : [String:Any]) {
         
