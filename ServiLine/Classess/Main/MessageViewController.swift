@@ -100,7 +100,7 @@ extension MessageViewController{
                     self.arrMessageList.reverse()
                     
                     if self.arrMessageList.count == 0{
-                        self.tblVw.displayBackgroundText(text: "No tienes mensajes")
+                        self.tblVw.displayBackgroundText(text: "No Record Found!")
                     }else{
                         self.tblVw.displayBackgroundText(text: "")
                     }
@@ -112,7 +112,7 @@ extension MessageViewController{
                 
                 if (response["result"]as? String) != nil{
                     self.tblVw.reloadData()
-                    self.tblVw.displayBackgroundText(text: "No tienes mensajes")
+                    self.tblVw.displayBackgroundText(text: "No Record Found!")
                 }else{
                     objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
                 }

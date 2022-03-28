@@ -55,7 +55,12 @@ extension ReportViewController: UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.pushVc(viewConterlerId: "OtherUserProfileViewController")
+        let objID = self.arrReportUserList[indexPath.row].strOpponentUserID
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "OtherUserProfileViewController")as! OtherUserProfileViewController
+        vc.strUserID = objID
+        self.navigationController?.pushViewController(vc, animated: true)
+        
+       // self.pushVc(viewConterlerId: "OtherUserProfileViewController")
     }
 }
 
@@ -86,6 +91,7 @@ extension ReportViewController{
             
             if status == MessageConstant.k_StatusCode{
                 if let arrData  = response["result"] as? [[String:Any]]{
+                    self.arrReportUserList.removeAll()
                     for dictdata in arrData{
                         let obj = FavoriteListModel.init(dict: dictdata)
                         self.arrReportUserList.append(obj)
@@ -97,7 +103,7 @@ extension ReportViewController{
                 objWebServiceManager.hideIndicator()
                 
                 if (response["result"]as? String) != nil{
-                    self.tblVw.displayBackgroundText(text: "!Aún no hay ningún usuario bloqueado!")
+                    self.tblVw.displayBackgroundText(text: "No Record Found!")
                 }else{
                     objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
                 }

@@ -779,7 +779,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7J79HT2HBV;
+				DEVELOPMENT_TEAM = 7E7WKW772Q;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ServiLine/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Servi Line";
@@ -805,7 +805,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ios.ServiLine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/rohit/Rohit's WorkSpace/Freelance/ServiLine/ServiLine/BridgingHeader.h";
+				SWIFT_OBJC_BRIDGING_HEADER = /Users/rohit/RohitWorkSpace/Serviline/ServiLine/BridgingHeader.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -819,7 +819,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7J79HT2HBV;
+				DEVELOPMENT_TEAM = 7E7WKW772Q;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ServiLine/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Servi Line";
@@ -845,7 +845,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ios.ServiLine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/rohit/Rohit's WorkSpace/Freelance/ServiLine/ServiLine/BridgingHeader.h";
+				SWIFT_OBJC_BRIDGING_HEADER = /Users/rohit/RohitWorkSpace/Serviline/ServiLine/BridgingHeader.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -89,6 +89,7 @@ extension BlockedViewController{
             
             if status == MessageConstant.k_StatusCode{
                 if let arrData  = response["result"] as? [[String:Any]]{
+                    self.arrBlockUserList.removeAll()
                     for dictdata in arrData{
                         let obj = FavoriteListModel.init(dict: dictdata)
                         self.arrBlockUserList.append(obj)
@@ -100,7 +101,7 @@ extension BlockedViewController{
                 objWebServiceManager.hideIndicator()
                 
                 if (response["result"]as? String) != nil{
-                    self.tblVw.displayBackgroundText(text: "!Aún no hay ningún usuario bloqueado!")
+                    self.tblVw.displayBackgroundText(text: "No Record Found!")
                 }else{
                     objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
                 }

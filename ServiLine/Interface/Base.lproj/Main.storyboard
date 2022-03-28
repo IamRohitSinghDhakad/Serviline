@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="bug-Ch-StO">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="bug-Ch-StO">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -2800,7 +2800,7 @@
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q3k-ge-uSu">
                                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="116"/>
                                                                     <subviews>
-                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="update_profile" translatesAutoresizingMaskIntoConstraints="NO" id="AY6-WH-6Gb">
+                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="update_profile" translatesAutoresizingMaskIntoConstraints="NO" id="AY6-WH-6Gb">
                                                                             <rect key="frame" x="20" y="23" width="70" height="70"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" secondItem="AY6-WH-6Gb" secondAttribute="height" id="NnG-5g-LEF"/>
@@ -3287,7 +3287,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="597"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EGD-OR-QCM">
-                                                        <rect key="frame" x="0.0" y="0.0" width="375" height="628.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="375" height="625"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vQQ-Mt-1cW">
                                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
@@ -3380,13 +3380,13 @@
                                                                 </constraints>
                                                             </view>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hpk-na-NNN">
-                                                                <rect key="frame" x="20" y="208" width="335" height="20.5"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <rect key="frame" x="20" y="208" width="335" height="17"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="UA9-G8-fDU">
-                                                                <rect key="frame" x="0.0" y="318.5" width="375" height="300"/>
+                                                                <rect key="frame" x="0.0" y="315" width="375" height="300"/>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="300" id="Rwl-7x-hwe"/>
@@ -3435,7 +3435,7 @@
                                                                 </cells>
                                                             </collectionView>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H0u-wz-NPz">
-                                                                <rect key="frame" x="0.0" y="233.5" width="375" height="80"/>
+                                                                <rect key="frame" x="0.0" y="230" width="375" height="80"/>
                                                                 <subviews>
                                                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="apB-fR-tJx">
                                                                         <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
@@ -3829,8 +3829,13 @@
                     <connections>
                         <outlet property="cvHgtConstant" destination="Rwl-7x-hwe" id="PJr-Zj-DyW"/>
                         <outlet property="cvImages" destination="UA9-G8-fDU" id="4cG-2b-gxy"/>
+                        <outlet property="imgVwUser" destination="Lyl-EL-c01" id="Sgi-hr-bGR"/>
+                        <outlet property="lblDescription" destination="Hpk-na-NNN" id="nTK-HM-PsC"/>
                         <outlet property="lblMessage" destination="Oa1-2I-0PC" id="KC1-b4-yjs"/>
                         <outlet property="lblPopUpHeading" destination="AH0-AU-aVI" id="aKH-Qi-Dac"/>
+                        <outlet property="lblTags" destination="hKD-pk-8iN" id="FbP-cY-HVy"/>
+                        <outlet property="lblUserName" destination="ZTR-uv-UVq" id="0n5-hk-rBD"/>
+                        <outlet property="lblWebsite" destination="Lmm-SZ-Z0t" id="hCR-q1-DNi"/>
                         <outlet property="vwPopUp" destination="4fA-80-k0N" id="h9i-Tm-fe4"/>
                     </connections>
                 </viewController>

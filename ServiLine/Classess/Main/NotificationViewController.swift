@@ -95,7 +95,7 @@ extension NotificationViewController{
                 objWebServiceManager.hideIndicator()
                 
                 if (response["result"]as? String) != nil{
-                    self.tblVw.displayBackgroundText(text: "Aún no tienes ninguna notificación")
+                    self.tblVw.displayBackgroundText(text: "No Record Found!")
                 }else{
                     objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
                 }

@@ -102,7 +102,7 @@ extension FavoriteViewController{
                 if (response["result"]as? String) != nil{
                     self.arrFavList.removeAll()
                     self.tblVw.reloadData()
-                    self.tblVw.displayBackgroundText(text: "No tienes perfiles favoritos")
+                    self.tblVw.displayBackgroundText(text: "No Record Found!")
                 }else{
                     objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
                 }
