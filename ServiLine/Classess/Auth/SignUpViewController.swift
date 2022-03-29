@@ -25,7 +25,7 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
     //Variables
     var imagePicker = UIImagePickerController()
     var pickedImage:UIImage?
-    var strType = ""
+    var strType = "user"
     var strNationID = ""
     var strCommunityID = ""
     var strProvinceID = ""
@@ -125,11 +125,12 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
      }
      
     @IBAction func btnOnregister(_ sender: Any) {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let vc = (self.mainStoryboard.instantiateViewController(withIdentifier: "SideMenuController") as? SideMenuController)!
-        let navController = UINavigationController(rootViewController: vc)
-        navController.isNavigationBarHidden = true
-        appDelegate.window?.rootViewController = navController
+        self.callWebserviceForSignUp()
+//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//        let vc = (self.mainStoryboard.instantiateViewController(withIdentifier: "SideMenuController") as? SideMenuController)!
+//        let navController = UINavigationController(rootViewController: vc)
+//        navController.isNavigationBarHidden = true
+//        appDelegate.window?.rootViewController = navController
        // self.validateForSignUp()
     }
     
@@ -415,7 +416,7 @@ extension SignUpViewController{
             "sector_id":self.strSectorID,
             "ios_register_id":objAppShareData.strFirebaseToken]as [String:Any]
         
-      //  print(dicrParam)
+       print(dicrParam)
         
         objWebServiceManager.uploadMultipartWithImagesData(strURL: WsUrl.url_SignUp, params: dicrParam, showIndicator: true, customValidation: "", imageData: imgData, imageToUpload: imageData, imagesParam: imageParam, fileName: "user_image", mimeType: "image/jpeg") { (response) in
             objWebServiceManager.hideIndicator()
@@ -430,7 +431,11 @@ extension SignUpViewController{
                 objAppShareData.SaveUpdateUserInfoFromAppshareData(userDetail: user_details ?? [:])
                 objAppShareData.fetchUserInfoFromAppshareData()
 
-                self.pushVc(viewConterlerId: "LoginViewController")
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                let vc = (self.mainStoryboard.instantiateViewController(withIdentifier: "SideMenuController") as? SideMenuController)!
+                let navController = UINavigationController(rootViewController: vc)
+                navController.isNavigationBarHidden = true
+                appDelegate.window?.rootViewController = navController
 
             }else{
                 objWebServiceManager.hideIndicator()

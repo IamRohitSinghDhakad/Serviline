@@ -13,6 +13,8 @@ class PopUpViewController: UIViewController {
     @IBOutlet var vwContainPopUp: UIView!
     @IBOutlet var tfSearch: UITextField!
     @IBOutlet var tblVw: UITableView!
+    @IBOutlet var imgVwRadio1: UIImageView!
+    @IBOutlet var imgVwRadio2: UIImageView!
     
     var arrOptions = [OptionsModelClass]()
     
@@ -36,6 +38,10 @@ class PopUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.imgVwRadio1.image = UIImage.init(named: "radio_button")
+        self.imgVwRadio2.image = UIImage.init(named: "radio_button")
+        
+        
         self.tblVw.delegate = self
         self.tblVw.dataSource = self
         
@@ -133,13 +139,18 @@ class PopUpViewController: UIViewController {
     }
     
     @IBAction func btnSelectionPopUp(_ sender: UIButton) {
+        self.imgVwRadio1.image = UIImage.init(named: "radio_button")
+        self.imgVwRadio2.image = UIImage.init(named: "radio_button")
+        
         switch sender.tag {
         case 0:
             print("user")
             self.strType = "user"
+            self.imgVwRadio1.image = UIImage.init(named: "radio_button_selected")
         default:
             print("profession")
             self.strType = "provider"
+            self.imgVwRadio2.image = UIImage.init(named: "radio_button_selected")
         }
     }
     

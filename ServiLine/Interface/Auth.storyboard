@@ -1921,6 +1921,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="imgVwRadio1" destination="QnH-Of-psR" id="ddq-Bv-66p"/>
+                        <outlet property="imgVwRadio2" destination="Mwv-JV-8oY" id="v02-Ti-Xtv"/>
                         <outlet property="tblVw" destination="Kp1-p5-Fl2" id="Ecr-y0-CIN"/>
                         <outlet property="tfSearch" destination="cZO-Ie-Olc" id="xbQ-iP-pcd"/>
                         <outlet property="vwContainPopUp" destination="wqs-lI-Dsg" id="1ei-z1-8iD"/>
