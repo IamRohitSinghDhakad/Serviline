@@ -26,6 +26,8 @@ struct WsUrl{
     static let url_completeProfile = BASE_URL + "complete_profile"
     static let url_forgotPassword = BASE_URL + "forgot_password"
     static let url_GetUserList = BASE_URL + "get_users"
+    static let url_SectorReq = BASE_URL + "sector_request"
+    static let url_ServiceRequest = BASE_URL + "service_request"
     
     static let url_GetUserImage = BASE_URL + "get_user_image"
     static let url_getUserProfile  = BASE_URL + "get_profile"

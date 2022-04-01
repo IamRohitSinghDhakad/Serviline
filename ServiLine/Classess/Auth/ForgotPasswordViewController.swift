@@ -23,6 +23,58 @@ class ForgotPasswordViewController: UIViewController {
     }
     
     @IBAction func btnOnSubmit(_ sender: Any) {
-        onBackPressed()
+        if (self.tfEmail.text!.isEmpty){
+            objAlert.showAlert(message: "Please enter email first", title: "Alert", controller: self)
+        }else{
+            self.call_WsForgotPassword()
+        }
     }
+}
+
+
+//MARK:- Call Webservice Forgot Password
+extension ForgotPasswordViewController{
+    
+    func call_WsForgotPassword(){
+        
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
+            return
+        }
+    
+        objWebServiceManager.showIndicator()
+        
+        let dicrParam = ["email":self.tfEmail.text!]as [String:Any]
+        
+        objWebServiceManager.requestPost(strURL: WsUrl.url_forgotPassword, queryParams: [:], params: dicrParam, strCustomValidation: "", showIndicator: false) { (response) in
+            objWebServiceManager.hideIndicator()
+            var statusCode = Int()
+            if let status = (response["status"] as? Int){
+                statusCode = status
+            }else  if let status = (response["status"] as? String){
+                statusCode = Int(status)!
+            }
+            
+            let message = (response["message"] as? String)
+            if statusCode == MessageConstant.k_StatusCode{
+                
+                objAlert.showAlertCallBack(alertLeftBtn: "", alertRightBtn: "OK", title: "", message: message ?? "Resent link send on your register email.", controller: self) {
+                    self.onBackPressed()
+                }
+                
+            }else{
+                objWebServiceManager.hideIndicator()
+                objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+                
+            }
+           
+            
+        } failure: { (Error) in
+            objWebServiceManager.hideIndicator()
+        }
+
+    
+   }
+    
 }

@@ -30,6 +30,19 @@ class AlertViewController: UIViewController {
     }
     
     // Alert call back function
+     func showAlertSingleButtonCallBack(alertBtn:String,  title: String, message: String ,controller: UIViewController, callback: @escaping () -> ()) {
+         
+         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+         
+          alert.addAction(UIAlertAction(title: alertBtn, style: .default, handler: {
+            alertAction in
+            callback()
+          }))
+         
+          controller.present(alert, animated: true, completion: nil)
+        }
+    
+    // Alert call back function
      func showAlertCallBack(alertLeftBtn:String, alertRightBtn:String,  title: String, message: String ,controller: UIViewController, callback: @escaping () -> ()) {
          
          let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
@@ -37,7 +50,7 @@ class AlertViewController: UIViewController {
          if alertLeftBtn != ""{
              alert.addAction(UIAlertAction(title:alertLeftBtn, style: .destructive, handler: {
                alertAction in
-             
+                 callback()
              }))
          }else{
             

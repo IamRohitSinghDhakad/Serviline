@@ -15,8 +15,11 @@ class PopUpViewController: UIViewController {
     @IBOutlet var tblVw: UITableView!
     @IBOutlet var imgVwRadio1: UIImageView!
     @IBOutlet var imgVwRadio2: UIImageView!
+    @IBOutlet var lblTitle: UILabel!
     
     var arrOptions = [OptionsModelClass]()
+    var arrOptionsFiltered = [OptionsModelClass]()
+    var strTitle = ""
     
     var strType = ""
     var isComingFrom = ""
@@ -38,9 +41,13 @@ class PopUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.lblTitle.text = self.strTitle
+        
+        self.tfSearch.delegate = self
+        self.tfSearch.addTarget(self, action: #selector(searchContactAsPerText(_ :)), for: .editingChanged)
+        
         self.imgVwRadio1.image = UIImage.init(named: "radio_button")
         self.imgVwRadio2.image = UIImage.init(named: "radio_button")
-        
         
         self.tblVw.delegate = self
         self.tblVw.dataSource = self
@@ -48,16 +55,9 @@ class PopUpViewController: UIViewController {
         self.vwContainPopUp.isHidden = true
         self.vwContainTable.isHidden = true
         
-        print(self.strNationID)
-        print(self.strCommunityID)
-        print(self.strProvinceID)
-        print(self.strMunicipalID)
-       
-        
         switch isComingFrom {
         case "1":
             self.vwContainPopUp.isHidden = false
-           
         case "2":
             self.vwContainTable.isHidden = false
             self.call_WsGetNation()
@@ -65,15 +65,12 @@ class PopUpViewController: UIViewController {
         case "3":
             self.vwContainTable.isHidden = false
             self.call_WsGetCommunity(strNationID: self.strNationID)
-            
         case "4":
             self.vwContainTable.isHidden = false
             self.call_WsGetprovience(strNationID: self.strNationID, strCommunityID: self.strCommunityID)
-            
         case "5":
             self.vwContainTable.isHidden = false
             self.call_WsGetMuncipal(strNationID: self.strNationID, strCommunityID: self.strCommunityID, strProvience: self.strProvinceID)
-            
         default:
             self.call_WsGetSector()
             self.vwContainTable.isHidden = false
@@ -90,15 +87,12 @@ class PopUpViewController: UIViewController {
         var dict = [String:Any]()
         
         /*
-       
          dict["update_subcat"] = self.selectedSubCat
          dict["price_min_value"] = self.strRangeFilterMinValue
          dict["price_max_value"] = self.strRangeFilterMaxValue
          dict["gender"] = self.strSelectedGender
          dict["selected_SubCategory"] = self.strSelectedSubCategory
          dict["selected_Countries"] = self.strSelectedCountries
-         
-        
          */
         
         switch self.isComingFrom {
@@ -123,13 +117,10 @@ class PopUpViewController: UIViewController {
             dict["Sector"] = self.strSectorTitle
             self.closerForSelectionTable?(dict)
         }
-        
         onBackPressed()
     }
     
-    
-    
-    
+
     @IBAction func btnOnOKPopUp(_ sender: Any) {
         var dict = [String:Any]()
         dict["type"] = self.strType
@@ -139,6 +130,7 @@ class PopUpViewController: UIViewController {
     }
     
     @IBAction func btnSelectionPopUp(_ sender: UIButton) {
+        
         self.imgVwRadio1.image = UIImage.init(named: "radio_button")
         self.imgVwRadio2.image = UIImage.init(named: "radio_button")
         
@@ -153,22 +145,46 @@ class PopUpViewController: UIViewController {
             self.imgVwRadio2.image = UIImage.init(named: "radio_button_selected")
         }
     }
-    
+}
 
+
+//MARK:- Searching
+extension PopUpViewController{
+    
+    @objc func searchContactAsPerText(_ textfield:UITextField) {
+            self.arrOptionsFiltered.removeAll()
+            if textfield.text?.count != 0 {
+                for dicData in self.arrOptions {
+                    let isMachingWorker : NSString = (dicData.strName) as NSString
+                    let range = isMachingWorker.lowercased.range(of: textfield.text!, options: NSString.CompareOptions.caseInsensitive, range: nil,   locale: nil)
+                    if range != nil {
+                        arrOptionsFiltered.append(dicData)
+                    }
+                }
+            } else {
+                self.arrOptionsFiltered = self.arrOptions
+            }
+            if self.arrOptionsFiltered.count == 0{
+                self.tblVw.displayBackgroundText(text: "No Record Found")
+            }else{
+                self.tblVw.displayBackgroundText(text: "")
+            }
+            self.tblVw.reloadData()
+    }
+    
 }
 
 
 extension PopUpViewController: UITableViewDelegate,UITableViewDataSource{
     
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.arrOptions.count
+        return self.arrOptionsFiltered.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "OptionsTableViewCell")as! OptionsTableViewCell
         
-        cell.lblTitle.text = self.arrOptions[indexPath.row].strName
+        cell.lblTitle.text = self.arrOptionsFiltered[indexPath.row].strName
         
         
         if self.arrOptions[indexPath.row].isSelected == true{
@@ -182,27 +198,27 @@ extension PopUpViewController: UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let obj = self.arrOptions[indexPath.row]
+        let obj = self.arrOptionsFiltered[indexPath.row]
         
         switch self.isComingFrom {
         case "2":
-            self.strNationID = self.arrOptions[indexPath.row].strID
-            self.strNationTitle = self.arrOptions[indexPath.row].strName
+            self.strNationID = self.arrOptionsFiltered[indexPath.row].strID
+            self.strNationTitle = self.arrOptionsFiltered[indexPath.row].strName
         case "3":
-            self.strCommunityID = self.arrOptions[indexPath.row].strID
-            self.strCommunityTitle = self.arrOptions[indexPath.row].strName
+            self.strCommunityID = self.arrOptionsFiltered[indexPath.row].strID
+            self.strCommunityTitle = self.arrOptionsFiltered[indexPath.row].strName
         case "4":
-            self.strProvinceID = self.arrOptions[indexPath.row].strID
-            self.strProvinceTitle = self.arrOptions[indexPath.row].strName
+            self.strProvinceID = self.arrOptionsFiltered[indexPath.row].strID
+            self.strProvinceTitle = self.arrOptionsFiltered[indexPath.row].strName
         case "5":
-            self.strMunicipalID = self.arrOptions[indexPath.row].strID
-            self.strMunicipalTitle = self.arrOptions[indexPath.row].strName
+            self.strMunicipalID = self.arrOptionsFiltered[indexPath.row].strID
+            self.strMunicipalTitle = self.arrOptionsFiltered[indexPath.row].strName
         default:
-            self.strSectorID = self.arrOptions[indexPath.row].strID
-            self.strSectorTitle = self.arrOptions[indexPath.row].strName
+            self.strSectorID = self.arrOptionsFiltered[indexPath.row].strID
+            self.strSectorTitle = self.arrOptionsFiltered[indexPath.row].strName
         }
         
-        self.arrOptions.filter({$0.isSelected == true}).first?.isSelected = false
+        self.arrOptionsFiltered.filter({$0.isSelected == true}).first?.isSelected = false
         obj.isSelected = true
         
         self.tblVw.reloadData()
@@ -236,10 +252,13 @@ extension PopUpViewController{
             if status == MessageConstant.k_StatusCode{
                 if let user_details  = response["result"] as? [[String:Any]] {
                     self.arrOptions.removeAll()
+                    self.arrOptionsFiltered.removeAll()
                     for data in user_details{
                         let obj = OptionsModelClass.init(dict: data)
                         self.arrOptions.append(obj)
                     }
+                    
+                    self.arrOptionsFiltered = self.arrOptions
                     
                     self.tblVw.reloadData()
                 }
@@ -287,10 +306,12 @@ extension PopUpViewController{
             if status == MessageConstant.k_StatusCode{
                 if let user_details  = response["result"] as? [[String:Any]] {
                     self.arrOptions.removeAll()
+                    self.arrOptionsFiltered.removeAll()
                     for data in user_details{
                         let obj = OptionsModelClass.init(dict: data)
                         self.arrOptions.append(obj)
                     }
+                    self.arrOptionsFiltered = self.arrOptions
                     
                     self.tblVw.reloadData()
                 }
@@ -300,7 +321,10 @@ extension PopUpViewController{
             }else{
                 objWebServiceManager.hideIndicator()
                 if let msgg = response["result"]as? String{
-                    objAlert.showAlert(message: msgg, title: "", controller: self)
+                    objAlert.showAlertSingleButtonCallBack(alertBtn: "OK", title: "", message: msgg, controller: self) {
+                        self.onBackPressed()
+                    }
+                   // objAlert.showAlert(message: msgg, title: "", controller: self)
                 }else{
                     objAlert.showAlert(message: message ?? "", title: "", controller: self)
                 }
@@ -340,11 +364,13 @@ extension PopUpViewController{
             if status == MessageConstant.k_StatusCode{
                 if let user_details  = response["result"] as? [[String:Any]] {
                     self.arrOptions.removeAll()
+                    self.arrOptionsFiltered.removeAll()
                     for data in user_details{
                         let obj = OptionsModelClass.init(dict: data)
                         self.arrOptions.append(obj)
                     }
                     
+                    self.arrOptionsFiltered = self.arrOptions
                     self.tblVw.reloadData()
                 }
                 else {
@@ -353,7 +379,9 @@ extension PopUpViewController{
             }else{
                 objWebServiceManager.hideIndicator()
                 if let msgg = response["result"]as? String{
-                    objAlert.showAlert(message: msgg, title: "", controller: self)
+                    objAlert.showAlertSingleButtonCallBack(alertBtn: "OK", title: "", message: msgg, controller: self) {
+                        self.onBackPressed()
+                    }
                 }else{
                     objAlert.showAlert(message: message ?? "", title: "", controller: self)
                 }
@@ -391,10 +419,13 @@ extension PopUpViewController{
             if status == MessageConstant.k_StatusCode{
                 if let user_details  = response["result"] as? [[String:Any]] {
                     self.arrOptions.removeAll()
+                    self.arrOptionsFiltered.removeAll()
                     for data in user_details{
                         let obj = OptionsModelClass.init(dict: data)
                         self.arrOptions.append(obj)
                     }
+                    
+                    self.arrOptionsFiltered = self.arrOptions
                     
                     self.tblVw.reloadData()
                 }
@@ -404,7 +435,9 @@ extension PopUpViewController{
             }else{
                 objWebServiceManager.hideIndicator()
                 if let msgg = response["result"]as? String{
-                    objAlert.showAlert(message: msgg, title: "", controller: self)
+                    objAlert.showAlertSingleButtonCallBack(alertBtn: "OK", title: "", message: msgg, controller: self) {
+                        self.onBackPressed()
+                    }
                 }else{
                     objAlert.showAlert(message: message ?? "", title: "", controller: self)
                 }
@@ -437,10 +470,13 @@ extension PopUpViewController{
             if status == MessageConstant.k_StatusCode{
                 if let user_details  = response["result"] as? [[String:Any]] {
                     self.arrOptions.removeAll()
+                    self.arrOptionsFiltered.removeAll()
                     for data in user_details{
                         let obj = OptionsModelClass.init(dict: data)
                         self.arrOptions.append(obj)
                     }
+                    
+                    self.arrOptionsFiltered = self.arrOptions
                     
                     self.tblVw.reloadData()
                 }

@@ -50,6 +50,7 @@ class userDetailModel: NSObject {
     var strAge      :String = ""
     var strWebsite      :String = ""
     var strUserType         :String = ""
+    var strUserRating      :Double = 0.0
     
     var strAboutMe :String = ""
     var strSpecialInstruction :String = ""
@@ -84,6 +85,12 @@ class userDetailModel: NSObject {
             self.strAge = age
         }else if let age = dict["age"] as? Int{
             self.strAge = "\(age)"
+        }
+        
+        if let rating = dict["rating"]as? String{
+            self.strUserRating = Double(rating) ?? 0.0
+        }else  if let rating = dict["rating"]as? Double{
+            self.strUserRating = rating
         }
         
         if let username = dict["name"] as? String{

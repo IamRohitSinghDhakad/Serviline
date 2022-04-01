@@ -11,10 +11,13 @@ class LoginViewController: UIViewController {
 
     @IBOutlet var tfEmail: UITextField!
     @IBOutlet var tfPassword: UITextField!
-    
+    @IBOutlet var vwEmailVerify: UIView!
+    @IBOutlet var lblVerifyDesc: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.vwEmailVerify.isHidden = true
 
         // Do any additional setup after loading the view.
     }
@@ -29,15 +32,22 @@ class LoginViewController: UIViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
+    @IBAction func btnDoneVerfiy(_ sender: Any) {
+        self.vwEmailVerify.isHidden = true
+    }
+    
     @IBAction func btnOnLogin(_ sender: Any) {
-        self.tfEmail.text = "shubhamshrimal4@gmail.com"
-        self.tfPassword.text = "123456"
-        self.call_WsLogin()
-//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-//        let vc = (self.mainStoryboard.instantiateViewController(withIdentifier: "SideMenuController") as? SideMenuController)!
-//        let navController = UINavigationController(rootViewController: vc)
-//        navController.isNavigationBarHidden = true
-//        appDelegate.window?.rootViewController = navController
+        
+        self.tfEmail.text = self.tfEmail.text?.trim()
+        self.tfPassword.text = self.tfPassword.text?.trim()
+        
+        if (self.tfEmail.text!.isEmpty){
+            objAlert.showAlert(message: "Please enter Email", title: "Alert", controller: self)
+        }else if (self.tfPassword.text!.isEmpty){
+            objAlert.showAlert(message: "Please enter Password", title: "Alert", controller: self)
+        }else{
+            self.call_WsLogin()
+        }
     }
 }
 
@@ -48,6 +58,7 @@ extension LoginViewController{
     
     func call_WsLogin(){
         
+        self.view.endEditing(true)
         if !objWebServiceManager.isNetworkAvailable(){
             objWebServiceManager.hideIndicator()
             objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
@@ -67,10 +78,20 @@ extension LoginViewController{
             let message = (response["message"] as? String)
             print(response)
             if status == MessageConstant.k_StatusCode{
+                
                 if let user_details  = response["result"] as? [String:Any] {
-                    objAppShareData.SaveUpdateUserInfoFromAppshareData(userDetail: user_details)
-                    objAppShareData.fetchUserInfoFromAppshareData()
-                    self.makeRootController()
+                    let email = user_details["email"]as! String
+                    if user_details["email_verified"]as! String == "0"{
+                        self.vwEmailVerify.isHidden = false
+                        self.lblVerifyDesc.text = "Please verify your email we have send verification details on \(email)."
+                    }else{
+                        self.vwEmailVerify.isHidden = true
+                        objAppShareData.SaveUpdateUserInfoFromAppshareData(userDetail: user_details)
+                        objAppShareData.fetchUserInfoFromAppshareData()
+                        self.makeRootController()
+                    }
+                    
+                   
                 }
                 else {
                     objAlert.showAlert(message: "Something went wrong!", title: "", controller: self)

@@ -12,12 +12,26 @@ import WebKit
 class WebViewShowViewController: UIViewController {
     
     @IBOutlet var webVw: WKWebView!
-
+    @IBOutlet var lblTitle: UILabel!
+    
+    
+    var strIsComingFrom = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.lblTitle.text = self.strIsComingFrom
         // Do any additional setup after loading the view.
-        self.loadUrl(strUrl: "https://www.google.com")
+        
+        switch strIsComingFrom {
+        case "Condition Of Use":
+            self.loadUrl(strUrl: "https://ambitious.in.net/Arun/serviline/index.php/api/page/Conditions%20of%20use")
+        case "Privacy Check":
+            self.loadUrl(strUrl: "https://ambitious.in.net/Arun/serviline/index.php/api/page/Privacy%20Policy")
+        default:
+            self.loadUrl(strUrl: "https://www.google.com")
+        }
+       
         
     }
     

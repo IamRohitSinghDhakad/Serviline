@@ -36,6 +36,19 @@ class PrivacyCheckViewController: UIViewController {
         }
     }
     
+    @IBAction func btnOnConditionOfUse(_ sender: Any) {
+        let vc = mainStoryboard.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
+        vc.strIsComingFrom = "Condition Of Use"
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @IBAction func btnOnPrivacyPolicy(_ sender: Any) {
+        let vc = mainStoryboard.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
+        vc.strIsComingFrom = "Privacy Check"
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    
     @IBAction func btnOnContinue(_ sender: Any) {
         
         if self.img1.image != UIImage.init(named: "checkbox_white"){
@@ -46,9 +59,10 @@ class PrivacyCheckViewController: UIViewController {
         }else{
             switch self.strIsComingFrom {
             case "1":
-                pushVc(viewConterlerId: "LoginViewController")
-            default:
                 pushVc(viewConterlerId: "SignUpViewController")
+            default:
+                pushVc(viewConterlerId: "LoginViewController")
+               
             }
         }
     }

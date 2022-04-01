@@ -14,6 +14,7 @@
 		F94B61AF27EAF875008B6505 /* OptionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94B61AE27EAF875008B6505 /* OptionsTableViewCell.swift */; };
 		F94B61B127EB0137008B6505 /* OptionsModelClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94B61B027EB0137008B6505 /* OptionsModelClass.swift */; };
 		F94DC82327DF4F59003D30B0 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94DC82227DF4F59003D30B0 /* WelcomeViewController.swift */; };
+		F94F1B6E27F5E088000C193B /* FloatRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94F1B6D27F5E088000C193B /* FloatRatingView.swift */; };
 		F97A47F227DE672C00B88927 /* SelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97A47F127DE672C00B88927 /* SelectLocationViewController.swift */; };
 		F97A47F427DE6A5000B88927 /* NewSectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97A47F327DE6A5000B88927 /* NewSectorViewController.swift */; };
 		F97A47F627DE6F6C00B88927 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97A47F527DE6F6C00B88927 /* EditProfileViewController.swift */; };
@@ -91,6 +92,7 @@
 		F94B61AE27EAF875008B6505 /* OptionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsTableViewCell.swift; sourceTree = "<group>"; };
 		F94B61B027EB0137008B6505 /* OptionsModelClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsModelClass.swift; sourceTree = "<group>"; };
 		F94DC82227DF4F59003D30B0 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		F94F1B6D27F5E088000C193B /* FloatRatingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatRatingView.swift; sourceTree = "<group>"; };
 		F97A47F127DE672C00B88927 /* SelectLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
 		F97A47F327DE6A5000B88927 /* NewSectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSectorViewController.swift; sourceTree = "<group>"; };
 		F97A47F527DE6F6C00B88927 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
@@ -193,6 +195,14 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		F94F1B6C27F5E075000C193B /* FloatingRatingView */ = {
+			isa = PBXGroup;
+			children = (
+				F94F1B6D27F5E088000C193B /* FloatRatingView.swift */,
+			);
+			path = FloatingRatingView;
+			sourceTree = "<group>";
+		};
 		F9A276BB27DBDEB400D9DCAB /* CellClasses */ = {
 			isa = PBXGroup;
 			children = (
@@ -267,6 +277,7 @@
 		F9CD369627DA1DB400486920 /* Resorce */ = {
 			isa = PBXGroup;
 			children = (
+				F94F1B6C27F5E075000C193B /* FloatingRatingView */,
 				F9CD369727DA1DB400486920 /* WebServiceManager */,
 				F9CD369A27DA1DB400486920 /* SideMenu */,
 				F9CD36A827DA1DB400486920 /* RDTextView */,
@@ -621,6 +632,7 @@
 				F982232427DC6A9600043B02 /* OtherUserProfileViewController.swift in Sources */,
 				F9CD36D627DA1DB400486920 /* MessageConstant.swift in Sources */,
 				F9CD36D827DA1DB400486920 /* Extensions.swift in Sources */,
+				F94F1B6E27F5E088000C193B /* FloatRatingView.swift in Sources */,
 				F9CD36C027DA1DB400486920 /* UserModel.swift in Sources */,
 				F9CD36EA27DA307200486920 /* PrivacyCheckViewController.swift in Sources */,
 				F93993FC27DA7DED0063E262 /* PopUpViewController.swift in Sources */,
@@ -779,7 +791,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7E7WKW772Q;
+				DEVELOPMENT_TEAM = 7J79HT2HBV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ServiLine/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Servi Line";
@@ -805,7 +817,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ios.ServiLine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = /Users/rohit/RohitWorkSpace/Serviline/ServiLine/BridgingHeader.h;
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/rohit/Rohit's WorkSpace/Freelance/Serviline/ServiLine/BridgingHeader.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -819,7 +831,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7E7WKW772Q;
+				DEVELOPMENT_TEAM = 7J79HT2HBV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ServiLine/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Servi Line";
@@ -845,7 +857,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ios.ServiLine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = /Users/rohit/RohitWorkSpace/Serviline/ServiLine/BridgingHeader.h;
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/rohit/Rohit's WorkSpace/Freelance/Serviline/ServiLine/BridgingHeader.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
