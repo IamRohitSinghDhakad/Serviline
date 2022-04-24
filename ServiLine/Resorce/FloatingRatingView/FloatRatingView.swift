@@ -49,6 +49,7 @@ open class FloatRatingView: UIView {
             // Update full image views
             for imageView in fullImageViews {
                 imageView.image = fullImage
+                imageView.setImageColor(color: UIColor.init(named: "Pink") ?? UIColor.gray)
             }
             refresh()
         }

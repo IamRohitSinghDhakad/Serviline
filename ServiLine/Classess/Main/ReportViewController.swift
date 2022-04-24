@@ -13,12 +13,11 @@ class ReportViewController: UIViewController {
     
     var arrReportUserList = [FavoriteListModel]()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.tblVw.delegate = self
         self.tblVw.dataSource = self
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,8 +50,18 @@ extension ReportViewController: UITableViewDelegate,UITableViewDataSource{
         
         cell.lblUserName.text = obj.strName
         
+        cell.btnRemove.tag = indexPath.row
+        cell.btnRemove.addTarget(self, action: #selector(removeUser(sender:)), for: .touchUpInside)
+
+        
         return cell
     }
+    
+    @objc func removeUser(sender: UIButton){
+        let objUserID = self.arrReportUserList[sender.tag].strOpponentUserID
+        self.call_ReportUaser(strUserID: objAppShareData.UserDetail.strUserId, strToUserID: objUserID)
+    }
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let objID = self.arrReportUserList[indexPath.row].strOpponentUserID
@@ -82,7 +91,8 @@ extension ReportViewController{
         let parameter = ["user_id":strUserID]as [String:Any]
         
         
-        objWebServiceManager.requestGet(strURL: WsUrl.url_getReportList, params: parameter, queryParams: [:], strCustomValidation: "") { (response) in
+        objWebServiceManager.requestPost(strURL: WsUrl.url_getReportList, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
+
             objWebServiceManager.hideIndicator()
             let status = (response["status"] as? Int)
             let message = (response["message"] as? String)
@@ -97,19 +107,69 @@ extension ReportViewController{
                         self.arrReportUserList.append(obj)
                     }
                     
+                    if self.arrReportUserList.count == 0{
+                        self.tblVw.displayBackgroundText(text: "No Record Found!")
+                    }else{
+                        self.tblVw.displayBackgroundText(text: "")
+                    }
                     self.tblVw.reloadData()
                 }
             }else{
                 objWebServiceManager.hideIndicator()
-                
-                if (response["result"]as? String) != nil{
+                if response["result"]as? String == "Any reports not found"{
+                    self.arrReportUserList.removeAll()
                     self.tblVw.displayBackgroundText(text: "No Record Found!")
+                    self.tblVw.reloadData()
                 }else{
                     objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
                 }
             }
         } failure: { (Error) in
             print(Error)
+            objWebServiceManager.hideIndicator()
+        }
+    }
+    
+    
+    //MARK:-Add Remove On Fav List
+    func call_ReportUaser(strUserID:String, strToUserID:String){
+        
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
+            return
+        }
+        
+        objWebServiceManager.showIndicator()
+        
+        let parameter = ["user_id":strUserID,
+                         "to_user_id":strToUserID,
+                         "message":""]as [String:Any]
+        print(parameter)
+        
+        objWebServiceManager.requestPost(strURL: WsUrl.url_ReportAnUser, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
+            
+            print(response)
+            
+            objWebServiceManager.hideIndicator()
+            let status = (response["status"] as? Int)
+            let message = (response["message"] as? String)
+                        
+            if status == MessageConstant.k_StatusCode{
+                if let dictData  = response["result"] as? [String:Any]{
+                    if message == "success"{
+
+
+                    }
+                }
+            }else{
+                if response["result"]as? String == "Any reports not found"{
+                    self.call_GetReportList(strUserID: objAppShareData.UserDetail.strUserId)
+                }
+                objWebServiceManager.hideIndicator()
+            
+            }
+        } failure: { (Error) in
             objWebServiceManager.hideIndicator()
         }
     }

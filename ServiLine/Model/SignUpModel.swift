@@ -52,13 +52,14 @@ class userDetailModel: NSObject {
     var strUserType         :String = ""
     var strUserRating      :Double = 0.0
     
+    var strSectorID   :String = ""
     var strAboutMe :String = ""
     var strSpecialInstruction :String = ""
     var strMunicipality :String = ""
-    var strAllowSex :String = ""
-    var strAllowCountry :String = ""
-    var strAllowCity :String = ""
-    var strAllowState :String = ""
+    var strNationID :String = ""
+    var strCommunityID :String = ""
+    var strMunicipalityId :String = ""
+    var strProvienceID :String = ""
     var strCinema :String = ""
     var strEye :String = ""
     var strHeight :String = ""
@@ -71,6 +72,11 @@ class userDetailModel: NSObject {
     var strBlockedBy: String = ""
     var strVisibilityStatus: String = ""
     var strMembershipStats:String = ""
+    var isFavorite:String = ""
+    var isReport:String = ""
+    var isRating:String = ""
+    var isBlock:String = ""
+    var strNotificationStatus:String = ""
     
     
     init(dict : [String:Any]) {
@@ -102,6 +108,39 @@ class userDetailModel: NSObject {
         }else if let strMembership = dict["has_membership"] as? Int{
             self.strMembershipStats = "\(strMembership)"
         }
+        
+        if let favorite_status = dict["favorite_status"] as? String{
+            self.isFavorite = favorite_status
+        }else if let favorite_status = dict["favorite_status"] as? Int{
+            self.isFavorite = "\(favorite_status)"
+        }
+        
+        if let report_status = dict["report_status"] as? String{
+            self.isReport = report_status
+        }else if let report_status = dict["report_status"] as? Int{
+            self.isReport = "\(report_status)"
+        }
+        
+        
+        if let rating_status = dict["rating_status"] as? String{
+            self.isRating = rating_status
+        }else if let rating_status = dict["rating_status"] as? Int{
+            self.isRating = "\(rating_status)"
+        }
+        
+        if let block_status = dict["block_status"] as? String{
+            self.isBlock = block_status
+        }else if let block_status = dict["block_status"] as? Int{
+            self.isBlock = "\(block_status)"
+        }
+        
+        
+        if let notification_status = dict["notification_status"] as? String{
+            self.strNotificationStatus = notification_status
+        }else if let notification_status = dict["notification_status"] as? Int{
+            self.strNotificationStatus = "\(notification_status)"
+        }
+        
         
         
         
@@ -142,28 +181,34 @@ class userDetailModel: NSObject {
             self.strAddress = address.decodeEmoji
         }
         
-        if let allow_sex = dict["allow_sex"] as? String{
-            self.strAllowSex = allow_sex
-        }else if let allow_sex = dict["allow_sex"] as? Int{
-            self.strAllowSex = "\(allow_sex)"
+        if let nation_id = dict["nation_id"] as? String{
+            self.strNationID = nation_id
+        }else if let nation_id = dict["nation_id"] as? Int{
+            self.strNationID = "\(nation_id)"
         }
         
-        if let allow_country = dict["allow_country"] as? String{
-            self.strAllowCountry = allow_country
-        }else if let allow_country = dict["allow_country"] as? Int{
-            self.strAllowCountry = "\(allow_country)"
+        if let community_id = dict["community_id"] as? String{
+            self.strCommunityID = community_id
+        }else if let community_id = dict["community_id"] as? Int{
+            self.strCommunityID = "\(community_id)"
         }
         
-        if let allow_city = dict["allow_city"] as? String{
-            self.strAllowCity = allow_city
-        }else if let allow_city = dict["allow_city"] as? Int{
-            self.strAllowCity = "\(allow_city)"
+        if let municipality_id = dict["municipality_id"] as? String{
+            self.strMunicipalityId = municipality_id
+        }else if let municipality_id = dict["municipality_id"] as? Int{
+            self.strMunicipalityId = "\(municipality_id)"
         }
         
-        if let allow_state = dict["allow_state"] as? String{
-            self.strAllowState = allow_state
-        }else if let allow_state = dict["allow_state"] as? Int{
-            self.strAllowState = "\(allow_state)"
+        if let province_id = dict["province_id"] as? String{
+            self.strProvienceID = province_id
+        }else if let province_id = dict["province_id"] as? Int{
+            self.strProvienceID = "\(province_id)"
+        }
+        
+        if let sector_id = dict["sector_id"] as? String{
+            self.strSectorID = sector_id
+        }else if let sector_id = dict["sector_id"] as? Int{
+            self.strSectorID = "\(sector_id)"
         }
         
         
@@ -278,88 +323,48 @@ class userDetailModel: NSObject {
 }
 
 /*
-{
-    "account_holder_name" = "";
-    "account_no" = "";
-    address = "";
-    age = 28;
-    "allow_city" = 0;
-    "allow_country" = 1;
-    "allow_sex" = Female;
-    "allow_state" = 0;
-    "bank_name" = "";
-    blocked = 0;
-    blockedBy = "";
-    "branch_name" = "";
-    "category_id" = "";
-    "chat_status" = "";
-    "chat_time" = "0000-00-00 00:00:00";
-    cinema = Tt;
-    city = Adsubia;
-    code = "";
-    "commission_base" = 0;
-    country = "Espa\U00f1a";
-    dob = "1992-12-24";
-    document = "";
-    email = "goswamipuriarun@yahoo.com";
-    "email_verified" = 0;
-    entrydt = "2021-05-31 08:02:57";
-    "expiry_date" = "2130-12-06 13:32:57";
-    eye = Yy;
-    "fssai_image" = "";
-    "fssai_no" = "";
-    "gst_image" = "";
-    "gst_no" = "";
-    "gumasta_image" = "";
-    "gumasta_no" = "";
-    hair = Fg;
-    "has_membership" = 1;
-    height = "";
-    "highlight_info" = fgty;
-    "ifsc_code" = "";
-    lat = "";
-    liked = 0;
-    lon = "";
-    "looking_for" = "Chat,Relaci\U00f3n,Amistad,Relaci\U00f3n \U00edntima";
-    "membership_id" = 2;
-    mobile = "";
-    "mobile_verified" = 0;
-    music = Gg;
-    name = "Arun Goswami";
-    otp = "";
-    "over_commission" = 0;
-    password = "";
-    "payment_email" = "";
-    plan =     {
-        "discount_price" = 0;
-        entrydt = "2020-07-15 09:58:06";
-        "expiry_date" = "2130-12-06 13:32:57";
-        name = "Arun Goswami";
-        "plan_id" = 2;
-        "plan_title" = "Female Ultimate";
-        "real_price" = 0;
-        status = 0;
-        validity = 40000;
-    };
-    "register_id" = "eAu4p6muQO-YQLuW-dvvRo:APA91bHwnw5OHBBg9xyejLivqLgZUn_MSU3KrevrmwRUCktORvC-ynlBRLGO8a7Sel92cuMoC9J_V56YRredd6ADrDK0l1Wh11WNxNGeznt0JsVvieYPA0zHATe_LbjxN0u1qwdY5bNK";
-    "rel_status" = "";
-    sex = Female;
-    "shipping_time" = 0;
-    "short_bio" = tyyt;
-    skin = Yytt;
-    "social_id" = 4005869259503653;
-    "social_type" = fb;
-    sport = Gg;
-    state = "Alicante/Alacant";
-    status = 1;
-    "sub_category_id" = "";
-    "swift_code" = "";
-    type = user;
-    "under_commission" = 0;
-    "user_id" = 26;
-    "user_image" = "http://ambitious.in.net/Shubham/paing/uploads/user/9074IMG_1622448105262.png";
-    visible = 0;
-    work = "";
-}
-
-*/
+ address = "";
+ "allow_free" = 0;
+ bio = "Hope you will choose me. anda ki roti ki sabji recipe in hindi with lyrics of a girl name in hindi full episode in english with song";
+ "block_status" = 0;
+ code = "";
+ "community_id" = 1;
+ "community_name" = "<null>";
+ deletedRemark = "";
+ deletedTime = "";
+ email = "elvish2412@gmail.com";
+ "email_verified" = 1;
+ entrydt = "2022-04-01 07:21:29";
+ expiry = "0000-00-00 00:00:00";
+ "favorite_status" = 0;
+ lat = "";
+ lng = "";
+ "membership_id" = 1;
+ mobile = "";
+ "municipality_id" = 1;
+ "municipality_name" = "municipality 1";
+ name = "Akankhsa Sharma";
+ "nation_id" = 1;
+ "nation_name" = "Espa\U00f1a";
+ "notification_status" = 1;
+ "other_block_status" = 0;
+ password = 12345;
+ "plan_id" = 0;
+ "province_id" = 1;
+ "province_name" = "Province 1";
+ rating = "4.3";
+ "rating_status" = 0;
+ "register_id" = "eMDYvgwuRqKXVOSHTzwc9b:APA91bEx6PttnmIkJRC8Vldo0G8FzqjAQhfj1gN478SSzon4RFa2bct7zbBidEqX9b6PLGqUJz9tfbdbldDY2EXyga8wEuyrQKgRPXouqweCx-cL2qYPyt3OFx8Q2uQ4YRFcocT-yqQP";
+ "report_status" = 0;
+ "sector_id" = 0;
+ "sector_name" = "<null>";
+ selectedPlan =     {
+ };
+ "social_id" = "";
+ "social_type" = "";
+ status = 1;
+ type = user;
+ "user_id" = 4;
+ "user_image" = "https://ambitious.in.net/Arun/serviline/uploads/user/3548IMG_1645701651993.png";
+ website = "www.ambitious.in.net";
+ */

@@ -10,13 +10,16 @@ import UIKit
 class MessageViewController: UIViewController {
 
     @IBOutlet var tblVw: UITableView!
+    @IBOutlet var vwContainsButton: UIView!
     
     var arrMessageList = [ConversationListModel]()
+    var isShowingCheckBox = false
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+      
         self.tblVw.estimatedRowHeight = 160
         self.tblVw.delegate = self
         self.tblVw.dataSource = self
@@ -25,18 +28,40 @@ class MessageViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.vwContainsButton.isHidden = true
         self.call_GetChatList(strUserID: objAppShareData.UserDetail.strUserId)
     }
 
     @IBAction func btnOnOpenSideMenu(_ sender: Any) {
         self.sideMenuController?.revealMenu()
     }
-   
-
+    
+    @IBAction func btnOnCancel(_ sender: Any) {
+        self.isShowingCheckBox = false
+        self.vwContainsButton.isHidden = true
+        self.tblVw.reloadData()
+    }
+    @IBAction func btnOnDelete(_ sender: Any) {
+        var arrID = [String]()
+        let arr = self.arrMessageList.filter{$0.isSelected == true}
+        for data in arr{
+            arrID.append(data.strNotificationId)
+        }
+        
+        if arrID.count == 0{
+            
+        }else{
+            let finalString = arrID.joined(separator: ",")
+            print(finalString)
+           // self.call_DeleteUserNotification(id: finalString)
+        }
+       
+    }
 }
 
 
 extension MessageViewController: UITableViewDelegate,UITableViewDataSource{
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.arrMessageList.count
     }
@@ -50,18 +75,52 @@ extension MessageViewController: UITableViewDelegate,UITableViewDataSource{
         if profilePic != "" {
             let url = URL(string: profilePic)
             cell.imgVwUser.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo"))
+        }else{
+            cell.imgVwUser.image = UIImage.init(named: "logo")
         }
         
         cell.lblUserName.text = obj.strName
         cell.lblTimeAgo.text = obj.strTimeAgo
         cell.lblMsg.text = obj.strLastMsg
         
+        if obj.strMessageCount > 0{
+            cell.lblMsgCount.isHidden = false
+            cell.lblMsgCount.text = "\(obj.strMessageCount)"
+        }else{
+            cell.lblMsgCount.isHidden = true
+        }
+        
+        if self.isShowingCheckBox == true{
+            cell.vwCheckUncheck.isHidden = false
+            cell.imgVwCheckUncheck.isHidden = false
+            
+            if obj.isSelected == true{
+                cell.imgVwCheckUncheck.image = UIImage.init(named: "select")
+            }else{
+                cell.imgVwCheckUncheck.image = UIImage.init(named: "unchecked")
+            }
+        }else{
+            obj.isSelected = false
+            cell.vwCheckUncheck.isHidden = true
+            cell.imgVwCheckUncheck.isHidden = true
+        }
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        pushVc(viewConterlerId: "ChatDetailViewController")
+        
+        if self.vwContainsButton.isHidden == true{
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "ChatDetailViewController")as! ChatDetailViewController
+            vc.strSenderID = self.arrMessageList[indexPath.row].strSenderIDForChat
+            vc.strUserImage = self.arrMessageList[indexPath.row].strUserImage
+            self.navigationController?.pushViewController(vc, animated: true)
+        }else{
+            let obj = self.arrMessageList[indexPath.row]
+            obj.isSelected = obj.isSelected == true ? false : true
+            self.tblVw.reloadData()
+        }
+       
     }
 }
 
@@ -97,7 +156,8 @@ extension MessageViewController{
                         self.arrMessageList.append(obj)
                     }
                     
-                    self.arrMessageList.reverse()
+                    self.setupLongGestureRecognizerOnCollection()
+                   // self.arrMessageList.reverse()
                     
                     if self.arrMessageList.count == 0{
                         self.tblVw.displayBackgroundText(text: "No Record Found!")
@@ -122,4 +182,33 @@ extension MessageViewController{
             objWebServiceManager.hideIndicator()
         }
     }
+}
+
+extension MessageViewController: UIGestureRecognizerDelegate{
+        private func setupLongGestureRecognizerOnCollection() {
+            let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gestureRecognizer:)))
+            longPressedGesture.minimumPressDuration = 0.5
+            longPressedGesture.delegate = self
+            longPressedGesture.delaysTouchesBegan = true
+            self.tblVw?.addGestureRecognizer(longPressedGesture)
+        }
+        
+        @objc func handleLongPress(gestureRecognizer: UILongPressGestureRecognizer) {
+            if (gestureRecognizer.state != .began) {
+                return
+            }
+
+            let p = gestureRecognizer.location(in: self.tblVw)
+            
+          //  let p = gestureRecognizer.location(in: collectionView)
+
+            if let indexPath = self.tblVw?.indexPathForRow(at: p) {
+                print("Long press at item: \(indexPath.row)")
+                let obj = self.arrMessageList[indexPath.row]
+                obj.isSelected = true
+                self.isShowingCheckBox = true
+                self.vwContainsButton.isHidden = false
+                self.tblVw.reloadData()
+            }
+        }
 }

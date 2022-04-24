@@ -13,8 +13,12 @@
 		F93993FC27DA7DED0063E262 /* PopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93993FB27DA7DED0063E262 /* PopUpViewController.swift */; };
 		F94B61AF27EAF875008B6505 /* OptionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94B61AE27EAF875008B6505 /* OptionsTableViewCell.swift */; };
 		F94B61B127EB0137008B6505 /* OptionsModelClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94B61B027EB0137008B6505 /* OptionsModelClass.swift */; };
+		F94DA72C2800A0C700480E92 /* EditImageVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94DA72B2800A0C600480E92 /* EditImageVideoViewController.swift */; };
+		F94DA7302800DA8900480E92 /* JSQuickPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94DA72F2800DA8900480E92 /* JSQuickPreviewController.swift */; };
 		F94DC82327DF4F59003D30B0 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94DC82227DF4F59003D30B0 /* WelcomeViewController.swift */; };
 		F94F1B6E27F5E088000C193B /* FloatRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94F1B6D27F5E088000C193B /* FloatRatingView.swift */; };
+		F968CD212801B54500747DCB /* ShowImageFullViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F968CD202801B54500747DCB /* ShowImageFullViewController.swift */; };
+		F968CD242801B87600747DCB /* FileDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F968CD232801B87600747DCB /* FileDownloader.swift */; };
 		F97A47F227DE672C00B88927 /* SelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97A47F127DE672C00B88927 /* SelectLocationViewController.swift */; };
 		F97A47F427DE6A5000B88927 /* NewSectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97A47F327DE6A5000B88927 /* NewSectorViewController.swift */; };
 		F97A47F627DE6F6C00B88927 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97A47F527DE6F6C00B88927 /* EditProfileViewController.swift */; };
@@ -40,6 +44,7 @@
 		F9AAAA1F27DBBB2E0035FFC7 /* MessageSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AAAA1E27DBBB2E0035FFC7 /* MessageSettingViewController.swift */; };
 		F9AAAA2127DBBB3F0035FFC7 /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AAAA2027DBBB3F0035FFC7 /* ReportViewController.swift */; };
 		F9AAAA2327DBBB4F0035FFC7 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AAAA2227DBBB4F0035FFC7 /* SettingViewController.swift */; };
+		F9B05E7D27FCAE0000355179 /* ChatDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B05E7C27FCAE0000355179 /* ChatDetailModel.swift */; };
 		F9CD367D27DA1A1C00486920 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD367C27DA1A1C00486920 /* AppDelegate.swift */; };
 		F9CD368127DA1A1C00486920 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD368027DA1A1C00486920 /* ViewController.swift */; };
 		F9CD368427DA1A1C00486920 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9CD368227DA1A1C00486920 /* Main.storyboard */; };
@@ -80,6 +85,8 @@
 		F9CD36E827DA222900486920 /* AppSideMenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD36E627DA222900486920 /* AppSideMenuTableViewCell.swift */; };
 		F9CD36EA27DA307200486920 /* PrivacyCheckViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD36E927DA307200486920 /* PrivacyCheckViewController.swift */; };
 		F9CD36EC27DA30A900486920 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD36EB27DA30A900486920 /* LoginViewController.swift */; };
+		F9E76ECA281331410095484A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9E76EC9281331410095484A /* GoogleService-Info.plist */; };
+		F9F3F8602805D873004B0C10 /* DeleteProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F3F85F2805D873004B0C10 /* DeleteProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,8 +98,13 @@
 		F93993FB27DA7DED0063E262 /* PopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpViewController.swift; sourceTree = "<group>"; };
 		F94B61AE27EAF875008B6505 /* OptionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsTableViewCell.swift; sourceTree = "<group>"; };
 		F94B61B027EB0137008B6505 /* OptionsModelClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsModelClass.swift; sourceTree = "<group>"; };
+		F94DA72B2800A0C600480E92 /* EditImageVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditImageVideoViewController.swift; sourceTree = "<group>"; };
+		F94DA72D2800CBAC00480E92 /* ServiLine.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ServiLine.entitlements; sourceTree = "<group>"; };
+		F94DA72F2800DA8900480E92 /* JSQuickPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSQuickPreviewController.swift; sourceTree = "<group>"; };
 		F94DC82227DF4F59003D30B0 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		F94F1B6D27F5E088000C193B /* FloatRatingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatRatingView.swift; sourceTree = "<group>"; };
+		F968CD202801B54500747DCB /* ShowImageFullViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowImageFullViewController.swift; sourceTree = "<group>"; };
+		F968CD232801B87600747DCB /* FileDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDownloader.swift; sourceTree = "<group>"; };
 		F97A47F127DE672C00B88927 /* SelectLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectLocationViewController.swift; sourceTree = "<group>"; };
 		F97A47F327DE6A5000B88927 /* NewSectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSectorViewController.swift; sourceTree = "<group>"; };
 		F97A47F527DE6F6C00B88927 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
@@ -118,6 +130,7 @@
 		F9AAAA1E27DBBB2E0035FFC7 /* MessageSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSettingViewController.swift; sourceTree = "<group>"; };
 		F9AAAA2027DBBB3F0035FFC7 /* ReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
 		F9AAAA2227DBBB4F0035FFC7 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		F9B05E7C27FCAE0000355179 /* ChatDetailModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatDetailModel.swift; sourceTree = "<group>"; };
 		F9CD367927DA1A1C00486920 /* ServiLine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ServiLine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9CD367C27DA1A1C00486920 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F9CD368027DA1A1C00486920 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -164,6 +177,8 @@
 		F9CD36E627DA222900486920 /* AppSideMenuTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSideMenuTableViewCell.swift; sourceTree = "<group>"; };
 		F9CD36E927DA307200486920 /* PrivacyCheckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyCheckViewController.swift; sourceTree = "<group>"; };
 		F9CD36EB27DA30A900486920 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		F9E76EC9281331410095484A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F9F3F85F2805D873004B0C10 /* DeleteProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteProfileViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,12 +210,28 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		F94DA72E2800DA5100480E92 /* QLPriview */ = {
+			isa = PBXGroup;
+			children = (
+				F94DA72F2800DA8900480E92 /* JSQuickPreviewController.swift */,
+			);
+			path = QLPriview;
+			sourceTree = "<group>";
+		};
 		F94F1B6C27F5E075000C193B /* FloatingRatingView */ = {
 			isa = PBXGroup;
 			children = (
 				F94F1B6D27F5E088000C193B /* FloatRatingView.swift */,
 			);
 			path = FloatingRatingView;
+			sourceTree = "<group>";
+		};
+		F968CD222801B85000747DCB /* FileDownloader */ = {
+			isa = PBXGroup;
+			children = (
+				F968CD232801B87600747DCB /* FileDownloader.swift */,
+			);
+			path = FileDownloader;
 			sourceTree = "<group>";
 		};
 		F9A276BB27DBDEB400D9DCAB /* CellClasses */ = {
@@ -236,6 +267,7 @@
 		F9CD367B27DA1A1C00486920 /* ServiLine */ = {
 			isa = PBXGroup;
 			children = (
+				F94DA72D2800CBAC00480E92 /* ServiLine.entitlements */,
 				F9CD369027DA1DB400486920 /* AppSharedClass */,
 				F9CD36B027DA1DB400486920 /* Extensions */,
 				F9CD369327DA1DB400486920 /* Model */,
@@ -246,6 +278,7 @@
 				F9CD368027DA1A1C00486920 /* ViewController.swift */,
 				F9CD368527DA1A1D00486920 /* Assets.xcassets */,
 				F9CD368727DA1A1D00486920 /* LaunchScreen.storyboard */,
+				F9E76EC9281331410095484A /* GoogleService-Info.plist */,
 				F9CD368A27DA1A1D00486920 /* Info.plist */,
 				F9CD36DC27DA1E0B00486920 /* BridgingHeader.h */,
 			);
@@ -264,6 +297,7 @@
 		F9CD369327DA1DB400486920 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				F9B05E7C27FCAE0000355179 /* ChatDetailModel.swift */,
 				F9CD369427DA1DB400486920 /* SignUpModel.swift */,
 				F9CD369527DA1DB400486920 /* UserModel.swift */,
 				F94B61B027EB0137008B6505 /* OptionsModelClass.swift */,
@@ -394,9 +428,12 @@
 		F9CD36E027DA220500486920 /* Classess */ = {
 			isa = PBXGroup;
 			children = (
+				F968CD222801B85000747DCB /* FileDownloader */,
+				F94DA72E2800DA5100480E92 /* QLPriview */,
 				F9CD36E327DA222900486920 /* SideMenu */,
 				F9CD36E227DA221700486920 /* Main */,
 				F9CD36E127DA220D00486920 /* Auth */,
+				F968CD202801B54500747DCB /* ShowImageFullViewController.swift */,
 			);
 			path = Classess;
 			sourceTree = "<group>";
@@ -436,6 +473,8 @@
 				F982232D27DCFD7000043B02 /* RatingViewController.swift */,
 				F982232F27DDBFB700043B02 /* WebViewShowViewController.swift */,
 				F97A47F527DE6F6C00B88927 /* EditProfileViewController.swift */,
+				F94DA72B2800A0C600480E92 /* EditImageVideoViewController.swift */,
+				F9F3F85F2805D873004B0C10 /* DeleteProfileViewController.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -520,6 +559,7 @@
 			files = (
 				F9CD36DF27DA1FD000486920 /* Auth.storyboard in Resources */,
 				F9CD368927DA1A1D00486920 /* LaunchScreen.storyboard in Resources */,
+				F9E76ECA281331410095484A /* GoogleService-Info.plist in Resources */,
 				F9CD368627DA1A1D00486920 /* Assets.xcassets in Resources */,
 				F9CD368427DA1A1C00486920 /* Main.storyboard in Resources */,
 			);
@@ -580,6 +620,7 @@
 				F982232E27DCFD7000043B02 /* RatingViewController.swift in Sources */,
 				F9CD36CB27DA1DB400486920 /* SideMenuController.swift in Sources */,
 				F9CD36C627DA1DB400486920 /* Delegate.swift in Sources */,
+				F968CD212801B54500747DCB /* ShowImageFullViewController.swift in Sources */,
 				F9CD36C227DA1DB400486920 /* WebServiceHelper.swift in Sources */,
 				F94B61AF27EAF875008B6505 /* OptionsTableViewCell.swift in Sources */,
 				F97A47F227DE672C00B88927 /* SelectLocationViewController.swift in Sources */,
@@ -602,7 +643,9 @@
 				F97A47F427DE6A5000B88927 /* NewSectorViewController.swift in Sources */,
 				F9AAAA1327DB72B00035FFC7 /* HomeViewController.swift in Sources */,
 				F9CD368127DA1A1C00486920 /* ViewController.swift in Sources */,
+				F94DA72C2800A0C700480E92 /* EditImageVideoViewController.swift in Sources */,
 				F9CD36E727DA222900486920 /* AppSideMenuViewController.swift in Sources */,
+				F9F3F8602805D873004B0C10 /* DeleteProfileViewController.swift in Sources */,
 				F9CD36D227DA1DB400486920 /* Location.swift in Sources */,
 				F9CD36E827DA222900486920 /* AppSideMenuTableViewCell.swift in Sources */,
 				F9AAAA2327DBBB4F0035FFC7 /* SettingViewController.swift in Sources */,
@@ -613,6 +656,7 @@
 				F900CB5827EF7FE100E3A8BA /* UserImageModel.swift in Sources */,
 				F9A276BD27DBDED900D9DCAB /* ViewProfileCollectionViewCell.swift in Sources */,
 				F9CD36C727DA1DB400486920 /* TransitionContext.swift in Sources */,
+				F968CD242801B87600747DCB /* FileDownloader.swift in Sources */,
 				F9CD36D327DA1DB400486920 /* LocationPickerViewController.swift in Sources */,
 				F9A276BF27DBE8DD00D9DCAB /* MessageTableViewCell.swift in Sources */,
 				F9CD36CA27DA1DB400486920 /* UIView+Container.swift in Sources */,
@@ -635,8 +679,10 @@
 				F94F1B6E27F5E088000C193B /* FloatRatingView.swift in Sources */,
 				F9CD36C027DA1DB400486920 /* UserModel.swift in Sources */,
 				F9CD36EA27DA307200486920 /* PrivacyCheckViewController.swift in Sources */,
+				F9B05E7D27FCAE0000355179 /* ChatDetailModel.swift in Sources */,
 				F93993FC27DA7DED0063E262 /* PopUpViewController.swift in Sources */,
 				F9CD36D027DA1DB400486920 /* SWRevealViewController.m in Sources */,
+				F94DA7302800DA8900480E92 /* JSQuickPreviewController.swift in Sources */,
 				F97A47F827DE757100B88927 /* ForgotPasswordViewController.swift in Sources */,
 				F9CD36C927DA1DB400486920 /* Segue.swift in Sources */,
 				F9CD36BD27DA1DB400486920 /* UserDefaultExtension.swift in Sources */,
@@ -789,6 +835,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ServiLine/ServiLine.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7J79HT2HBV;
@@ -829,6 +876,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ServiLine/ServiLine.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7J79HT2HBV;

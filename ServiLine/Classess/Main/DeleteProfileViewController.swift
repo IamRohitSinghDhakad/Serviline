@@ -1,14 +1,15 @@
 //
-//  ReportUserViewController.swift
+//  DeleteProfileViewController.swift
 //  ServiLine
 //
-//  Created by Rohit Singh Dhakad on 12/03/22.
+//  Created by Rohit Singh Dhakad on 12/04/22.
 //
 
 import UIKit
 
-class ReportUserViewController: UIViewController {
-
+class DeleteProfileViewController: UIViewController {
+    
+    
     @IBOutlet var imgVwUser: UIImageView!
     @IBOutlet var lblDescription: UILabel!
     @IBOutlet var txtVw: RDTextView!
@@ -18,7 +19,6 @@ class ReportUserViewController: UIViewController {
     
     var objUserDetail:userDetailModel?
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,21 +27,17 @@ class ReportUserViewController: UIViewController {
         let myProfilePic = objAppShareData.UserDetail.strProfilePicture
         if myProfilePic != "" {
             let url = URL(string: myProfilePic)
-            self.imVwUserReport.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo"))
-        }
-        self.lblMsgReportUser.text = objAppShareData.UserDetail.strUserName + " has been added a report and we have received \n The reason for your complaint. We will study amd evaluate your message we will act accordingly Thank You!!!"
-        
-        let profilePic = self.objUserDetail!.strProfilePicture
-        if profilePic != "" {
-            let url = URL(string: profilePic)
             self.imgVwUser.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo"))
         }
+     //   self.lblMsgReportUser.text = objAppShareData.UserDetail.strUserName + " has been added a report and we have received \n The reason for your complaint. We will study amd evaluate your message we will act accordingly Thank You!!!"
         
-        self.lblDescription.text = "You want to report \(objUserDetail?.strUserName ?? "") for some situation what have you suffered or observed Briefly write your reason and we will study the particular case."
+        
+        self.lblDescription.text = "You want to delete account?\n " + objAppShareData.UserDetail.strUserName + " for some situation what have you suffered or observed Briefly write your reason we will study the particular reason."
 
         // Do any additional setup after loading the view.
     }
     
+
     @IBAction func btnOnBackHeader(_ sender: Any) {
         onBackPressed()
     }
@@ -58,20 +54,21 @@ class ReportUserViewController: UIViewController {
             objAlert.showAlert(message: "Please enter some text", title: "Alert", controller: self)
         }
         else{
-            self.call_ReportUaser(strUserID: objAppShareData.UserDetail.strUserId, strToUserID: self.objUserDetail!.strUserId)
+            self.call_DeleteProfile(strUserID: objAppShareData.UserDetail.strUserId)
         }
       
         
     }
-    
+   
 
 }
 
 
-extension ReportUserViewController{
+
+extension DeleteProfileViewController{
     
     //MARK:-Add Remove On Fav List
-    func call_ReportUaser(strUserID:String, strToUserID:String){
+    func call_DeleteProfile(strUserID:String){
         
         if !objWebServiceManager.isNetworkAvailable(){
             objWebServiceManager.hideIndicator()
@@ -81,12 +78,24 @@ extension ReportUserViewController{
         
         objWebServiceManager.showIndicator()
         
+        /*
+         Call<ResponseBody> update_profile(@Query("user_id") String user_id,
+                                               @Query("deletedRemark") String deletedRemark,
+                                               @Query("deletedTime") String deletedTime);
+         yyyy/MM/dd HH:mm:ss
+         */
+        
+        
+        let formatter: DateFormatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
+        let dateTime: String = formatter.string(from: Date())
+        
         let parameter = ["user_id":strUserID,
-                         "to_user_id":strToUserID,
-                         "message":self.txtVw.text!]as [String:Any]
+                         "deletedTime":dateTime,
+                         "deletedRemark":self.txtVw.text!]as [String:Any]
         print(parameter)
         
-        objWebServiceManager.requestPost(strURL: WsUrl.url_ReportAnUser, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
+        objWebServiceManager.requestPost(strURL: WsUrl.url_completeProfile, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
             
             print(response)
             
@@ -98,7 +107,7 @@ extension ReportUserViewController{
                 if let dictData  = response["result"] as? [String:Any]{
                     if message == "success"{
 
-                        self.vwPopUp.isHidden = false
+                        AppSharedData.sharedObject().signOut()
 
                     }
                 }

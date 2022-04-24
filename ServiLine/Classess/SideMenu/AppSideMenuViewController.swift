@@ -197,7 +197,7 @@ extension AppSideMenuViewController: UITableViewDelegate, UITableViewDataSource 
         let row = indexPath.row
         cell.menuImage.image = UIImage(named: menus[row].menuImageName)
         
-        if row == 5{
+        if row == 4{
             if let badgeCount = UserDefaults.standard.value(forKey: "badge")as? Int{
                 print(badgeCount)
                 if badgeCount != 0{
@@ -226,7 +226,7 @@ extension AppSideMenuViewController: UITableViewDelegate, UITableViewDataSource 
         if row == 9 {
             sideMenuController?.hideMenu()
             
-            objAlert.showAlertCallBack(alertLeftBtn: "No", alertRightBtn: "Yes", title: "Logout?", message: "Are you sure you want to logout?", controller: self) {
+            objAlert.showAlertCallBack(alertLeftBtn: "Yes", alertRightBtn: "No", title: "Logout?", message: "Are you sure you want to logout?", controller: self) {
                // self.call_WSLogout(strUserID: objAppShareData.UserDetail.strUserId)
                 AppSharedData.sharedObject().signOut()
             }

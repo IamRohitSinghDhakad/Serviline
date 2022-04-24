@@ -10,6 +10,8 @@ import UIKit
 class ViewProfileCollectionViewCell: UICollectionViewCell {
     
     
+    @IBOutlet var vwContainer: UIView!
     @IBOutlet var imgVw: UIImageView!
+    @IBOutlet var imgVwTick: UIImageView!
     
 }

@@ -7,8 +7,19 @@
 
 import UIKit
 import Alamofire
+import AVKit
+import MobileCoreServices
+import UniformTypeIdentifiers
+import AVKit
+import AVFoundation
+import SDWebImage
 
-class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,UIScrollViewDelegate {
+//enum AssetType: String {
+//    case image = "image"
+//    case video = "video"
+//}
+
+class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,UIScrollViewDelegate,UIDocumentPickerDelegate {
 
     @IBOutlet var vwCornerHeader: UIView!
     @IBOutlet var imgVwUser: UIImageView!
@@ -23,29 +34,35 @@ class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,
     @IBOutlet var subVw: UIView!
     @IBOutlet var imgVwFull: UIImageView!
     @IBOutlet var vwContainRightTickImageSubVw: UIView!
-    
-    @IBOutlet var cvSticker: UICollectionView!
-    @IBOutlet var subVwContainCV: UIView!
     @IBOutlet var subVwSelection: UIView!
     @IBOutlet var sbVwMainSticker: UIView!
     @IBOutlet var btnAddSticker: UIButton!
-    
     @IBOutlet var vwContainFullImage: UIView!
     @IBOutlet var imgvwFullForDownload: UIImageView!
-    @IBOutlet var btnSendSticker: UIButton!
-    
+    @IBOutlet var imgVwRadioVideo: UIImageView!
+    @IBOutlet var imgVwRadioFile: UIImageView!
+    @IBOutlet var imgVwRadioImage: UIImageView!
+    @IBOutlet var btnOnSelect: UIButton!
     @IBOutlet var vwBlockUser: UIView!
     @IBOutlet var scrollVwFullImageDownload: UIScrollView!
+
+    
     
     
     //MARK:- Variables
     var imagePicker = UIImagePickerController()
     var pickedImage:UIImage?
     
+    var controller = UIImagePickerController()
+    let videoFileName = "/video.mp4"
+    var videoUrl = ""
+    var videoData = Data()
+    
+    
     let txtViewCommentMaxHeight: CGFloat = 100
     let txtViewCommentMinHeight: CGFloat = 34
 
-   // var arrChatMessages = [ChatDetailModel]()
+    var arrChatMessages = [ChatDetailModel]()
     var strUserName = ""
     var strUserImage = ""
     var strSenderID = ""
@@ -59,7 +76,8 @@ class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,
     var strSelectedImageUrl = ""
     var strMsgID = -1
     
-    var arrImagesSticker = [UIImage.init(named: "sone"),UIImage.init(named: "stwo"),UIImage.init(named: "sthree"),UIImage.init(named: "four"),UIImage.init(named: "five"),UIImage.init(named: "six"),UIImage.init(named: "seven"),UIImage.init(named: "eight")]
+    
+    private lazy var downloader = FilesDownloader()
     
     //MARK: - Override Methods
     
@@ -87,20 +105,27 @@ class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,
         self.subVw.isHidden = true
         self.subVwSelection.isHidden = true
         self.sbVwMainSticker.isHidden = true
-        self.subVwContainCV.isHidden = true
+        
+        self.imgVwRadioImage.image = UIImage.init(named: "radio_button")
+        self.imgVwRadioFile.image = UIImage.init(named: "radio_button")
+        self.imgVwRadioVideo.image = UIImage.init(named: "radio_button")
+       
         
         self.vwContainFullImage.isHidden = true
         
         let profilePic = self.strUserImage
         if profilePic != "" {
             let url = URL(string: profilePic)
-          //  self.imgVwUser.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "splashLogo"))
+           self.imgVwUser.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo"))
         }
         
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
-        self.tblChat.addGestureRecognizer(longPress)
+     //   let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
+      //  self.tblChat.addGestureRecognizer(longPress)
         
-      //  self.call_GetChatList(strUserID: objAppShareData.UserDetail.strUserId, strSenderID: self.strSenderID)
+       // self.call_GetChatList(strUserID: objAppShareData.UserDetail.strUserId, strSenderID: self.strSenderID)
+        if self.timer == nil{
+            self.timer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(self.updateTimer), userInfo: nil, repeats: true)
+        }
         
     }
     
@@ -113,6 +138,10 @@ class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,
 //        self.tblChat.scrollToBottom()
     }
     
+    func downloadFile(from url: URL) {
+           downloader.download(from: url, delegate: self)
+       }
+    
     //Scroll Methods
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.imgvwFullForDownload
@@ -122,13 +151,14 @@ class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,
     @IBAction func btnGoToUserProfile(_ sender: Any) {
         let userID = self.strSenderID
         if objAppShareData.UserDetail.strUserId == userID{
+            
         }else{
-//            let vc = UIStoryboard(name: "UserProfile", bundle: nil).instantiateViewController(withIdentifier: "UserProfileViewController") as? UserProfileViewController
-//            vc?.userID = userID
-//            vc?.isComingFromChat = true
-//            self.timer?.invalidate()
-//            self.timer = nil
-//            self.navigationController?.pushViewController(vc!, animated: true)
+            let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "OtherUserProfileViewController") as? OtherUserProfileViewController
+            vc?.strUserID = userID
+          //  vc?.isComingFromChat = true
+            self.timer?.invalidate()
+            self.timer = nil
+            self.navigationController?.pushViewController(vc!, animated: true)
         }
     }
     
@@ -148,17 +178,17 @@ class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,
     }
     
     @IBAction func btnDeleteFullImageDownload(_ sender: Any) {
-        if self.strMsgID != -1{
-            
-            objAlert.showAlertCallBack(alertLeftBtn: "no", alertRightBtn: "si", title: "", message: "¿Quieres borrar este mensaje?", controller: self) {
-               
-                self.vwContainFullImage.isHidden = true
-           //     let userIDForDelete = self.arrChatMessages[self.strMsgID].strMsgIDForDelete
-           //     self.call_DeleteChatMsgSinle(strUserID: objAppShareData.UserDetail.strUserId, strMsgID: userIDForDelete)
-            }
-        }else{
-            
-        }
+//        if self.strMsgID != -1{
+//
+//            objAlert.showAlertCallBack(alertLeftBtn: "no", alertRightBtn: "si", title: "", message: "¿Quieres borrar este mensaje?", controller: self) {
+//
+//                self.vwContainFullImage.isHidden = true
+//           //     let userIDForDelete = self.arrChatMessages[self.strMsgID].strMsgIDForDelete
+//           //     self.call_DeleteChatMsgSinle(strUserID: objAppShareData.UserDetail.strUserId, strMsgID: userIDForDelete)
+//            }
+//        }else{
+//
+//        }
        
     }
     
@@ -172,7 +202,7 @@ class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,
                 UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
             }
             
-            objAlert.showAlertCallBack(alertLeftBtn: "", alertRightBtn: "OK", title: "", message: "Imagen guardada con éxito", controller: self) {
+            objAlert.showAlertCallBack(alertLeftBtn: "", alertRightBtn: "OK", title: "", message: "Image download succesfully ", controller: self) {
                 self.vwContainFullImage.isHidden = true
             }
         }else{
@@ -185,7 +215,7 @@ class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,
     
     @objc func updateTimer() {
         //example functionality
-      //  self.call_GetChatList(strUserID: objAppShareData.UserDetail.strUserId, strSenderID: self.strSenderID)
+        self.call_GetChatList(strUserID: objAppShareData.UserDetail.strUserId, strSenderID: self.strSenderID)
     }
     
     @IBAction func btnBackOnHeader(_ sender: Any) {
@@ -198,21 +228,97 @@ class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,
         self.setImage()
     }
     
-    @IBAction func btnOpenStickerView(_ sender: Any) {
-        self.subVwSelection.isHidden = true
-        self.subVwContainCV.isHidden = false
-    }
-    @IBAction func btnOpenAudio(_ sender: Any) {
-        self.subVwSelection.isHidden = true
-        self.sbVwMainSticker.isHidden = true
-        self.subVwContainCV.isHidden = true
+    @IBAction func btnOnSelectMedia(_ sender: UIButton) {
+        self.imgVwRadioImage.image = UIImage.init(named: "radio_button")
+        self.imgVwRadioFile.image = UIImage.init(named: "radio_button")
+        self.imgVwRadioVideo.image = UIImage.init(named: "radio_button")
+        
+        switch sender.tag {
+        case 0:
+            if self.imgVwRadioImage.image == UIImage.init(named: "radio_button"){
+                self.imgVwRadioImage.image = UIImage.init(named: "radio_button_selected")
+            }else{
+                self.imgVwRadioImage.image = UIImage.init(named: "radio_button")
+            }
+            self.btnOnSelect.tag = 0
+        case 1:
+            if self.imgVwRadioFile.image == UIImage.init(named: "radio_button"){
+                self.imgVwRadioFile.image = UIImage.init(named: "radio_button_selected")
+            }else{
+                self.imgVwRadioFile.image = UIImage.init(named: "radio_button")
+            }
+            self.btnOnSelect.tag = 1
+        case 2:
+            if self.imgVwRadioVideo.image == UIImage.init(named: "radio_button"){
+                self.imgVwRadioVideo.image = UIImage.init(named: "radio_button_selected")
+            }else{
+                self.imgVwRadioVideo.image = UIImage.init(named: "radio_button")
+            }
+            self.btnOnSelect.tag = 2
+        default:
+            break
+        }
     }
     
-    @IBAction func btnOpenVideo(_ sender: Any) {
-        self.subVwSelection.isHidden = true
+    @IBAction func btnOnSelect(_ sender: UIButton) {
         self.sbVwMainSticker.isHidden = true
-        self.subVwContainCV.isHidden = true
+        switch sender.tag {
+        case 0:
+            self.setImage()
+        case 1:
+            // Use this code if your are developing prior iOS 14
+//            let types: [String] = [kUTTypePDF as String]
+//            let documentPicker = UIDocumentPickerViewController(documentTypes: types, in: .import)
+//            documentPicker.delegate = self
+//            documentPicker.modalPresentationStyle = .formSheet
+//            self.present(documentPicker, animated: true, completion: nil)
+
+            // For iOS 14+
+            if #available(iOS 14.0, *) {
+                let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: [UTType.item], asCopy: false)
+                documentPicker.delegate = self
+                documentPicker.modalPresentationStyle = .formSheet
+                self.present(documentPicker, animated: true, completion: nil)
+
+            } else {
+                // Fallback on earlier versions
+            }
+//            documentPicker.delegate = self
+//            documentPicker.modalPresentationStyle = .formSheet
+
+          
+        default:
+            self.takeVideo()
+        }
     }
+    
+    //================= UI Document Picker ==============//
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+            guard controller.documentPickerMode == .open, let url = urls.first, url.startAccessingSecurityScopedResource() else { return }
+            defer {
+                DispatchQueue.main.async {
+                    url.stopAccessingSecurityScopedResource()
+                }
+            }
+            
+            do {
+                let document = try Data(contentsOf: url.absoluteURL)
+                print(document)
+             //   parent.file = document
+              //  parent.fileName = url.lastPathComponent
+                print("File Selected: " + url.path)
+            }
+            catch {
+                print("Error selecting file: " + error.localizedDescription)
+            }
+            
+        }
+//    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+//         // you get from the urls parameter the urls from the files selected
+//        print(urls)
+//    }
+    
     
     @IBAction func btnAddOnSticker(_ sender: Any) {
         self.sbVwMainSticker.isHidden = false
@@ -220,43 +326,38 @@ class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,
     }
     
     @IBAction func btnSendMessage(_ sender: Any) {
-//        if (txtVwChat.text?.isEmpty)!{
-//
-//            self.txtVwChat.text = "."
-//            self.txtVwChat.text = self.txtVwChat.text.trimmingCharacters(in: .whitespacesAndNewlines)
-//            self.txtVwChat.isScrollEnabled = false
-//            self.txtVwChat.frame.size.height = self.txtViewCommentMinHeight
-//            self.txtVwChat.text = ""
-//
-//            if self.txtVwChat.text.count > 0{
-//
-//                self.txtVwChat.isScrollEnabled = false
-//
-//            }else{
-//                self.txtVwChat.isScrollEnabled = false
-//            }
-//
-//        }else{
-//
-//
-//            self.txtVwChat.frame.size.height = self.txtViewCommentMinHeight
-//            DispatchQueue.main.async {
-//                let text  = self.txtVwChat.text.encodeEmoji
-//                self.sendMessageNew(strText: text)
-//            }
-//            if self.txtVwChat.text.count > 0{
-//                self.txtVwChat.isScrollEnabled = false
-//
-//            }else{
-//                self.txtVwChat.isScrollEnabled = false
-//            }
-//        }
         
+        if (txtVwChat.text?.isEmpty)!{
+
+            self.txtVwChat.text = "."
+            self.txtVwChat.text = self.txtVwChat.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+            self.txtVwChat.isScrollEnabled = false
+            self.txtVwChat.frame.size.height = self.txtViewCommentMinHeight
+            self.txtVwChat.text = ""
+
+            if self.txtVwChat.text!.count > 0{
+                self.txtVwChat.isScrollEnabled = false
+            }else{
+                self.txtVwChat.isScrollEnabled = false
+            }
+        }else{
+            self.txtVwChat.frame.size.height = self.txtViewCommentMinHeight
+            DispatchQueue.main.async {
+                let text  = self.txtVwChat.text!.encodeEmoji
+                self.sendMessageNew(strText: text)
+            }
+            if self.txtVwChat.text!.count > 0{
+                self.txtVwChat.isScrollEnabled = false
+
+            }else{
+                self.txtVwChat.isScrollEnabled = false
+            }
+        }
     }
+    
     @IBAction func btnCloseStickerSubVw(_ sender: Any) {
         self.subVwSelection.isHidden = true
         self.sbVwMainSticker.isHidden = true
-        self.subVwContainCV.isHidden = true
         self.selectedIndex = -1
     }
     
@@ -291,51 +392,6 @@ class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,
     }
 }
 
-//extension ChatDetailViewController:UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return self.arrImagesSticker.count
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChatStickerCollectionViewCell", for: indexPath)as! ChatStickerCollectionViewCell
-//
-//        cell.imgVwSticker.image = self.arrImagesSticker[indexPath.row]
-//
-//        if self.selectedIndex == indexPath.row{
-//            cell.vwBorder.borderWidth = 1
-//            cell.vwBorder.borderColor = UIColor.init(named: "AppSkyBlue")
-//        }else{
-//            cell.vwBorder.borderWidth = 0
-//            cell.vwBorder.borderColor = UIColor.clear
-//        }
-//
-//
-//        return cell
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        self.selectedIndex = indexPath.row
-//        self.pickedImage = self.arrImagesSticker[indexPath.row]
-//        self.cvSticker.reloadData()
-//    }
-//
-//
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//
-//        let noOfCellsInRow = 3
-//
-//        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
-//
-//        let totalSpace = flowLayout.sectionInset.left
-//            + flowLayout.sectionInset.right
-//            + (flowLayout.minimumInteritemSpacing * CGFloat(noOfCellsInRow - 1))
-//
-//        let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(noOfCellsInRow))
-//
-//        return CGSize(width: size, height: size)
-//    }
-//}
-
 // MARK:- UIImage Picker Delegate
 extension ChatDetailViewController: UIImagePickerControllerDelegate{
     
@@ -366,6 +422,8 @@ extension ChatDetailViewController: UIImagePickerControllerDelegate{
         self.present(alert, animated: true, completion: nil)
     }
     
+
+    
     // Open camera
     func openCamera()
     {
@@ -389,22 +447,88 @@ extension ChatDetailViewController: UIImagePickerControllerDelegate{
         self.present(imagePicker, animated: true, completion: nil)
     }
     
+    
+    
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.dismiss(animated: true, completion: nil)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let editedImage = info[.editedImage] as? UIImage {
-            self.pickedImage = editedImage
-            self.imgVwFull.image = self.pickedImage
-            imagePicker.dismiss(animated: true, completion: nil)
-        } else if let originalImage = info[.originalImage] as? UIImage {
-            self.pickedImage = originalImage
-            self.imgVwFull.image = pickedImage
-            imagePicker.dismiss(animated: true, completion: nil)
+        
+        picker.dismiss(animated: true, completion: nil)
+        
+        guard let mediaType = info[UIImagePickerController.InfoKey.mediaType] as? String else { return }
+        
+        if mediaType  == "public.image" {
+            print("Image Selected")
+            if let url = info[.imageURL] as? URL {
+                
+                let editedImage = info[.editedImage] as? UIImage
+                self.pickedImage = editedImage
+                self.imgVwFull.image = self.pickedImage
+                
+                self.callWebserviceForSendImage(strSenderID: objAppShareData.UserDetail.strUserId, strReceiverID: self.strSenderID, strType: "Image")
+//                let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "EditImageVideoViewController") as? EditImageVideoViewController
+//                vc?.type = .image
+//                vc?.assetURL = url
+//                vc?.isComingFrom = ""
+//                self.navigationController?.pushViewController(vc!, animated: true)
+            }
         }
         
-        self.subVw.isHidden = false
+        if mediaType == "public.movie" {
+            print("Video Selected")
+            // Using the full key
+            if let url = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
+                
+                let duration = AVURLAsset(url: url).duration.seconds
+                    print(duration)
+                
+                self.videoUrl = "\(url)"
+                
+                self.callWebserviceForSendVideo(strSenderID: objAppShareData.UserDetail.strUserId, strReceiverID: self.strSenderID, strType: "video", strVidUrl: url)
+                
+                // Do something with the URL
+//                let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "EditImageVideoViewController") as? EditImageVideoViewController
+//                vc?.type = .video
+//                vc?.assetURL = url
+//                vc?.isComingFrom = ""
+//                self.navigationController?.pushViewController(vc!, animated: true)
+            }
+
+        }
+    
+        
+        
+//        if let editedImage = info[.editedImage] as? UIImage {
+//            self.pickedImage = editedImage
+//            self.imgVwFull.image = self.pickedImage
+//            imagePicker.dismiss(animated: true, completion: nil)
+//        } else if let originalImage = info[.originalImage] as? UIImage {
+//            self.pickedImage = originalImage
+//            self.imgVwFull.image = pickedImage
+//            imagePicker.dismiss(animated: true, completion: nil)
+//
+//        }else{
+//            if let selectedVideo:URL = (info[UIImagePickerController.InfoKey.mediaURL] as? URL) {
+//                print(selectedVideo)
+//                let duration = AVURLAsset(url: selectedVideo).duration.seconds
+//                print(duration)
+//                imagePicker.dismiss(animated: true, completion: nil)
+//                // Do something with the URL
+//                let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "EditImageVideoViewController") as? EditImageVideoViewController
+//                vc?.type = .video
+//                vc?.assetURL = selectedVideo
+//                vc?.isComingFrom = "VidoBlog"
+//                self.navigationController?.pushViewController(vc!, animated: true)
+//
+//                //self.uploadVideoUrl(uploadUrl:] as! String)
+//                // print(self.videoUrl)
+//
+//            }
+//        }
+        
+        
     }
     
     func cornerImage(image: UIImageView, color: UIColor ,width: CGFloat){
@@ -414,6 +538,158 @@ extension ChatDetailViewController: UIImagePickerControllerDelegate{
         image.layer.borderWidth = width
     }
     
+}
+
+//MARK:- Video Picker
+extension ChatDetailViewController{
+    
+    func takeVideo(){
+        let alert = UIAlertController(title: "Choose Video", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
+            if AVCaptureDevice.authorizationStatus(for: .video) ==  .authorized {
+                //already authorized
+                DispatchQueue.main.async {
+                    self.recordVid()
+                }
+            } else {
+                AVCaptureDevice.requestAccess(for: .video, completionHandler: { (granted: Bool) in
+                    if granted {
+                        //access allowed
+                        DispatchQueue.main.async {
+                            self.recordVid()
+                        }
+                    } else {
+                        //access denied
+                        self.alertPromptToAllowCameraAccessViaSettings()
+                    }
+                })
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in
+            DispatchQueue.main.async {
+                self.openVideoGallery()
+            }
+        }))
+        
+        alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+        imagePicker.delegate = self
+        alert.popoverPresentationController?.sourceView = self.view // works for both iPhone & iPad
+        present(alert, animated: true) {
+            print("option menu presented")
+        }
+        
+    }
+    
+    
+    func recordVid(){
+        // 1 Check if project runs on a device with camera available
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            
+            // 2 Present UIImagePickerController to take video
+            controller.sourceType = .camera
+            controller.mediaTypes = ["public.movie"]
+            controller.delegate = self
+            controller.videoMaximumDuration = 30
+            present(controller, animated: true, completion: nil)
+        }
+        else {
+            print("Camera is not available")
+            controller.sourceType = .savedPhotosAlbum
+            controller.mediaTypes = ["public.movie"]
+            controller.delegate = self
+            controller.videoMaximumDuration = 30
+            present(controller, animated: true, completion: nil)
+        }
+    }
+    
+    func alertPromptToAllowCameraAccessViaSettings() {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Access the Camera", message: "Allow to access the camera from your device settings. Go to settings.", preferredStyle: .alert )
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { _ in
+                if let appSettingsURL = NSURL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(appSettingsURL as URL)
+                }
+            }))
+            alert.addAction(UIAlertAction.init(title: "No", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func openVideoGallery() {
+        imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .savedPhotosAlbum
+        imagePicker.mediaTypes = ["public.movie"]
+        imagePicker.allowsEditing = true
+        imagePicker.videoMaximumDuration = 30
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    func captureOutput(captureOutput: AVCaptureFileOutput!, didStartRecordingToOutputFileAtURL fileURL: NSURL!, fromConnections connections: [AnyObject]!) {
+        
+        captureOutput.maxRecordedDuration = CMTimeMake(value: 10, timescale: 1)
+        let seconds = 5.0
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+            captureOutput.stopRecording()
+            // Put your code which should be executed with a delay here
+        }
+        return
+    }
+    
+    //MARK: - Helper methods
+    // Helper function inserted by Swift 4.2 migrator.
+    fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
+        return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
+    }
+    
+    // Helper function inserted by Swift 4.2 migrator.
+    fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
+        return input.rawValue
+    }
+    
+//    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+//
+//   //     if isComingFromRecording == true{
+//            // 1
+//            if let selectedVideo:URL = (info[UIImagePickerController.InfoKey.mediaURL] as? URL) {
+//                // Save video to the main photo album
+//               // let selectorToCall = #selector(self.videoSaved(_:didFinishSavingWithError:context:))
+//
+//                // 2
+//              //  UISaveVideoAtPathToSavedPhotosAlbum(selectedVideo.relativePath, self, selectorToCall, nil)
+//                // Save the video to the app directory
+////                let videoData = try? Data(contentsOf: selectedVideo)
+////                if videoData != nil{
+////                    self.videoData = videoData ?? Data()
+////                    self.assetURL = selectedVideo
+////                  //  self.callwebServicceApi()
+////                }
+//
+//
+//                    let duration = AVURLAsset(url: selectedVideo).duration.seconds
+//                        print(duration)
+//
+//                    // Do something with the URL
+//                    let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "EditImageVideoViewController") as? EditImageVideoViewController
+//                    vc?.type = .video
+//                    vc?.assetURL = selectedVideo
+//                    vc?.isComingFrom = "VidoBlog"
+//                    self.navigationController?.pushViewController(vc!, animated: true)
+//
+//
+//                //self.uploadVideoUrl(uploadUrl:] as! String)
+//                // print(self.videoUrl)
+//
+//            }
+//            // 3
+//            picker.dismiss(animated: true)
+//
+//
+//
+//
+//
+//    }
 }
 
 //MARK:- UItextViewHeightManage
@@ -460,11 +736,11 @@ extension ChatDetailViewController: UITextViewDelegate{
         self.txtVwChat.text = self.txtVwChat.text?.trimmingCharacters(in: .whitespacesAndNewlines)
         
         if self.txtVwChat.text == "" {
+            objAlert.showAlert(message: "Please enter some text", title: "Alert", controller: self)
            // AppSharedClass.shared.showAlert(title: "Alert", message: "Please enter some text", view: self)
             return
         }else{
-         //   self.call_SendTextMessageOnly(strUserID: objAppShareData.UserDetail.strUserId, strText: strText)
-           //asd self.call_WSSendMessage(strSenderID: self.getSenderID, strMessage: self.txtVwChat.text)
+            self.call_SendTextMessageOnly(strUserID: objAppShareData.UserDetail.strUserId, strText: strText)
         }
         self.txtVwChat.text = ""
     }
@@ -476,133 +752,213 @@ extension ChatDetailViewController: UITextViewDelegate{
 extension ChatDetailViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return self.arrChatMessages.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tblChat.dequeueReusableCell(withIdentifier: "ChatDetailTVCell")as! ChatDetailTVCell
         
-//        let obj = self.arrChatMessages[indexPath.row]
-//
-//        if obj.strImageUrl != ""{
-//            if obj.strSenderId == objAppShareData.UserDetail.strUserId{
-//                cell.vwMyMsg.isHidden = true
-//                cell.vwOpponent.isHidden = true
-//                cell.vwOpponentImage.isHidden = true
-//                cell.vwMyImage.isHidden = false
-//
-//                if obj.strType == "Sticker" || obj.strType == "sticker"{
-//                    cell.vwContainImgBorderMySide.backgroundColor = .clear
-//                    cell.imgVwMySide.contentMode = .scaleAspectFit
-////                    cell.vwContainImgBorderMySide.isHidden = false
-////                    cell.imgVwMySide.contentMode = .scaleAspectFill
-//                }else{
-//                    cell.vwContainImgBorderMySide.backgroundColor = UIColor.init(named: "AppSkyBlue")
-//                    cell.imgVwMySide.contentMode = .scaleAspectFill
-//                }
-//
-//                let profilePic = obj.strImageUrl
-////                if profilePic != "" {
-////                    let url = URL(string: profilePic)
-////                    cell.imgVwopponent.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "splashLogo"), options: .refreshCached) { (image, error, cacheType, url) in
-////                        if image != nil {
-////                            cell.imgVwopponent.image = image
-////                        }
-////                        if let error = error {
-////                            print("URL: \(url), error: \(error)")
-////                        }
-////                    }
-//////                    cell.imgVwMySide.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo_square"))
-////                }
-//
-//                cell.imgVwMySide.imageFromServerURL(urlString: profilePic, PlaceHolderImage: #imageLiteral(resourceName: "logo_square"))
-//
-//
-//
-//            }else{
-//                cell.vwMyMsg.isHidden = true
-//                cell.vwOpponent.isHidden = true
-//                cell.vwOpponentImage.isHidden = false
-//                cell.vwMyImage.isHidden = true
-//
-//
-//                if obj.strType == "Sticker" || obj.strType == "sticker"{
-//                    cell.vwContainImgBorderOpponentSide.backgroundColor = .clear
-//                    cell.imgVwopponent.contentMode = .scaleAspectFit
-////                    cell.vwContainImgBorderOpponentSide.isHidden = false
-////                    cell.imgVwopponent.contentMode = .scaleAspectFill
-//                }else{
-//                    cell.vwContainImgBorderOpponentSide.backgroundColor = UIColor.init(named: "AppSkyBlue")
-//                    cell.imgVwopponent.contentMode = .scaleAspectFill
-//                }
-//
-//                let profilePic = obj.strImageUrl
-//                cell.imgVwopponent.imageFromServerURL(urlString: profilePic, PlaceHolderImage: #imageLiteral(resourceName: "logo_square"))
-//            }
-//        }else{
-//            if obj.strSenderId == objAppShareData.UserDetail.strUserId{
-//                cell.vwOpponentImage.isHidden = true
-//                cell.vwMyImage.isHidden = true
-//                cell.vwMyMsg.isHidden = false
-//                cell.lblMyMsg.text = obj.strOpponentChatMessage
-//                cell.lblMyMsgTime.text = obj.strOpponentChatTime
-//                cell.vwOpponent.isHidden = true
-//            }else{
-//                cell.vwOpponentImage.isHidden = true
-//                cell.vwMyImage.isHidden = true
-//                cell.lblOpponentMsg.text = obj.strOpponentChatMessage
-//                cell.lblopponentMsgTime.text = obj.strOpponentChatTime
-//                cell.vwOpponent.isHidden = false
-//                cell.vwMyMsg.isHidden = true
-//            }
-//        }
-//
-//        cell.lblOpponentMsg.text = obj.strOpponentChatMessage
-//        cell.lblopponentMsgTime.text = obj.strChatTime
-//        cell.lblMyImageTime.text = obj.strChatTime
-//        cell.lblOpponentImgTime.text = obj.strChatTime
-//        cell.lblMyMsgTime.text = obj.strChatTime
-//
-//        cell.btnOpenImageOnFullviewMySide.tag = indexPath.row
-//        cell.btnOpenImageOnFullviewMySide.addTarget(self, action: #selector(btnOpenImage), for: .touchUpInside)
-//
-//        cell.btnOpenImageOnFullViewOpponentSide.tag = indexPath.row
-//        cell.btnOpenImageOnFullViewOpponentSide.addTarget(self, action: #selector(btnOpenImage), for: .touchUpInside)
+        let obj = self.arrChatMessages[indexPath.row]
+        
+        let imgUrl = obj.strImageUrl
+        let docUrl = obj.strChatDocumentUrl
+        let vidUrl = obj.strChatVideoUrl
+        
+        
+        if imgUrl != "" || docUrl != "" || vidUrl != ""{
+            if obj.strSenderId == objAppShareData.UserDetail.strUserId{
+                cell.vwMyMsg.isHidden = true
+                cell.vwOpponent.isHidden = true
+                cell.vwOpponentImage.isHidden = true
+                cell.vwMyImage.isHidden = false
+
+                if obj.strType == "image" || obj.strType == "Image"{
+                    let profilePic = obj.strImageUrl
+                    if profilePic != ""{
+                       // cell.imgVwMySide.imageFromServerURL(urlString: profilePic, PlaceHolderImage: #imageLiteral(resourceName: "logo"))
+                        let url = URL(string: profilePic)
+                        cell.imgVwMySide.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo"))
+                    }else{
+                        cell.imgVwMySide.image = nil
+                    }
+                   // cell.imgVwMySide.imageFromServerURL(urlString: profilePic, PlaceHolderImage: #imageLiteral(resourceName: "logo"))
+                }else{
+                    cell.imgVwMySide.imageFromServerURL(urlString: "", PlaceHolderImage: #imageLiteral(resourceName: "logo"))
+                }
+                
+                if obj.strType == "video" || obj.strType == "Video"{
+                  
+                    if let vidUrll : URL = URL(string: obj.strChatVideoUrl){
+                        self.getThumbnailImageFromVideoUrl(url: vidUrll) { image in
+                          //  cell.imgVwMySide.imageFromServerURL(urlString: profilePic, PlaceHolderImage: #imageLiteral(resourceName: "logo"))
+                            cell.imgVwMySide.image = image
+                        }
+                    }else{
+                        print("Not able to convert")
+                    }
+                       
+                    
+                }else{
+                    cell.imgVwMySide.imageFromServerURL(urlString: "", PlaceHolderImage: #imageLiteral(resourceName: "logo"))
+                }
+               
+
+                if obj.strType == "file" || obj.strType == "File"{
+                    cell.imgVwMySide.image = UIImage.init(named: "doc")
+
+                }else{
+                    cell.imgVwMySide.imageFromServerURL(urlString: "", PlaceHolderImage: #imageLiteral(resourceName: "logo"))
+                }
+
+
+            }else{
+                cell.vwMyMsg.isHidden = true
+                cell.vwOpponent.isHidden = true
+                cell.vwOpponentImage.isHidden = false
+                cell.vwMyImage.isHidden = true
+                
+                if obj.strType == "image"{
+                    let profilePic = obj.strImageUrl
+                    if profilePic != ""{
+                        cell.imgVwopponent.imageFromServerURL(urlString: profilePic, PlaceHolderImage: #imageLiteral(resourceName: "logo"))
+                    }else{
+                        cell.imgVwopponent.image = nil
+                    }
+                  
+                }else{
+                    cell.imgVwMySide.imageFromServerURL(urlString: "", PlaceHolderImage: #imageLiteral(resourceName: "logo"))
+                }
+                
+                
+                
+                if obj.strType == "file" || obj.strType == "File"{
+                    cell.imgVwopponent.image = UIImage.init(named: "doc")
+
+                }else{
+                    cell.imgVwopponent.imageFromServerURL(urlString: "", PlaceHolderImage: #imageLiteral(resourceName: "logo"))
+                }
+
+               
+            }
+        }else{
+            
+            if obj.strSenderId == objAppShareData.UserDetail.strUserId{
+                cell.vwOpponentImage.isHidden = true
+                cell.vwMyImage.isHidden = true
+                cell.vwMyMsg.isHidden = false
+                cell.lblMyMsg.text = obj.strOpponentChatMessage
+                cell.lblMyMsgTime.text = obj.strOpponentChatTime
+                cell.vwOpponent.isHidden = true
+            }else{
+                cell.vwOpponentImage.isHidden = true
+                cell.vwMyImage.isHidden = true
+                cell.lblOpponentMsg.text = obj.strOpponentChatMessage
+                cell.lblopponentMsgTime.text = obj.strOpponentChatTime
+                cell.vwOpponent.isHidden = false
+                cell.vwMyMsg.isHidden = true
+            }
+        }
+
+        cell.lblOpponentMsg.text = obj.strOpponentChatMessage
+        cell.lblopponentMsgTime.text = obj.strChatTime
+        cell.lblMyImageTime.text = obj.strChatTime
+        cell.lblOpponentImgTime.text = obj.strChatTime
+        cell.lblMyMsgTime.text = obj.strChatTime
+
+        cell.btnOpenImageOnFullviewMySide.tag = indexPath.row
+        cell.btnOpenImageOnFullviewMySide.addTarget(self, action: #selector(btnOpenImage), for: .touchUpInside)
+
+        cell.btnOpenImageOnFullViewOpponentSide.tag = indexPath.row
+        cell.btnOpenImageOnFullViewOpponentSide.addTarget(self, action: #selector(btnOpenImage), for: .touchUpInside)
         
         return cell
     }
     
+    private func createVideoThumbnail(from url: URL) -> UIImage? {
+
+        let asset = AVAsset(url: url)
+        let assetImgGenerate = AVAssetImageGenerator(asset: asset)
+        assetImgGenerate.appliesPreferredTrackTransform = true
+       // assetImgGenerate.maximumSize = CGSize(width: frame.width, height: frame.height)
+       // assetImgGenerate.maximumSize = CGSize()
+
+        let time = CMTimeMakeWithSeconds(0.0, preferredTimescale: 600)
+        do {
+            let img = try assetImgGenerate.copyCGImage(at: time, actualTime: nil)
+            let thumbnail = UIImage(cgImage: img)
+            return thumbnail
+        }
+        catch {
+          print(error.localizedDescription)
+          return nil
+        }
+
+    }
     
     @objc func btnOpenImage(sender: UIButton){
         print(sender.tag)
-//        self.strMsgID = sender.tag
-//        let obj = self.arrChatMessages[sender.tag]
-//        self.strSelectedImageUrl = obj.strImageUrl
-//        let profilePic = obj.strImageUrl
-//        if profilePic != "" {
-//            let url = URL(string: profilePic)
-//            self.imgvwFullForDownload.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo_square"))
-//        }
-//
-//        self.vwContainFullImage.isHidden = false
+        self.strMsgID = sender.tag
+        
+        switch self.arrChatMessages[sender.tag].strType {
+        case "image":
+            let obj = self.arrChatMessages[sender.tag]
+            self.strSelectedImageUrl = obj.strImageUrl
+            let profilePic = obj.strImageUrl
+            if profilePic != "" {
+                let url = URL(string: profilePic)
+                self.imgvwFullForDownload.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo"))
+            }
+
+            self.vwContainFullImage.isHidden = false
+        case "file":
+            
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
+            vc.strIsComingFrom = "Document"
+            vc.strUrl =  self.arrChatMessages[sender.tag].strChatDocumentUrl.trim()
+            self.navigationController?.pushViewController(vc, animated: true)
+            
+//            let url = URL(string: self.arrChatMessages[sender.tag].strChatDocumentUrl.trim())!
+//            FileDownloader.loadFileAsync(url: url) { (path, error) in
+//                if error == nil{
+//                    objAlert.showAlert(message: "File download succesfully on document direcotry.", title: "Success", controller: self)
+//                }else{
+//                    objAlert.showAlert(message: "File download error", title: "Failed", controller: self)
+//                }
+//                print("PDF File downloaded to : \(path!)")
+//            }
+            
+        case "video":
+            let url = URL(string: self.arrChatMessages[sender.tag].strChatVideoUrl) ?? URL(fileURLWithPath: "")
+            playVideo(url: url)
+        default:
+            break
+        }
+        
+       
     }
 
-    
-    @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
-        if sender.state == .began {
-            let touchPoint = sender.location(in: tblChat)
-//            if let indexPath = tblChat.indexPathForRow(at: touchPoint) {
-//                print(indexPath.row)
-//                // your code here, get the row for the indexPath or do whatever you want
-//
-//                let type = self.arrChatMessages[indexPath.row].strType
-//                if type == "Text" || type == "text"{
-//                    self.openActionSheet(index: indexPath.row)
-//                }
-//            }
+    func playVideo(url: URL) {
+            let player = AVPlayer(url: url)
+            let vc = AVPlayerViewController()
+            vc.player = player
+            self.present(vc, animated: true) { vc.player?.play() }
         }
-    }
     
+//    @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
+//        if sender.state == .began {
+//            let touchPoint = sender.location(in: tblChat)
+////            if let indexPath = tblChat.indexPathForRow(at: touchPoint) {
+////                print(indexPath.row)
+////                // your code here, get the row for the indexPath or do whatever you want
+////
+////                let type = self.arrChatMessages[indexPath.row].strType
+////                if type == "Text" || type == "text"{
+////                    self.openActionSheet(index: indexPath.row)
+////                }
+////            }
+//        }
+//    }
+//
     
     
     func openActionSheet(index:Int){
@@ -652,7 +1008,7 @@ extension ChatDetailViewController:UITableViewDelegate,UITableViewDataSource{
 
 //Get Chat List
 ////MARK:- Call Webservice Chat List
-//extension ChatDetailViewController{
+extension ChatDetailViewController{
 //
 //
 //    // MARK:- Get Profile
@@ -717,178 +1073,190 @@ extension ChatDetailViewController:UITableViewDelegate,UITableViewDataSource{
 //    }
 //
 //
-//    func call_GetChatList(strUserID:String, strSenderID:String){
-//
-//        if !objWebServiceManager.isNetworkAvailable(){
-//            objWebServiceManager.hideIndicator()
-//            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
-//            return
-//        }
-//
-//      //  objWebServiceManager.showIndicator()
-//
-//        let parameter = ["receiver_id":strSenderID,
-//                         "sender_id":strUserID,
-//                         "chat_status":self.strOnlineStatus]as [String:Any]
-//
-//
-//        objWebServiceManager.requestGet(strURL: WsUrl.url_getChatList, params: parameter, queryParams: [:], strCustomValidation: "") { (response) in
-//            objWebServiceManager.hideIndicator()
-//            let status = (response["status"] as? Int)
-//            let message = (response["message"] as? String)
-//
-//            print(response)
-//
-//            if status == MessageConstant.k_StatusCode{
-//
-//                if let dictChatStatus = response["online_status"] as? [String:Any]{
-//                    if let chatStatus = dictChatStatus["chat_status"] as? String{
-//                        self.lblOnLineStatus.text = chatStatus.contains("Typing") ? "Escribiendo..." : chatStatus.contains("Online") ? "En línea" : chatStatus
-//                    }else{
-//                        self.lblOnLineStatus.text = ""
+
+    func call_GetChatList(strUserID:String, strSenderID:String){
+
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
+            return
+        }
+
+      //  objWebServiceManager.showIndicator()
+
+        let parameter = ["receiver_id":strSenderID,
+                         "sender_id":strUserID]as [String:Any]
+      
+
+        print(parameter)
+
+      //  objWebServiceManager.requestGet(strURL: WsUrl.url_getChatList, params: parameter, queryParams: [:], strCustomValidation: "") { (response) in
+        objWebServiceManager.requestPost(strURL: WsUrl.url_getChatList, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
+ 
+
+            objWebServiceManager.hideIndicator()
+            let status = (response["status"] as? Int)
+            let message = (response["message"] as? String)
+
+            print(response)
+
+            if status == MessageConstant.k_StatusCode{
+
+                if let dictChatStatus = response["online_status"] as? [String:Any]{
+                    if let chatStatus = dictChatStatus["chat_status"] as? String{
+                        self.lblOnLineStatus.text = chatStatus.contains("Typing") ? "Escribiendo..." : chatStatus.contains("Online") ? "En línea" : chatStatus
+                    }else{
+                        self.lblOnLineStatus.text = ""
+                    }
+                }
+
+                if let arrData  = response["result"] as? [[String:Any]] {
+                    var newArrayChatMessages: [ChatDetailModel] = []
+                    for dict in arrData {
+                        let obj = ChatDetailModel.init(dict: dict)
+                        newArrayChatMessages.append(obj)
+                    }
+
+                    if self.arrChatMessages.count == 0 {
+                        //Add initially all
+                        self.arrChatMessages.removeAll()
+                        self.tblChat.reloadData()
+
+                        for i in 0..<arrData.count{
+                            let dictdata = arrData[i]
+                            let obj = ChatDetailModel.init(dict: dictdata)
+                            self.arrChatMessages.insert(obj, at: i)
+    //
+    //                        self.arrChatMessages.append(obj)
+                            self.tblChat.insertRows(at: [IndexPath(item: i, section: 0)], with: .none)
+                        }
+                        DispatchQueue.main.async {
+                            self.tblChat.scrollToBottom()
+                        }
+
+                    }
+                    else {
+                        let previoudIds = self.arrChatMessages.map { $0.strMsgIDForDelete }
+                        let newIds = newArrayChatMessages.map { $0.strMsgIDForDelete }
+
+                        let previoudIdsSet = Set(previoudIds)
+                        let newIdsSet = Set(newIds)
+
+                        let unique = (previoudIdsSet.symmetricDifference(newIdsSet)).sorted()
+
+                        for uniqueId in unique {
+                            if previoudIds.contains(uniqueId) {
+                                //Remove the element
+                                if let idToDelete = self.arrChatMessages.firstIndex(where: { $0.strMsgIDForDelete == uniqueId }) {
+                                    self.arrChatMessages.remove(at: idToDelete)
+                                    self.tblChat.deleteRows(at: [IndexPath(item: idToDelete, section: 0)], with: .none)
+
+                                }
+                            }
+                            else if newIds.contains(uniqueId) {
+                                // Add new element
+                                let filterObj = newArrayChatMessages.filter({ $0.strMsgIDForDelete == uniqueId })
+                                if filterObj.count > 0 {
+                                    let index = self.arrChatMessages.count
+                                    self.arrChatMessages.insert(filterObj[0], at: index)
+                                    self.tblChat.insertRows(at: [IndexPath(item: index, section: 0)], with: .none)
+                                    self.tblChat.scrollToBottom()
+                                }
+                            }
+                        }
+                    }
+
+//                    for i in 0..<self.arrChatMessages.count{
+//                        self.tblChat.deleteRows(at: [IndexPath(item: i, section: 0)], with: .automatic)
 //                    }
-//                }
-//
-//                if let arrData  = response["result"] as? [[String:Any]] {
-//                    var newArrayChatMessages: [ChatDetailModel] = []
-//                    for dict in arrData {
-//                        let obj = ChatDetailModel.init(dict: dict)
-//                        newArrayChatMessages.append(obj)
-//                    }
-//
-//                    if self.arrChatMessages.count == 0 {
-//                        //Add initially all
-//                        self.arrChatMessages.removeAll()
+
+                    if self.initilizeFirstTimeOnly == false{
+                        self.initilizeFirstTimeOnly = true
+                        self.arrCount = self.arrChatMessages.count
 //                        self.tblChat.reloadData()
-//
-//                        for i in 0..<arrData.count{
-//                            let dictdata = arrData[i]
-//                            let obj = ChatDetailModel.init(dict: dictdata)
-//                            self.arrChatMessages.insert(obj, at: i)
-//    //
-//    //                        self.arrChatMessages.append(obj)
-//                            self.tblChat.insertRows(at: [IndexPath(item: i, section: 0)], with: .none)
-//                        }
-//                        DispatchQueue.main.async {
-//                            self.tblChat.scrollToBottom()
-//                        }
-//
+                    }
+
+//                    self.tblChat.scrollToBottom()
+//                    if self.isSendMessage{
+//                        self.isSendMessage = false
+//                        self.tblChat.scrollToBottom()
 //                    }
-//                    else {
-//                        let previoudIds = self.arrChatMessages.map { $0.strMsgIDForDelete }
-//                        let newIds = newArrayChatMessages.map { $0.strMsgIDForDelete }
-//
-//                        let previoudIdsSet = Set(previoudIds)
-//                        let newIdsSet = Set(newIds)
-//
-//                        let unique = (previoudIdsSet.symmetricDifference(newIdsSet)).sorted()
-//
-//                        for uniqueId in unique {
-//                            if previoudIds.contains(uniqueId) {
-//                                //Remove the element
-//                                if let idToDelete = self.arrChatMessages.firstIndex(where: { $0.strMsgIDForDelete == uniqueId }) {
-//                                    self.arrChatMessages.remove(at: idToDelete)
-//                                    self.tblChat.deleteRows(at: [IndexPath(item: idToDelete, section: 0)], with: .none)
-//
-//                                }
-//                            }
-//                            else if newIds.contains(uniqueId) {
-//                                // Add new element
-//                                let filterObj = newArrayChatMessages.filter({ $0.strMsgIDForDelete == uniqueId })
-//                                if filterObj.count > 0 {
-//                                    let index = self.arrChatMessages.count
-//                                    self.arrChatMessages.insert(filterObj[0], at: index)
-//                                    self.tblChat.insertRows(at: [IndexPath(item: index, section: 0)], with: .none)
-//                                    self.tblChat.scrollToBottom()
-//                                }
-//
-//                            }
-//                        }
-//
-//                    }
-//
-//
-////                    for i in 0..<self.arrChatMessages.count{
-////                        self.tblChat.deleteRows(at: [IndexPath(item: i, section: 0)], with: .automatic)
-////                    }
-//
-//
-//
-//
-//                    if self.initilizeFirstTimeOnly == false{
-//                        self.initilizeFirstTimeOnly = true
-//                        self.arrCount = self.arrChatMessages.count
-////                        self.tblChat.reloadData()
-//                    }
-//
-////                    self.tblChat.scrollToBottom()
-////                    if self.isSendMessage{
-////                        self.isSendMessage = false
-////                        self.tblChat.scrollToBottom()
-////                    }
-//
-//                    if self.arrCount == self.arrChatMessages.count{
-//
+
+                    if self.arrCount == self.arrChatMessages.count{
+
+                    }else{
+//                        self.tblChat.reloadData()
+                        self.updateTableContentInset()
+                    }
+
+
+                    if self.arrChatMessages.count == 0{
+                        self.tblChat.displayBackgroundText(text: "¡Sin conversación todavía!")
+                    }else{
+                        self.tblChat.displayBackgroundText(text: "")
+                    }
+
+//                    if self.isSendMessage{
+//                        self.isSendMessage = false
+//                        self.tblChat.scrollToBottom()
 //                    }else{
-////                        self.tblChat.reloadData()
-//                        self.updateTableContentInset()
+//
 //                    }
-//
-//
-//                    if self.arrChatMessages.count == 0{
-//                        self.tblChat.displayBackgroundText(text: "¡Sin conversación todavía!")
-//                    }else{
-//                        self.tblChat.displayBackgroundText(text: "")
-//                    }
-//
-////                    if self.isSendMessage{
-////                        self.isSendMessage = false
-////                        self.tblChat.scrollToBottom()
-////                    }else{
-////
-////                    }
-//
-//                }
-//            }else{
-//                objWebServiceManager.hideIndicator()
-//
-//                if (response["result"]as? String) != nil{
-//                    self.tblChat.displayBackgroundText(text: "ningún record fue encontrado")
-//                }else{
-//                    objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
-//                }
-//            }
-//        } failure: { (Error) in
-//            print(Error)
-//            objWebServiceManager.hideIndicator()
-//        }
-//    }
+
+                }
+            }else{
+                objWebServiceManager.hideIndicator()
+
+                if (response["result"]as? String) != nil{
+                    self.tblChat.displayBackgroundText(text: "ningún record fue encontrado")
+                }else{
+                    objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+                }
+            }
+        } failure: { (Error) in
+            print(Error)
+            objWebServiceManager.hideIndicator()
+        }
+    }
 //
 //
 //    //MARK:- Send Text message Only
 //
-//    func call_SendTextMessageOnly(strUserID:String, strText:String){
-//
-//        if !objWebServiceManager.isNetworkAvailable(){
-//            objWebServiceManager.hideIndicator()
-//            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
-//            return
-//        }
-//
-//       // objWebServiceManager.showIndicator()
-//
-//        let dicrParam = ["receiver_id":self.strSenderID,//Opponent ID
-//                         "sender_id":strUserID,//My ID
-//                         "type":"Text",
-//                         "chat_message":strText]as [String:Any]
-//
-//        objWebServiceManager.requestPost(strURL: WsUrl.url_insertChat, queryParams: [:], params: dicrParam, strCustomValidation: "", showIndicator: false) { (response) in
-//            objWebServiceManager.hideIndicator()
-//            let status = (response["status"] as? Int)
-//            let message = (response["message"] as? String)
-//
-//            print(response)
-//
+    func call_SendTextMessageOnly(strUserID:String, strText:String){
+
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
+            return
+        }
+
+       // objWebServiceManager.showIndicator()
+
+        let dicrParam = ["receiver_id":self.strSenderID,//Opponent ID
+                         "sender_id":strUserID,//My ID
+                         "type":"Text",
+                         "chat_message":strText]as [String:Any]
+        print(dicrParam)
+
+        objWebServiceManager.requestPost(strURL: WsUrl.url_insertChat, queryParams: [:], params: dicrParam, strCustomValidation: "", showIndicator: false) { (response) in
+            objWebServiceManager.hideIndicator()
+            let status = (response["status"] as? Int)
+            let message = (response["message"] as? String)
+
+            print(response)
+            
+            if let result = response["result"]as? [String:Any]{
+                if message == "success"{
+                    self.isSendMessage = true
+                    self.initilizeFirstTimeOnly = false
+                    // self.call_GetChatList(strUserID: objAppShareData.UserDetail.strUserId, strSenderID: self.strSenderID)
+                }
+            }else{
+                objWebServiceManager.hideIndicator()
+                // objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+                
+            }
+
 //            if let result = response["result"]as? String{
 //                if result == "successful"{
 //                    self.isSendMessage = true
@@ -900,13 +1268,13 @@ extension ChatDetailViewController:UITableViewDelegate,UITableViewDataSource{
 //               // objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
 //
 //            }
-//
-//
-//        } failure: { (Error) in
-//            print(Error)
-//            objWebServiceManager.hideIndicator()
-//        }
-//   }
+
+
+        } failure: { (Error) in
+            print(Error)
+            objWebServiceManager.hideIndicator()
+        }
+   }
 //
 //    //MARK:- Delete Singhe Message
 //    func call_DeleteChatMsgSinle(strUserID:String, strMsgID:String){
@@ -998,72 +1366,142 @@ extension ChatDetailViewController:UITableViewDelegate,UITableViewDataSource{
 //MARK:- CallWebservice
 //extension ChatDetailViewController{
 //
-//    func callWebserviceForSendImage(strSenderID:String,strReceiverID:String,strType:String){
-//
-//        if !objWebServiceManager.isNetworkAvailable(){
-//            objWebServiceManager.hideIndicator()
-//
-//            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
-//            return
-//        }
-//        objWebServiceManager.showIndicator()
-//        self.view.endEditing(true)
-//
-//        var imageData = [Data]()
-//        var imgData : Data?
-//        if self.pickedImage != nil{
-//           // imgData = (self.pickedImage?.jpegData(compressionQuality: 1.0))!
-//            imgData = (self.pickedImage?.pngData())// jpegData(compressionQuality: 1.0))!
-//        }
-//        else {
-//            imgData = (self.imgVwUser.image?.pngData()) //jpegData(compressionQuality: 1.0))!
-//        }
-//        imageData.append(imgData!)
-//
-//        let imageParam = ["chat_image"]
-//
-//        print(imageData)
-//
-//        let dicrParam = ["sender_id":strSenderID,
-//                         "receiver_id":strReceiverID,
-//                         "chat_message":"",
-//                         "type":strType
-//        ]as [String:Any]
-//
-//        print(dicrParam)
-//
-//        objWebServiceManager.uploadMultipartWithImagesData(strURL: WsUrl.url_insertChat, params: dicrParam, showIndicator: true, customValidation: "", imageData: imgData, imageToUpload: imageData, imagesParam: imageParam, fileName: "chat_image", mimeType: "image/png") { (response) in
-//            objWebServiceManager.hideIndicator()
-//            print(response)
-//            let status = (response["status"] as? Int)
-//            let message = (response["message"] as? String)
-//
-//
-//            if let result = response["result"]as? String{
-//                if result == "successful"{
-//                    self.subVw.isHidden = true
-//                    self.subVwContainCV.isHidden = true
-//                    self.subVwSelection.isHidden = true
-//                    self.sbVwMainSticker.isHidden = true
-//
-//                    self.isSendMessage = true
-//                    self.initilizeFirstTimeOnly = false
-//                   // self.call_GetChatList(strUserID: objAppShareData.UserDetail.strUserId, strSenderID: self.strSenderID)
-//                }
-//            }else{
-//                objWebServiceManager.hideIndicator()
-//                objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
-//            }
-//
-//        } failure: { (Error) in
-//            print(Error)
-//        }
-//    }
-//
-//
-//
-//
-//   }
+    func callWebserviceForSendImage(strSenderID:String,strReceiverID:String,strType:String){
+
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+
+            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
+            return
+        }
+        objWebServiceManager.showIndicator()
+        self.view.endEditing(true)
+
+        var imageData = [Data]()
+        var imgData : Data?
+        if self.pickedImage != nil{
+           // imgData = (self.pickedImage?.jpegData(compressionQuality: 1.0))!
+            imgData = (self.pickedImage?.pngData())// jpegData(compressionQuality: 1.0))!
+        }
+        else {
+            imgData = (self.imgVwUser.image?.pngData()) //jpegData(compressionQuality: 1.0))!
+        }
+        imageData.append(imgData!)
+
+        let imageParam = ["chat_image"]
+
+        print(imageData)
+
+        let dicrParam = ["sender_id":strSenderID,
+                         "receiver_id":strReceiverID,
+                         "chat_message":"",
+                         "type":strType
+        ]as [String:Any]
+
+        print(dicrParam)
+
+        objWebServiceManager.uploadMultipartWithImagesData(strURL: WsUrl.url_insertChat, params: dicrParam, showIndicator: true, customValidation: "", imageData: imgData, imageToUpload: imageData, imagesParam: imageParam, fileName: "chat_image", mimeType: "image/png") { (response) in
+            objWebServiceManager.hideIndicator()
+            print(response)
+            let status = (response["status"] as? Int)
+            let message = (response["message"] as? String)
+
+
+            if let result = response["result"]as? [String:Any]{
+               
+                    self.subVw.isHidden = true
+                    self.subVwSelection.isHidden = true
+                    self.sbVwMainSticker.isHidden = true
+
+                    self.isSendMessage = true
+                    self.initilizeFirstTimeOnly = false
+                   // self.call_GetChatList(strUserID: objAppShareData.UserDetail.strUserId, strSenderID: self.strSenderID)
+        
+            }else{
+                objWebServiceManager.hideIndicator()
+                objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+            }
+
+        } failure: { (Error) in
+            print(Error)
+        }
+    }
+
+    
+    //MARK:- upload Chat Video
+    
+    func callWebserviceForSendVideo(strSenderID:String,strReceiverID:String,strType:String,strVidUrl:URL){
+
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+
+            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
+            return
+        }
+        objWebServiceManager.showIndicator()
+        self.view.endEditing(true)
+
+        var videoData = [Data]()
+        var vidData : Data?
+        
+     //   if self.pickedVideo != nil{
+            do {
+            vidData = try Data(contentsOf: strVidUrl, options: Data.ReadingOptions.alwaysMapped)
+            print(vidData)
+            } catch {
+                print(error)
+                objWebServiceManager.hideIndicator()
+                objAlert.showAlert(message: error.localizedDescription, title: "Alert", controller: self)
+                return
+            }
+     //   }
+        
+        videoData.append(vidData!)
+
+        let imageParam = ["chat_video"]
+
+        print(videoData)
+
+        let dicrParam = ["sender_id":strSenderID,
+                         "receiver_id":strReceiverID,
+                         "chat_message":"",
+                         "type":strType
+        ]as [String:Any]
+
+        print(dicrParam)
+
+        objWebServiceManager.uploadMultipartWithImagesData(strURL: WsUrl.url_insertChat, params: dicrParam, showIndicator: true, customValidation: "", imageData: vidData, imageToUpload: videoData, imagesParam: imageParam, fileName: "chat_video", mimeType: "video/mp4") { (response) in
+            
+            objWebServiceManager.hideIndicator()
+            print(response)
+            
+            let status = (response["status"] as? Int)
+            let message = (response["message"] as? String)
+
+
+            if let result = response["result"]as? [String:Any]{
+               
+                    self.subVw.isHidden = true
+                    self.subVwSelection.isHidden = true
+                    self.sbVwMainSticker.isHidden = true
+
+                    self.isSendMessage = true
+                    self.initilizeFirstTimeOnly = false
+                   // self.call_GetChatList(strUserID: objAppShareData.UserDetail.strUserId, strSenderID: self.strSenderID)
+                
+            }else{
+                objWebServiceManager.hideIndicator()
+                objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+            }
+
+        } failure: { (Error) in
+            print(Error)
+        }
+    }
+
+
+
+   }
 
 //MARK:- Scroll to bottom
 extension UITableView {
@@ -1163,4 +1601,22 @@ extension UIImageView {
     sender.view?.transform = scale
     sender.scale = 1
   }
+}
+
+
+extension ChatDetailViewController: FileDownloadingDelegate {
+    func updateDownloadProgressWith(progress: Float) {
+        // self.downloadProgressView.setProgress(progress, animated: true)
+    }
+
+    func downloadFinished(localFilePath tempFilePath: URL) {
+        print("downloaded to \(tempFilePath)")
+        // resave the file into your desired place using
+        // let dataFromURL = NSData(contentsOf: location)
+        // dataFromURL?.write(to: yourDesiredFileUrl, atomically: true)
+    }
+
+    func downloadFailed(withError error: Error) {
+        // handle the error
+    }
 }

@@ -13,7 +13,8 @@ enum AssetType: String {
     case video = "video"
 }
 
-class ProfileViewController: UIViewController, UINavigationControllerDelegate {
+class ProfileViewController: UIViewController, UINavigationControllerDelegate,ProfileUpdateProtocol {
+  
     
     
     @IBOutlet var vwContainButtons: UIView!
@@ -32,12 +33,15 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate {
     var imagePicker = UIImagePickerController()
     var pickedImage:UIImage?
     var type: AssetType?
+    var isShowingCheckBox:Bool?
+    
+    var objUserDetail:userDetailModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.imagePicker.delegate = self
-        self.vwContainButtons.isHidden = true
+       
         self.cvImages.delegate = self
         self.cvImages.dataSource = self
         let strUserID = objAppShareData.UserDetail.strUserId
@@ -46,10 +50,17 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate {
         // Do any additional setup after loading the view.
     }
     
+    func isUpdatedDelegate(isUpdate: Bool) {
+        if isUpdate == true{
+            let strUserID = objAppShareData.UserDetail.strUserId
+            self.call_GetProfile(strUserID: strUserID)
+        }
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-       
+        self.vwContainButtons.isHidden = true
         
     }
     
@@ -64,10 +75,36 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate {
         self.sideMenuController?.revealMenu()
     }
     
-
+    
+    @IBAction func btnOnCancel(_ sender: Any) {
+        self.isShowingCheckBox = false
+        self.vwContainButtons.isHidden = true
+        self.cvImages.reloadData()
+    }
+    
+    @IBAction func btnOnDelete(_ sender: Any) {
+        var arrID = [String]()
+        let arr = self.arrayPhotoCollection.filter{$0.isSelected == true}
+        for data in arr{
+            arrID.append(data.strUserImageId)
+        }
+        
+        if arrID.count == 0{
+            
+        }else{
+            let finalString = arrID.joined(separator: ",")
+            print(finalString)
+            self.call_DeleteUserImage(id: finalString)
+        }
+       
+    }
+    
     
     @IBAction func btnOnUpdateProfile(_ sender: Any) {
-        self.pushVc(viewConterlerId: "EditProfileViewController")
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "EditProfileViewController")as! EditProfileViewController
+        vc.objUserDetail = self.objUserDetail
+        vc.isUpdatedDelegate = self
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func btnOnAddImages(_ sender: Any) {
@@ -137,7 +174,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate{
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let editedImage = info[.editedImage] as? UIImage {
             self.pickedImage = editedImage
-            self.imgVwUser.image = self.pickedImage
+          //  self.imgVwUser.image = self.pickedImage
             //  self.cornerImage(image: self.imgUpload,color:#colorLiteral(red: 0.8, green: 0.8, blue: 0.8, alpha: 1) ,width: 0.5 )
             
             self.call_UploadImage()
@@ -145,7 +182,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate{
             imagePicker.dismiss(animated: true, completion: nil)
         } else if let originalImage = info[.originalImage] as? UIImage {
             self.pickedImage = originalImage
-            self.imgVwUser.image = pickedImage
+          //  self.imgVwUser.image = pickedImage
           
             self.call_UploadImage()
             
@@ -176,8 +213,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate{
 extension ProfileViewController: UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
       //  let height = self.arrayPhotoCollection.count * 128
-        let height = CGFloat((self.arrayPhotoCollection.count) * 50)
-        self.cvHgtConstant.constant = CGFloat(height)
+//
         return self.arrayPhotoCollection.count
     }
     
@@ -192,8 +228,37 @@ extension ProfileViewController: UICollectionViewDelegate,UICollectionViewDataSo
             cell.imgVw.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo"))
         }
         
-        
+        if self.isShowingCheckBox == true{
+            cell.imgVwTick.isHidden = false
+            if obj.isSelected == true{
+                cell.imgVwTick.image = UIImage.init(named: "select")
+            }else{
+                cell.imgVwTick.image = UIImage.init(named: "unchecked")
+            }
+        }else{
+            obj.isSelected = false
+            cell.imgVwTick.isHidden = true
+        }
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if self.vwContainButtons.isHidden == true{
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "ShowImageFullViewController")as! ShowImageFullViewController
+            vc.strImageUrl = self.arrayPhotoCollection[indexPath.row].strFile
+            self.navigationController?.pushViewController(vc, animated: true)
+        }else{
+            let obj = self.arrayPhotoCollection[indexPath.row]
+            obj.isSelected = obj.isSelected == true ? false : true
+            self.cvImages.reloadData()
+        }
+        
+//        if obj.isSelected == true{
+//
+//        }else{
+//
+//        }
     }
     
     
@@ -231,7 +296,8 @@ extension ProfileViewController{
                          "login_user_id":strUserID]as [String:Any]
         
         
-        objWebServiceManager.requestGet(strURL: WsUrl.url_getUserProfile, params: parameter, queryParams: [:], strCustomValidation: "") { (response) in
+        objWebServiceManager.requestPost(strURL: WsUrl.url_getUserProfile, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: true) { response in
+            
             objWebServiceManager.hideIndicator()
             let status = (response["status"] as? Int)
             let message = (response["message"] as? String)
@@ -244,7 +310,7 @@ extension ProfileViewController{
                        
                     
                     let obj = userDetailModel.init(dict: user_details)
-                    
+                    self.objUserDetail = obj
                     let profilePic = obj.strProfilePicture
                     if profilePic != "" {
                         let url = URL(string: profilePic)
@@ -319,6 +385,10 @@ extension ProfileViewController{
                     }
                    
                     self.cvImages.reloadData()
+                    self.setupLongGestureRecognizerOnCollection()
+                    let height = self.cvImages.collectionViewLayout.collectionViewContentSize.height
+                    self.cvHgtConstant.constant = CGFloat(height)
+                    self.view.setNeedsLayout()
                 }
                 
             }else{
@@ -391,4 +461,72 @@ extension ProfileViewController{
 
         }
     
+    
+    func call_DeleteUserImage(id: String) {
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
+            return
+        }
+        
+        objWebServiceManager.showIndicator()
+        
+        let parameter = ["user_image_id" : id] as [String:Any]
+        print(parameter)
+        
+        objWebServiceManager.requestGet(strURL: WsUrl.url_DeleteUserImage, params: parameter, queryParams: [:], strCustomValidation: "") { (response) in
+            objWebServiceManager.hideIndicator()
+            let status = (response["status"] as? Int)
+            let message = (response["message"] as? String)
+            
+            print(response)
+            
+            if status == MessageConstant.k_StatusCode{
+                
+                self.call_GetUserImage(strUserID: objAppShareData.UserDetail.strUserId)
+                self.vwContainButtons.isHidden = true
+                
+            }else{
+                objWebServiceManager.hideIndicator()
+               // objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+                
+            }
+            
+            
+        } failure: { (Error) in
+            print(Error)
+            objWebServiceManager.hideIndicator()
+        }
+    }
+    
+}
+
+
+extension ProfileViewController: UIGestureRecognizerDelegate{
+    private func setupLongGestureRecognizerOnCollection() {
+        let longPressedGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(gestureRecognizer:)))
+        longPressedGesture.minimumPressDuration = 0.5
+        longPressedGesture.delegate = self
+        longPressedGesture.delaysTouchesBegan = true
+        self.cvImages?.addGestureRecognizer(longPressedGesture)
+    }
+    
+    @objc func handleLongPress(gestureRecognizer: UILongPressGestureRecognizer) {
+        if (gestureRecognizer.state != .began) {
+            return
+        }
+
+        let p = gestureRecognizer.location(in: self.cvImages)
+        
+      //  let p = gestureRecognizer.location(in: collectionView)
+
+        if let indexPath = self.cvImages?.indexPathForItem(at: p) {
+            print("Long press at item: \(indexPath.row)")
+            let obj = self.arrayPhotoCollection[indexPath.row]
+            obj.isSelected = true
+            self.isShowingCheckBox = true
+            self.vwContainButtons.isHidden = false
+            self.cvImages.reloadData()
+        }
+    }
 }

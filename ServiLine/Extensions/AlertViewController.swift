@@ -57,7 +57,7 @@ class AlertViewController: UIViewController {
          }
           alert.addAction(UIAlertAction(title: alertRightBtn, style: .default, handler: {
             alertAction in
-            callback()
+           // callback()
           }))
          
           controller.present(alert, animated: true, completion: nil)

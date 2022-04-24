@@ -54,11 +54,24 @@ extension FavoriteViewController: UITableViewDelegate,UITableViewDataSource{
         cell.lblUserName.text = obj.strName
         cell.lblDesc.text = obj.strBio
         
+        cell.btnRemove.tag = indexPath.row
+        cell.btnRemove.addTarget(self, action: #selector(removeUser(sender:)), for: .touchUpInside)
+
+        
         return cell
     }
     
+    @objc func removeUser(sender: UIButton){
+        let objUserID = self.arrFavList[sender.tag].strOpponentUserID
+        self.call_RemoveFromFavoriteList(strUserID: objAppShareData.UserDetail.strUserId, strToUserID: objUserID)
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        pushVc(viewConterlerId: "OtherUserProfileViewController")
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "OtherUserProfileViewController")as! OtherUserProfileViewController
+        vc.strUserID = self.arrFavList[indexPath.row].strOpponentUserID
+        self.navigationController?.pushViewController(vc, animated: true)
+       // pushVc(viewConterlerId: "OtherUserProfileViewController")
     }
 }
 
@@ -79,7 +92,7 @@ extension FavoriteViewController{
         
         let parameter = ["user_id":strUserID]as [String:Any]
         
-        objWebServiceManager.requestGet(strURL: WsUrl.url_FavoriteList, params: parameter, queryParams: [:], strCustomValidation: "") { (response) in
+        objWebServiceManager.requestPost(strURL: WsUrl.url_FavoriteList, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
             
             print(response)
             
@@ -112,4 +125,44 @@ extension FavoriteViewController{
         }
     }
     
+    
+    //MARK:- Remove From Favorite
+    func call_RemoveFromFavoriteList(strUserID:String, strToUserID:String){
+        
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
+            return
+        }
+        
+        objWebServiceManager.showIndicator()
+        
+        let parameter = ["user_id":strUserID,
+                         "to_user_id":strToUserID]as [String:Any]
+        
+        objWebServiceManager.requestPost(strURL: WsUrl.url_SaveInFavorite, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
+            
+            print(response)
+            
+            objWebServiceManager.hideIndicator()
+            let status = (response["status"] as? Int)
+            let message = (response["message"] as? String)
+                        
+            if status == MessageConstant.k_StatusCode{
+                if let arrData  = response["result"] as? [[String:Any]]{
+                    
+                }
+            }else{
+                if response["result"]as? String == "Any favorites not found"{
+                    self.call_GetFavoriteList(strUserID: strUserID)
+//                    self.btnMessage.isHidden = false
+//                    self.vwBlockUser.isHidden = true
+                }
+                objWebServiceManager.hideIndicator()
+            
+            }
+        } failure: { (Error) in
+            objWebServiceManager.hideIndicator()
+        }
+    }
 }

@@ -17,27 +17,38 @@ class OtherUserProfileViewController: UIViewController {
     @IBOutlet var lblTags: UILabel!
     @IBOutlet var lblWebsite: UILabel!
     @IBOutlet var lblDescription: UILabel!
+    @IBOutlet var vwRating: FloatRatingView!
+    @IBOutlet var lblRating: UILabel!
+    @IBOutlet var imgVwFavorite: UIImageView!
+    @IBOutlet var imgVwRating: UIImageView!
+    @IBOutlet var imgVwBlock: UIImageView!
+    @IBOutlet var imgVwReport: UIImageView!
+    @IBOutlet var btnYesPopUp: UIButton!
+    @IBOutlet var vwBlockUser: UIView!
+    @IBOutlet var btnUnblock: UIButton!
+    @IBOutlet var btnMessage: UIButton!
     
     @IBOutlet var cvHgtConstant: NSLayoutConstraint!
     @IBOutlet var cvImages: UICollectionView!
     
     //Variables
     var arrayPhotoCollection: [UserImageModel] = []
+    var objUserDetail:userDetailModel?
     var strUserID = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.vwBlockUser.isHidden = true
         self.vwPopUp.isHidden = true
         self.cvImages.delegate = self
         self.cvImages.dataSource = self
-        
+        self.call_GetProfile(strUserID: objAppShareData.UserDetail.strUserId, strOtherUserID: self.strUserID)
         // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.call_GetProfile(strUserID: objAppShareData.UserDetail.strUserId, strOtherUserID: self.strUserID)
+       
     }
     
     
@@ -48,14 +59,38 @@ class OtherUserProfileViewController: UIViewController {
     @IBAction func btnAction(_ sender: UIButton) {
         switch sender.tag {
         case 0:
-            pushVc(viewConterlerId: "RatingViewController")
+            let ratingCount:Int = Int(self.objUserDetail!.isRating) ?? 0
+            if ratingCount >= 3{
+                
+            }else{
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "RatingViewController")as! RatingViewController
+                vc.obj = self.objUserDetail
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+           
         case 1:
+            self.btnYesPopUp.tag = 1
+            if self.objUserDetail?.isFavorite == "1"{
+                self.lblMessage.text = "Are you sure you want to remove \(self.objUserDetail?.strUserName ?? "") from favorite?"
+            }else{
+                self.lblMessage.text = "Are you sure you want to add \(self.objUserDetail?.strUserName ?? "") from favorite?"
+            }
             self.vwPopUp.isHidden = false
         case 2:
-            self.vwPopUp.isHidden = false
+            self.call_BlockUnblockUser(strUserID: objAppShareData.UserDetail.strUserId, strToUserID: self.strUserID)
         default:
-            self.pushVc(viewConterlerId: "ReportUserViewController")
+            self.btnYesPopUp.tag = 3
+            if self.objUserDetail?.isReport == "1"{
+                self.lblMessage.text = "Are you sure you want to remove \(self.objUserDetail?.strUserName ?? "") from Report?"
+            }else{
+                self.lblMessage.text = "Are you sure you want to add \(self.objUserDetail?.strUserName ?? "") into your report list?"
+            }
+            self.vwPopUp.isHidden = false
+          
         }
+    }
+    @IBAction func btnOnUnblockUser(_ sender: Any) {
+        self.call_BlockUnblockUser(strUserID: objAppShareData.UserDetail.strUserId, strToUserID: self.strUserID)
     }
     
     
@@ -69,7 +104,23 @@ class OtherUserProfileViewController: UIViewController {
     }
     
    
-    @IBAction func btnYesPopUp(_ sender: Any) {
+    @IBAction func btnYesPopUp(_ sender: UIButton) {
+        
+        switch sender.tag {
+        case 1:
+             self.call_AddRemoveFromFavoriteList(strUserID: objAppShareData.UserDetail.strUserId, strToUserID: self.strUserID)
+        case 3:
+            if self.objUserDetail?.isReport == "1"{
+                self.call_ReportUaser(strUserID: objAppShareData.UserDetail.strUserId, strToUserID: self.objUserDetail?.strUserId ?? "")
+            }else{
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "ReportUserViewController")as! ReportUserViewController
+                vc.objUserDetail = self.objUserDetail
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+           
+        default:
+            break
+        }
         self.vwPopUp.isHidden = true
     }
     
@@ -77,15 +128,11 @@ class OtherUserProfileViewController: UIViewController {
 
 extension OtherUserProfileViewController: UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let height = CGFloat((self.arrayPhotoCollection.count) * 50)
-        self.cvHgtConstant.constant = CGFloat(height)
         return self.arrayPhotoCollection.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ViewProfileCollectionViewCell", for: indexPath)as! ViewProfileCollectionViewCell
-        
-        
         let obj = self.arrayPhotoCollection[indexPath.row]
         let profilePic = obj.strFile
         if profilePic != "" {
@@ -95,6 +142,12 @@ extension OtherUserProfileViewController: UICollectionViewDelegate,UICollectionV
         
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ShowImageFullViewController")as! ShowImageFullViewController
+        vc.strImageUrl = self.arrayPhotoCollection[indexPath.row].strFile
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     
@@ -109,7 +162,7 @@ extension OtherUserProfileViewController: UICollectionViewDelegate,UICollectionV
             + (flowLayout.minimumInteritemSpacing * CGFloat(noOfCellsInRow - 1))
 
         let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(noOfCellsInRow))
-
+        print(size)
         return CGSize(width: size, height: size)
     }
 }
@@ -132,7 +185,8 @@ extension OtherUserProfileViewController{
                          "login_user_id":strUserID]as [String:Any]
         
         
-        objWebServiceManager.requestGet(strURL: WsUrl.url_getUserProfile, params: parameter, queryParams: [:], strCustomValidation: "") { (response) in
+        objWebServiceManager.requestPost(strURL: WsUrl.url_getUserProfile, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
+
             objWebServiceManager.hideIndicator()
             let status = (response["status"] as? Int)
             let message = (response["message"] as? String)
@@ -145,6 +199,7 @@ extension OtherUserProfileViewController{
                        
                     
                     let obj = userDetailModel.init(dict: user_details)
+                    self.objUserDetail = obj
                     
                     let profilePic = obj.strProfilePicture
                     if profilePic != "" {
@@ -161,11 +216,46 @@ extension OtherUserProfileViewController{
                         self.lblUserName.text = obj.strUserName
                     }
 
-
+                    self.lblRating.text = "(\(obj.strUserRating))"
+                    self.vwRating.rating = obj.strUserRating
                     self.lblWebsite.text = obj.strWebsite
                     print(obj.strNation + "," + obj.strProvince + "," + obj.strMunicipality + "," + obj.strCommunity)
                     self.lblTags.text = obj.strNation + "," + obj.strProvince + "," + obj.strMunicipality + "," + obj.strCommunity
                     self.lblDescription.text = obj.strAboutMe
+                    
+                    if obj.isFavorite == "1"{
+                        self.imgVwFavorite.image = UIImage.init(named: "favorite_black")
+                        self.imgVwFavorite.setImageColor(color: UIColor.init(named: "Pink") ?? UIColor.gray)
+                       
+                    }else{
+                        self.imgVwFavorite.image = UIImage.init(named: "favorite_black")
+                        self.imgVwFavorite.setImageColor(color: UIColor.darkGray)
+                        
+                    }
+                    
+                    if obj.isRating != "0"{
+                        self.imgVwRating.image = UIImage.init(named: "rating")
+                        self.imgVwRating.setImageColor(color: UIColor.init(named: "Pink") ?? UIColor.gray)
+                    }else{
+                        self.imgVwRating.image = UIImage.init(named: "rating")
+                        self.imgVwRating.setImageColor(color: UIColor.gray)
+                    }
+                    
+                    if obj.isBlock == "1"{
+                        self.vwBlockUser.isHidden = false
+                        self.btnMessage.isHidden = true
+                    }else{
+                        self.vwBlockUser.isHidden = true
+                        self.btnMessage.isHidden = false
+                    }
+                    
+                    if obj.isReport == "1"{
+                        self.imgVwReport.image = UIImage.init(named: "report_alert")
+                        self.imgVwReport.setImageColor(color: UIColor.init(named: "Pink") ?? UIColor.gray)
+                    }else{
+                        self.imgVwReport.image = UIImage.init(named: "report_alert")
+                        self.imgVwReport.setImageColor(color: UIColor.gray)
+                    }
                     
                     
                     self.call_GetUserImage(strUserID: strOtherUserID)
@@ -199,7 +289,7 @@ extension OtherUserProfileViewController{
         let parameter = ["user_id" : strUserID] as [String:Any]
         
         
-        objWebServiceManager.requestGet(strURL: WsUrl.url_GetUserImage, params: parameter, queryParams: [:], strCustomValidation: "") { (response) in
+        objWebServiceManager.requestPost(strURL: WsUrl.url_GetUserImage, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
             
             print(response)
             objWebServiceManager.hideIndicator()
@@ -216,8 +306,11 @@ extension OtherUserProfileViewController{
                         let obj = UserImageModel.init(dict: dictdata)
                         self.arrayPhotoCollection.append(obj)
                     }
-                   
                     self.cvImages.reloadData()
+                    let height = self.cvImages.collectionViewLayout.collectionViewContentSize.height
+                    self.cvHgtConstant.constant = CGFloat(height)
+                    self.view.setNeedsLayout()
+                    //  self.view.layoutIfNeeded()
                 }
                 
             }else{
@@ -232,4 +325,142 @@ extension OtherUserProfileViewController{
         }
     }
     
+    
+    
+    //MARK:-Add Remove On Fav List
+    func call_AddRemoveFromFavoriteList(strUserID:String, strToUserID:String){
+        
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
+            return
+        }
+        
+        objWebServiceManager.showIndicator()
+        
+        let parameter = ["user_id":strUserID,
+                         "to_user_id":strToUserID]as [String:Any]
+        print(parameter)
+        
+        objWebServiceManager.requestPost(strURL: WsUrl.url_SaveInFavorite, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
+            
+            print(response)
+            
+            objWebServiceManager.hideIndicator()
+            let status = (response["status"] as? Int)
+            let message = (response["message"] as? String)
+                        
+            if status == MessageConstant.k_StatusCode{
+                if let dictData  = response["result"] as? [String:Any]{
+                    if message == "success"{
+                       // self.imgVwFavorite.image = UIImage.init(named: "favorite_black")
+                        self.imgVwFavorite.setImageColor(color: UIColor.init(named: "Pink") ?? UIColor.gray)
+                        self.objUserDetail?.isFavorite = "1"
+                    }
+                }
+            }else{
+                if response["result"]as? String == "Any favorites not found"{
+                   // self.imgVwFavorite.image = UIImage.init(named: "favorite_black")
+                    self.imgVwFavorite.setImageColor(color: UIColor.gray)
+                    self.objUserDetail?.isFavorite = "0"
+                }
+                objWebServiceManager.hideIndicator()
+            
+            }
+        } failure: { (Error) in
+            objWebServiceManager.hideIndicator()
+        }
+    }
+    
+    
+    
+    //MARK:-Add Remove On Fav List
+    func call_BlockUnblockUser(strUserID:String, strToUserID:String){
+        
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
+            return
+        }
+        
+        objWebServiceManager.showIndicator()
+        
+        let parameter = ["user_id":strUserID,
+                         "to_user_id":strToUserID]as [String:Any]
+        print(parameter)
+        
+        objWebServiceManager.requestPost(strURL: WsUrl.url_BlockUnblockUser, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
+            
+            print(response)
+            
+            objWebServiceManager.hideIndicator()
+            let status = (response["status"] as? Int)
+            let message = (response["message"] as? String)
+                        
+            if status == MessageConstant.k_StatusCode{
+                if let dictData  = response["result"] as? [String:Any]{
+                    if message == "success"{
+                        self.btnMessage.isHidden = true
+                        self.vwBlockUser.isHidden = false
+                        
+                    }
+                }
+            }else{
+                if response["result"]as? String == "Any blocked users not found"{
+                    self.btnMessage.isHidden = false
+                    self.vwBlockUser.isHidden = true
+                }
+                objWebServiceManager.hideIndicator()
+            
+            }
+        } failure: { (Error) in
+            objWebServiceManager.hideIndicator()
+        }
+    }
+    
+    
+    //MARK:- Report a User
+    
+    //MARK:-Add Remove On Fav List
+    func call_ReportUaser(strUserID:String, strToUserID:String){
+        
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
+            return
+        }
+        
+        objWebServiceManager.showIndicator()
+        
+        let parameter = ["user_id":strUserID,
+                         "to_user_id":strToUserID,
+                         "message":""]as [String:Any]
+        print(parameter)
+        
+        objWebServiceManager.requestPost(strURL: WsUrl.url_ReportAnUser, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
+            
+            print(response)
+            
+            objWebServiceManager.hideIndicator()
+            let status = (response["status"] as? Int)
+            let message = (response["message"] as? String)
+                        
+            if status == MessageConstant.k_StatusCode{
+                if let dictData  = response["result"] as? [String:Any]{
+                    if message == "success"{
+
+
+                    }
+                }
+            }else{
+                if response["result"]as? String == "Any reports not found"{
+                    self.objUserDetail?.isReport = "0"
+                }
+                objWebServiceManager.hideIndicator()
+            
+            }
+        } failure: { (Error) in
+            objWebServiceManager.hideIndicator()
+        }
+    }
 }

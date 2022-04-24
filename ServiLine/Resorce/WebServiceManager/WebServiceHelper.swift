@@ -12,6 +12,7 @@ import UIKit
 let BASE_URL = "https://ambitious.in.net/Arun/serviline/index.php/api/"//Local
 //let BASE_URL = "https://paing-spain.com/admin/index.php/api/"//Live
 
+
 struct WsUrl{
     
     static let url_SignUp  = BASE_URL + "signup?"
@@ -34,6 +35,8 @@ struct WsUrl{
     static let url_getNotification  = BASE_URL + "get_notification"
     static let url_getConversationList = BASE_URL + "get_conversation"
     static let url_getBlockList = BASE_URL + "my_blocked_users"
+    static let url_BlockUnblockUser = BASE_URL + "blocked_an_user"
+    static let url_ReportAnUser = BASE_URL + "report_an_user"
     static let url_getReportList = BASE_URL + "my_report_users"
     static let url_getBlockUnblock = BASE_URL + "block_in_user"
     static let url_getBlogList = BASE_URL + "get_blog?"
@@ -41,7 +44,7 @@ struct WsUrl{
     static let url_getVideos = BASE_URL + "get_video"
     static let url_likeVideo = BASE_URL + "video_like"
     static let url_deleteVideo = BASE_URL + "delete_video"
-    
+    static let url_GiveRating = BASE_URL + "rating"
     static let url_AddBlogInList = BASE_URL + "add_blog"
     static let url_DeleteBlogInList = BASE_URL + "delete_blog"
     static let url_addBlogComment = BASE_URL + "blog_comment"

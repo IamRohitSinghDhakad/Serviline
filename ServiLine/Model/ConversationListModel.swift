@@ -15,11 +15,14 @@ class ConversationListModel: NSObject {
     var strLastMsg: String = ""
     var strTimeAgo : String = ""
     var strSenderID :String = ""
+    var strSenderIDForChat :String = ""
     var strIsBlocked : String = ""
-    
+    var strNotificationId : String = ""
+    var strMessageCount : Int = 0
     var strNotificationTitle  : String = ""
     var strNotificationUserName  : String = ""
     var strNotificationImage  : String = ""
+    var isSelected : Bool = false
     
     init(dict : [String:Any]) {
         
@@ -28,12 +31,30 @@ class ConversationListModel: NSObject {
             self.strChatStatus = chat_status
         }
         
-        if let sender_id = dict["sender_id"] as? String{
+        if let sender_id = dict["send_by"] as? String{
             self.strSenderID = sender_id
-        }else if let sender_id = dict["sender_id"] as? Int{
+        }else if let sender_id = dict["send_by"] as? Int{
             self.strSenderID = "\(sender_id)"
         }
         
+        if let no_of_message = dict["no_of_message"] as? String{
+            self.strMessageCount = Int(no_of_message) ?? 0
+        }else if let no_of_message = dict["no_of_message"] as? Int{
+            self.strMessageCount = no_of_message
+        }
+        
+        if let sender_id = dict["sender_id"] as? String{
+            self.strSenderIDForChat = sender_id
+        }else if let sender_id = dict["sender_id"] as? Int{
+            self.strSenderIDForChat = "\(sender_id)"
+        }
+        
+        if let notification_id = dict["notification_id"] as? String{
+            self.strNotificationId = notification_id
+        }else if let notification_id = dict["notification_id"] as? Int{
+            self.strNotificationId = "\(notification_id)"
+        }
+
         if let user_image = dict["sender_image"] as? String{
             self.strUserImage = user_image
         }

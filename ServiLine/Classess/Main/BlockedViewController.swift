@@ -55,11 +55,22 @@ extension BlockedViewController: UITableViewDelegate,UITableViewDataSource{
         
         cell.lblUserName.text = obj.strName
         
+        cell.btnRemove.tag = indexPath.row
+        cell.btnRemove.addTarget(self, action: #selector(removeUser(sender:)), for: .touchUpInside)
+
+        
         return cell
     }
     
+    @objc func removeUser(sender: UIButton){
+        let objUserID = self.arrBlockUserList[sender.tag].strOpponentUserID
+        self.call_BlockUnblockUser(strUserID: objAppShareData.UserDetail.strUserId, strToUserID: objUserID)
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.pushVc(viewConterlerId: "OtherUserProfileViewController")
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "OtherUserProfileViewController")as! OtherUserProfileViewController
+        vc.strUserID = self.arrBlockUserList[indexPath.row].strOpponentUserID
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -80,27 +91,35 @@ extension BlockedViewController{
         let parameter = ["user_id":strUserID]as [String:Any]
         
         
-        objWebServiceManager.requestGet(strURL: WsUrl.url_getBlockList, params: parameter, queryParams: [:], strCustomValidation: "") { (response) in
+        objWebServiceManager.requestPost(strURL: WsUrl.url_getBlockList, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
+
             objWebServiceManager.hideIndicator()
             let status = (response["status"] as? Int)
             let message = (response["message"] as? String)
             
             print(response)
+            self.arrBlockUserList.removeAll()
             
             if status == MessageConstant.k_StatusCode{
                 if let arrData  = response["result"] as? [[String:Any]]{
-                    self.arrBlockUserList.removeAll()
+                  
                     for dictdata in arrData{
                         let obj = FavoriteListModel.init(dict: dictdata)
                         self.arrBlockUserList.append(obj)
                     }
-                    
+                    if self.arrBlockUserList.count != 0{
+                        self.tblVw.displayBackgroundText(text: "")
+                    }else{
+                        self.tblVw.displayBackgroundText(text: "No Record Found!")
+                    }
+                   
                     self.tblVw.reloadData()
                 }
             }else{
                 objWebServiceManager.hideIndicator()
                 
                 if (response["result"]as? String) != nil{
+                    self.tblVw.reloadData()
                     self.tblVw.displayBackgroundText(text: "No Record Found!")
                 }else{
                     objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
@@ -108,6 +127,52 @@ extension BlockedViewController{
             }
         } failure: { (Error) in
             print(Error)
+            objWebServiceManager.hideIndicator()
+        }
+    }
+    
+    
+    //MARK:-Add Remove On Fav List
+    func call_BlockUnblockUser(strUserID:String, strToUserID:String){
+        
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
+            return
+        }
+        
+        objWebServiceManager.showIndicator()
+        
+        let parameter = ["user_id":strUserID,
+                         "to_user_id":strToUserID]as [String:Any]
+        print(parameter)
+        
+        objWebServiceManager.requestPost(strURL: WsUrl.url_BlockUnblockUser, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
+            
+            print(response)
+            
+            objWebServiceManager.hideIndicator()
+            let status = (response["status"] as? Int)
+            let message = (response["message"] as? String)
+                        
+            if status == MessageConstant.k_StatusCode{
+                if let dictData  = response["result"] as? [String:Any]{
+                    if message == "success"{
+//                        self.btnMessage.isHidden = true
+//                        self.vwBlockUser.isHidden = false
+                        
+                    }
+                }
+            }else{
+                if response["result"]as? String == "Any blocked users not found"{
+                    self.call_GetBlockList(strUserID: strUserID)
+//                    self.btnMessage.isHidden = false
+//                    self.vwBlockUser.isHidden = true
+                }
+                objWebServiceManager.hideIndicator()
+            
+            }
+        } failure: { (Error) in
             objWebServiceManager.hideIndicator()
         }
     }

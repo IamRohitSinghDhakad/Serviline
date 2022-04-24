@@ -16,6 +16,7 @@ class UserImageModel: NSObject {
     var strType :String = ""
     var strUserId :String = ""
     var strUserImageId :String = ""
+    var isSelected:Bool?
     
     
     init(dict : [String : Any]) {
