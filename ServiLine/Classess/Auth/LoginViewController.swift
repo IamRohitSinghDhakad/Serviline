@@ -69,7 +69,8 @@ extension LoginViewController{
         
         let dicrParam = ["email":self.tfEmail.text!,
                          "password":self.tfPassword.text!,
-                         "register_id":objAppShareData.strFirebaseToken
+                         "register_id":objAppShareData.strFirebaseToken,
+                         "device_type":"IOS"
         ]as [String:Any]
         
         print(dicrParam)
