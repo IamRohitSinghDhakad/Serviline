@@ -81,7 +81,7 @@ extension MessageViewController: UITableViewDelegate,UITableViewDataSource{
         
         cell.lblUserName.text = obj.strName
         cell.lblTimeAgo.text = obj.strTimeAgo
-        cell.lblMsg.text = obj.strLastMsg
+        cell.lblMsg.text = obj.strLastMsg.decodeEmoji
         
         if obj.strMessageCount > 0{
             cell.lblMsgCount.isHidden = false
