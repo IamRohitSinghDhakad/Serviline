@@ -28,11 +28,9 @@ class DeleteProfileViewController: UIViewController {
         if myProfilePic != "" {
             let url = URL(string: myProfilePic)
             self.imgVwUser.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo"))
-        }
-     //   self.lblMsgReportUser.text = objAppShareData.UserDetail.strUserName + " has been added a report and we have received \n The reason for your complaint. We will study amd evaluate your message we will act accordingly Thank You!!!"
+        }        
         
-        
-        self.lblDescription.text = "You want to delete account?\n " + objAppShareData.UserDetail.strUserName + " for some situation what have you suffered or observed Briefly write your reason we will study the particular reason."
+        self.lblDescription.text = "Quieres borrar la cuenta?\n " + objAppShareData.UserDetail.strUserName + " por alguna situación que haya sufrido u observado\n Escribanos brevemente sus razones y \nnosotros estudiaremos el caso"
 
         // Do any additional setup after loading the view.
     }
@@ -51,7 +49,7 @@ class DeleteProfileViewController: UIViewController {
         self.txtVw.text = self.txtVw.text?.trim()
         
         if (self.txtVw.text!.isEmpty){
-            objAlert.showAlert(message: "Please enter some text", title: "Alert", controller: self)
+            objAlert.showAlert(message: "Introduzca mensaje", title: "Alert", controller: self)
         }
         else{
             self.call_DeleteProfile(strUserID: objAppShareData.UserDetail.strUserId)

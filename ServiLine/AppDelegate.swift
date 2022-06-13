@@ -10,6 +10,7 @@ import IQKeyboardManagerSwift
 import Firebase
 import FirebaseMessaging
 import UserNotifications
+import TPVVInLibrary
 
 
 
@@ -45,12 +46,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.registerForRemoteNotification()
         Messaging.messaging().delegate = self
         
+        TPVVConfiguration.shared.appLicense = "vjqzC1kU9RuWP0Q3OXzO"
+        
+        TPVVConfiguration.shared.appEnviroment = EnviromentType.Test
+        
+        TPVVConfiguration.shared.appFuc = "356431767"
+        
+        TPVVConfiguration.shared.appTerminal = "001"
+        
+        TPVVConfiguration.shared.appCurrency = "978"
+        
+        
+        
+        /*
+         Usuario: 356431767
+         Password: prueba2022
+         Número de Comercio (Ds_Merchant_MerchantCode): 356431767
+         Número de Terminal (Ds_Merchant_Terminal): 001
+         Moneda del Terminal (Ds_Merchant_Currency): 978
+         Clave secreta de encriptación: sq7HjrUOBfKmC576ILgskD5srU870gJ7
+         Empresa Bobili-Bobili Solutions Número comercio 356431767
+         */
         
         (UIApplication.shared.delegate as? AppDelegate)?.self.window = window
         
         self.settingRootController()
         
         return true
+    }
+    
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.portrait
     }
 
 }
@@ -166,7 +192,7 @@ extension AppDelegate : MessagingDelegate{
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         
         if let userInfo = notification.request.content.userInfo as? [String : Any]{
-            print(userInfo)
+        print(userInfo)
 
             //Update BadgeCount
             if let badgeCount = UserDefaults.standard.value(forKey: "badge")as? Int{
@@ -180,7 +206,26 @@ extension AppDelegate : MessagingDelegate{
          //   objAppShareData.notificationDict = userInfo
 //            self.navWithNotification(type: notificationType, bookingID: bookingID)
         }
-        completionHandler([.alert,.sound,.badge])
+        var notiStatus = Int()
+        var notiSoundStatus = Int()
+        if let status = UserDefaults.standard.value(forKey: "isShowPopUp")as? Int{
+            notiStatus = status
+        }
+        
+        if let statusSound = UserDefaults.standard.value(forKey: "isMakingSound")as? Int{
+            notiSoundStatus = statusSound
+        }
+        
+        
+        if notiStatus == 1{
+            completionHandler([])
+        }else{
+            if notiSoundStatus == 0{
+                completionHandler([.alert,.badge])
+            }else{
+                completionHandler([.alert,.sound,.badge])
+            }
+        }
     }
     
     

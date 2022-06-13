@@ -20,12 +20,22 @@ class MessageSettingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.call_GetProfile(strUserID: objAppShareData.UserDetail.strUserId)
+       
         
         self.imgVwSecond.image = UIImage.init(named: "checkBox")
         self.imgVwThird.image = UIImage.init(named: "checkBox")
         
+        secondImageStatus = "0"
+        thirdImageStatus = "0"
+        self.imgVwThird.image = UIImage.init(named: "unchecked")
+        self.imgVwSecond.image = UIImage.init(named: "unchecked")
+        
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.call_GetProfile(strUserID: objAppShareData.UserDetail.strUserId)
     }
     
     @IBAction func btnOnOpenSideMenu(_ sender: Any) {
@@ -42,22 +52,30 @@ class MessageSettingViewController: UIViewController {
                 self.call_UpdateNotification(strUserID: objAppShareData.UserDetail.strUserId, strNotificationSTatus: "0")
             }
         case 1:
-            if  secondImageStatus == "1"{
+            if  secondImageStatus == "0"{
+                UserDefaults.standard.setValue(1, forKey: "isShowPopUp")
+                self.imgVwSecond.image = UIImage.init(named: "checkBox")
                 self.imgVwSecond.setImageColor(color: UIColor.init(named: "Pink") ?? UIColor.gray)
-                secondImageStatus = "0"
-            }else{
-                self.imgVwSecond.setImageColor(color: UIColor.gray)
                 secondImageStatus = "1"
+            }else{
+                UserDefaults.standard.setValue(0, forKey: "isShowPopUp")
+                self.imgVwSecond.image = UIImage.init(named: "unchecked")
+                self.imgVwSecond.setImageColor(color: UIColor.gray)
+                secondImageStatus = "0"
             }
             
         default:
             
-            if  thirdImageStatus == "1"{
+            if  thirdImageStatus == "0"{
+                self.imgVwThird.image = UIImage.init(named: "checkBox")
                 self.imgVwThird.setImageColor(color: UIColor.init(named: "Pink") ?? UIColor.gray)
-                thirdImageStatus = "0"
-            }else{
-                self.imgVwThird.setImageColor(color: UIColor.gray)
                 thirdImageStatus = "1"
+                UserDefaults.standard.setValue(0, forKey: "isMakingSound")
+            }else{
+                self.imgVwThird.image = UIImage.init(named: "unchecked")
+                self.imgVwThird.setImageColor(color: UIColor.gray)
+                thirdImageStatus = "0"
+                UserDefaults.standard.setValue(1, forKey: "isMakingSound")
             }        }
     }
     
@@ -87,7 +105,6 @@ extension MessageSettingViewController{
             let status = (response["status"] as? Int)
             let message = (response["message"] as? String)
             
-            print(response)
             
             if status == MessageConstant.k_StatusCode{
                 
@@ -97,8 +114,7 @@ extension MessageSettingViewController{
                     
                     self.strNotificationStatus = obj.strNotificationStatus
                     
-                    if obj.strNotificationStatus == "1"{
-                        
+                    if obj.strNotificationStatus == "0"{
                         self.imgVwFirst.image = UIImage.init(named: "checkBox")
                         self.imgVwFirst.setImageColor(color: UIColor.init(named: "Pink")!)
                     }else{
@@ -157,7 +173,7 @@ extension MessageSettingViewController{
                     
                     self.strNotificationStatus = obj.strNotificationStatus
                     
-                    if obj.strNotificationStatus == "1"{
+                    if obj.strNotificationStatus == "0"{
                         
                         self.imgVwFirst.image = UIImage.init(named: "checkBox")
                         self.imgVwFirst.setImageColor(color: UIColor.init(named: "Pink")!)

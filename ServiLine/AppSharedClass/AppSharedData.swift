@@ -30,6 +30,7 @@ class AppSharedData: NSObject {
     var strFirebaseToken = ""
     var isFromNotification = Bool()
     var isNotificationDict = [String:Any]()
+    var dictHomeLocationInfo = [String:Any]()
     
     open var isLoggedIn: Bool {
         get {

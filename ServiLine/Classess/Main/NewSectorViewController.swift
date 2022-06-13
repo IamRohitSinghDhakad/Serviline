@@ -39,7 +39,7 @@ class NewSectorViewController: UIViewController {
     @IBAction func btnOnSend(_ sender: Any) {
         self.txtVw.text = self.txtVw.text?.trim()
         if (self.txtVw.text!.isEmpty){
-            objAlert.showAlert(message: "Please enter some text", title: "Alert", controller: self)
+            objAlert.showAlert(message: "Introduzca mensaje", title: "", controller: self)
         }else{
             self.call_WsSendSectorReq(strText: self.txtVw.text!, strUserID: objAppShareData.UserDetail.strUserId)
         }

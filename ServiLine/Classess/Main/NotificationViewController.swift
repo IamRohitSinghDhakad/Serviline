@@ -11,7 +11,7 @@ class NotificationViewController: UIViewController {
 
     @IBOutlet var tblVw: UITableView!
     @IBOutlet var vwContainButtons: UIView!
-    
+    @IBOutlet var vwNoRecordFound: UIView!
     
     var arrNotifications = [ConversationListModel]()
     var isShowingCheckBox = false
@@ -19,17 +19,17 @@ class NotificationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-       
+        self.vwNoRecordFound.isHidden = true
         self.tblVw.delegate = self
         self.tblVw.dataSource = self
         // Do any additional setup after loading the view.
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.vwContainButtons.isHidden = true
         self.call_GetNotification(strUserId: objAppShareData.UserDetail.strUserId)
+        UserDefaults.standard.setValue(0, forKey: "badge")
     }
 
     @IBAction func btnOnOpenSideMenu(_ sender: Any) {
@@ -78,7 +78,7 @@ extension NotificationViewController: UITableViewDelegate,UITableViewDataSource{
         
         cell.lblUserName.text = obj.strNotificationUserName
         cell.lblTimeAgo.text = obj.strTimeAgo
-        cell.lblMsg.text = obj.strNotificationTitle
+        cell.lblMsg.text = "\(obj.strNotificationTitle) \n \(obj.strNotificationMsg)"
         
         
         if self.isShowingCheckBox == true{
@@ -119,10 +119,6 @@ extension NotificationViewController: UITableViewDelegate,UITableViewDataSource{
             obj.isSelected = obj.isSelected == true ? false : true
             self.tblVw.reloadData()
         }
-        
-        
-        
-        
     }
 }
 
@@ -157,16 +153,25 @@ extension NotificationViewController{
                         self.arrNotifications.append(obj)
                     }
                     self.setupLongGestureRecognizerOnCollection()
+                    
+                    if self.arrNotifications.count == 0{
+                        //self.tblVw.displayBackgroundText(text: "No Record Found!")
+                        self.vwNoRecordFound.isHidden = false
+                    }else{
+                        //self.tblVw.displayBackgroundText(text: "")
+                        self.vwNoRecordFound.isHidden = true
+                    }
+                    
                     self.tblVw.reloadData()
                 }
             }else{
                 objWebServiceManager.hideIndicator()
-                
-                if (response["result"]as? String) != nil{
-                    self.tblVw.displayBackgroundText(text: "No Record Found!")
-                }else{
-                    objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
-                }
+                self.vwNoRecordFound.isHidden = false
+//                if (response["result"]as? String) != nil{
+//                    self.tblVw.displayBackgroundText(text: "No Record Found!")
+//                }else{
+//                    objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+//                }
                 
                // objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
                 

@@ -9,8 +9,12 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet var lblText:UILabel!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.lblText.text = "Plataforma exclusiva\npara contactar con sectores\ny profesionales de servicios"
         // Do any additional setup after loading the view.
     }
     @IBAction func btnOnSignUp(_ sender: Any) {

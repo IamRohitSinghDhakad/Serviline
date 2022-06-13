@@ -10,6 +10,7 @@ import UIKit
 class BlockedViewController: UIViewController {
 
     @IBOutlet var tblVw: UITableView!
+    @IBOutlet var vwNoRecordFound: UIView!
     
     var arrBlockUserList = [FavoriteListModel]()
     
@@ -18,6 +19,7 @@ class BlockedViewController: UIViewController {
         
         self.tblVw.delegate = self
         self.tblVw.dataSource = self
+        self.vwNoRecordFound.isHidden = true
 
         // Do any additional setup after loading the view.
     }
@@ -108,22 +110,24 @@ extension BlockedViewController{
                         self.arrBlockUserList.append(obj)
                     }
                     if self.arrBlockUserList.count != 0{
-                        self.tblVw.displayBackgroundText(text: "")
+                       // self.tblVw.displayBackgroundText(text: "")
+                        self.vwNoRecordFound.isHidden = true
                     }else{
-                        self.tblVw.displayBackgroundText(text: "No Record Found!")
+                       // self.tblVw.displayBackgroundText(text: "No Record Found!")
+                        self.vwNoRecordFound.isHidden = false
                     }
                    
                     self.tblVw.reloadData()
                 }
             }else{
                 objWebServiceManager.hideIndicator()
-                
-                if (response["result"]as? String) != nil{
-                    self.tblVw.reloadData()
-                    self.tblVw.displayBackgroundText(text: "No Record Found!")
-                }else{
-                    objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
-                }
+                self.vwNoRecordFound.isHidden = false
+//                if (response["result"]as? String) != nil{
+//                    self.tblVw.reloadData()
+//                    self.tblVw.displayBackgroundText(text: "No Record Found!")
+//                }else{
+//                    objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+//                }
             }
         } failure: { (Error) in
             print(Error)

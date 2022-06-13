@@ -52,7 +52,6 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
     
     
     func setUserData(){
-        
         guard let userData = self.objUserDetail else {return}
         
         let profilePic = userData.strProfilePicture
@@ -77,6 +76,7 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
         self.lblCommunity.text = userData.strCommunity
         self.lblProvision.text = userData.strProvince
         self.lblMuncipal.text = userData.strMunicipality
+        self.lblSector.text = userData.strSectorName
         self.txtVw.text = userData.strAboutMe
         
         self.strNationID = userData.strNationID
@@ -106,38 +106,37 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
         
         switch sender.tag {
         case 0:
-            self.openSelectionScreen(strIsComingFrom: "2", strTitle: "Nation")
+            self.openSelectionScreen(strIsComingFrom: "2", strTitle: "País")
             print("Nation is ")
         case 1:
             if self.strNationID == ""{
-                objAlert.showAlert(message: "Please select nation first", title: "Alert", controller: self)
+                objAlert.showAlert(message: "Selecciona País!!!", title: "Alert", controller: self)
             }else{
-                self.openSelectionScreen(strIsComingFrom: "3", strTitle: "Community")
+                self.openSelectionScreen(strIsComingFrom: "3", strTitle: "Comunidad")
             }
             print("Community is ")
         case 2:
             if self.strCommunityID == ""{
-                objAlert.showAlert(message: "Please select community first", title: "Alert", controller: self)
+                objAlert.showAlert(message: "Selecciona Comunidad!!!", title: "Alert", controller: self)
             }else{
-                self.openSelectionScreen(strIsComingFrom: "4", strTitle: "Provience")
+                self.openSelectionScreen(strIsComingFrom: "4", strTitle: "Provincia")
             }
             print("Province is ")
         case 3:
             
             if self.strProvinceID == ""{
-                objAlert.showAlert(message: "Please select provience first", title: "Alert", controller: self)
+                objAlert.showAlert(message: "Selecciona Provincia!!!", title: "Alert", controller: self)
             }else{
-                self.openSelectionScreen(strIsComingFrom: "5", strTitle: "Muncipal")
+                self.openSelectionScreen(strIsComingFrom: "5", strTitle: "Municipio/Ciudad")
             }
             print("Muncipal City is ")
         case 4:
             if self.strProvinceID == ""{
-                objAlert.showAlert(message: "Please select Muncipal first", title: "Alert", controller: self)
+                objAlert.showAlert(message: "Selecciona Municipio!!!", title: "Alert", controller: self)
             }else{
                 self.openSelectionScreen(strIsComingFrom: "6", strTitle: "Sector")
             }
            
-            print("Service sector is ")
         default:
             break
         }
@@ -146,6 +145,9 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
     func openSelectionScreen(strIsComingFrom:String, strTitle:String){
         let vc = UIStoryboard.init(name: "Auth", bundle: nil).instantiateViewController(withIdentifier: "PopUpViewController")as! PopUpViewController
          vc.isComingFrom = strIsComingFrom
+        if strIsComingFrom == "6"{
+            vc.isMultiple = "Yes"
+        }
          vc.strTitle = strTitle
             vc.strNationID = self.strNationID
             vc.strCommunityID = self.strCommunityID
@@ -166,9 +168,9 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
                         self.strCommunityID = ""
                         self.strProvinceID = ""
                         self.strMunicipalID = ""
-                        self.lblCommunity.text = "Community"
-                        self.lblProvision.text = "Province"
-                        self.lblMuncipal.text = "Muncipality / City"
+                        self.lblCommunity.text = "Comunidad"
+                        self.lblProvision.text = "Provincia"
+                        self.lblMuncipal.text = "Municipio/Ciudad"
                     }
                     
                     if let communityID = dict["Community_id"]as? String{
@@ -176,15 +178,15 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
                         self.lblCommunity.text = dict["Community"]as? String
                         self.strProvinceID = ""
                         self.strMunicipalID = ""
-                        self.lblProvision.text = "Province"
-                        self.lblMuncipal.text = "Muncipality / City"
+                        self.lblProvision.text = "Provincia"
+                        self.lblMuncipal.text = "Municipio/Ciudad"
                     }
                     
                     if let Province = dict["Province_id"]as? String{
                         self.strProvinceID = Province
                         self.lblProvision.text = dict["Province"]as? String
                         self.strMunicipalID = ""
-                        self.lblMuncipal.text = "Muncipality / City"
+                        self.lblMuncipal.text = "Municipio/Ciudad"
                     }
                     
                     if let MunicipalID = dict["Municipal_id"]as? String{
@@ -213,41 +215,31 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
         self.tfWebsite.text = self.tfWebsite.text!.trim()
     
         if (tfName.text?.isEmpty)! {
-            objAlert.showAlert(message: "Please enter name", title:MessageConstant.k_AlertTitle, controller: self)
+            objAlert.showAlert(message: "Entrar nombre", title:MessageConstant.k_AlertTitle, controller: self)
         }else if (tfEmail.text?.isEmpty)! {
-            objAlert.showAlert(message: MessageConstant.BlankEmail, title:MessageConstant.k_AlertTitle, controller: self)
+            objAlert.showAlert(message: "Escribir email", title:MessageConstant.k_AlertTitle, controller: self)
         }else if !objValidationManager.validateEmail(with: tfEmail.text!){
-            objAlert.showAlert(message: MessageConstant.ValidEmail, title:MessageConstant.k_AlertTitle, controller: self)
+            objAlert.showAlert(message: "Introducir correo electrónico valido", title:MessageConstant.k_AlertTitle, controller: self)
         }else if (tfPwd.text?.isEmpty)! {
-            objAlert.showAlert(message: MessageConstant.BlankPassword, title:MessageConstant.k_AlertTitle, controller: self)
-        }else if (lblNation.text! == "Nation") {
-            objAlert.showAlert(message: "Please select nation first", title:MessageConstant.k_AlertTitle, controller: self)
+            objAlert.showAlert(message: "Contraseña", title:MessageConstant.k_AlertTitle, controller: self)
+        }else if (lblNation.text! == "País") {
+            objAlert.showAlert(message: "Selecciona País!!!", title:MessageConstant.k_AlertTitle, controller: self)
         }
-        else if (lblCommunity.text! == "Community") {
-            objAlert.showAlert(message: "Please select community first", title:MessageConstant.k_AlertTitle, controller: self)
-        }else if (lblProvision.text! == "Province") {
-            objAlert.showAlert(message: "Please select province first", title:MessageConstant.k_AlertTitle, controller: self)
-        }else if (lblMuncipal.text! == "Muncipality / City") {
-            objAlert.showAlert(message: "Please select muncipal first", title:MessageConstant.k_AlertTitle, controller: self)
+        else if (lblCommunity.text! == "Comunidad") || self.lblCommunity.text == ""{
+            objAlert.showAlert(message: "Selecciona Comunidad!!!", title:MessageConstant.k_AlertTitle, controller: self)
+        }else if (lblProvision.text! == "Provincia") || self.lblProvision.text == ""{
+            objAlert.showAlert(message: "Selecciona Provincia!!!", title:MessageConstant.k_AlertTitle, controller: self)
+        }else if (lblMuncipal.text! == "Municipio/Ciudad") || self.lblMuncipal.text == ""{
+            objAlert.showAlert(message: "Selecciona Municipio!!!", title:MessageConstant.k_AlertTitle, controller: self)
         }
         else if self.strType == "Provider" || self.strType == "provider"{
             if (lblSector.text! == "Sector") {
-                objAlert.showAlert(message: "Please select sector first", title:MessageConstant.k_AlertTitle, controller: self)
-            }else if (tfWebsite.text?.isEmpty)! {
-                objAlert.showAlert(message: "Please enter website", title:MessageConstant.k_AlertTitle, controller: self)
-            }else if (txtVw.text?.isEmpty)! {
-                
+                objAlert.showAlert(message: "Selección Sector Profesional", title:MessageConstant.k_AlertTitle, controller: self)
             }else{
                 self.callWebserviceForCompleteProfile()
             }
         }else{
-            if (tfWebsite.text?.isEmpty)! {
-                objAlert.showAlert(message: "Please enter website", title:MessageConstant.k_AlertTitle, controller: self)
-            }else if (txtVw.text?.isEmpty)! {
-                objAlert.showAlert(message: "Please enter bio", title:MessageConstant.k_AlertTitle, controller: self)
-            }else{
                 self.callWebserviceForCompleteProfile()
-            }
         }
     }
 }
@@ -407,7 +399,7 @@ extension EditProfileViewController{
                     objAppShareData.SaveUpdateUserInfoFromAppshareData(userDetail: user_details)
                     objAppShareData.fetchUserInfoFromAppshareData()
                     
-                    objAlert.showAlertSingleButtonCallBack(alertBtn: "OK", title: "Success", message: "Profile Updated Sucessfully", controller: self) {
+                    objAlert.showAlertSingleButtonCallBack(alertBtn: "OK", title: "Éxito", message: "actualización de perfil con éxito", controller: self) {
                         self.isUpdatedDelegate?.isUpdatedDelegate(isUpdate: true)
                         self.onBackPressed()
                     }

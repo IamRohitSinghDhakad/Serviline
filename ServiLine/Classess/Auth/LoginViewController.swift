@@ -16,7 +16,7 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.tfPassword.isSecureTextEntry = true
         self.vwEmailVerify.isHidden = true
 
         // Do any additional setup after loading the view.
@@ -24,6 +24,13 @@ class LoginViewController: UIViewController {
     
     @IBAction func btnOnForgotPassword(_ sender: Any) {
         self.pushVc(viewConterlerId: "ForgotPasswordViewController")
+    }
+    @IBAction func btnShowPassword(_ sender: Any) {
+        if self.tfPassword.isSecureTextEntry == true{
+            self.tfPassword.isSecureTextEntry = false
+        }else{
+            self.tfPassword.isSecureTextEntry = true
+        }
     }
     
    
@@ -42,9 +49,9 @@ class LoginViewController: UIViewController {
         self.tfPassword.text = self.tfPassword.text?.trim()
         
         if (self.tfEmail.text!.isEmpty){
-            objAlert.showAlert(message: "Please enter Email", title: "Alert", controller: self)
+            objAlert.showAlert(message: "Escribir email", title: "", controller: self)
         }else if (self.tfPassword.text!.isEmpty){
-            objAlert.showAlert(message: "Please enter Password", title: "Alert", controller: self)
+            objAlert.showAlert(message: "Contraseña", title: "", controller: self)
         }else{
             self.call_WsLogin()
         }
@@ -89,7 +96,7 @@ extension LoginViewController{
                     let email = user_details["email"]as! String
                     if user_details["email_verified"]as! String == "0"{
                         self.vwEmailVerify.isHidden = false
-                        self.lblVerifyDesc.text = "Please verify your email we have send verification details on \(email)."
+                        self.lblVerifyDesc.text = "por favor verifica tu email. hemos enviado los detalles de la verificación en \(email)."
                     }else{
                         self.vwEmailVerify.isHidden = true
                         objAppShareData.SaveUpdateUserInfoFromAppshareData(userDetail: user_details)

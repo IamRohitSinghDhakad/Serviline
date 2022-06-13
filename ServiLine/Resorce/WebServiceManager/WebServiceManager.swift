@@ -586,6 +586,93 @@ extension WebServiceManager {
             }
         }
     }
+    
+    
+    
+    //===================================================//
+    
+    //**************** Upload Document *****************//
+    
+    //====================================================//
+    
+    // //MARK: - upload MultipartData method with 3 images ---
+    public func uploadMultipartWithDocumentData(strURL:String, params : [String:Any]?,showIndicator:Bool , customValidation:String, imageData:Data?,imageToUpload:[Data],imagesParam:[String], fileName:String?, mimeType:String?, success:@escaping(Dictionary<String,Any>) ->Void, failure:@escaping (Error) ->Void){
+        
+        
+        if !NetworkReachabilityManager()!.isReachable{
+            let app = UIApplication.shared.delegate as? AppDelegate
+            _ = app?.window
+            //  objAlert.showAlertVc(title: k_noNetwork, controller: window!)
+            //                DispatchQueue.main.async {
+            //                    self.StopIndicator()
+            //                }
+            return
+        }
+        
+        strAuthToken = ""
+        if let token = UserDefaults.standard.string(forKey:UserDefaults.Keys.AuthToken) {
+            
+            strAuthToken =  token //"Bearer" + " " +
+        }
+        
+        let header: HTTPHeaders = ["authToken": strAuthToken ,
+                                   "Accept": "application/json",
+                                   "Content-Type": "application/x-www-form-urlencoded"]
+        print(header)
+        print(strURL)
+        
+        AF.upload(multipartFormData: { (multipartFormData) in
+            
+            let count = imageToUpload.count
+            for i in 0..<count{
+                multipartFormData.append(imageToUpload[i], withName: "\(imagesParam[i])", fileName: fileName , mimeType: mimeType)
+            }
+            
+            for (key, value) in params ?? [:]{
+                multipartFormData.append((value as AnyObject).data(using: String.Encoding.utf8.rawValue)!, withName: key)
+            }
+            
+        }, to: strURL,usingThreshold: UInt64.init(), method: .post,headers: header).response{ response in
+            
+            switch response.result{
+            
+            case .success( _):
+                do {
+                    if let jsonData = response.data{
+                        let parsedData = try JSONSerialization.jsonObject(with: jsonData) as! Dictionary<String, AnyObject>
+                        print(parsedData)
+                        
+                        let dictionary = parsedData as NSDictionary
+                        
+                        if let errorCode = dictionary["status_code"] as? Int{
+                            let strErrorType = dictionary["error_type"] as? String ?? ""
+                            _ = dictionary["message"] as? String ?? ""
+                            if errorCode == 400{
+                                
+                                if strErrorType == "USER_NOT_FOUND" || strErrorType == "ACCOUNT_DISABLED" || strErrorType == "INVALID_TOKEN" || strErrorType == "SESSION_EXPIRED"{
+                                    //objAppShareData.showSessionFailAlert()
+                                    return
+                                    
+                                }else{
+                                    //  objAppShareData.showErrorAlert(strMessage:strMessage1)
+                                }
+                            }
+                        }
+                        success(parsedData as Dictionary<String, Any>)
+                    }
+                }catch{
+                    print(response.description)
+                    // objAppShareData.showErrorAlert(strMessage:response.description)
+                }
+            case .failure(let encodingError):
+                print("PHP error",encodingError)
+                failure(encodingError)
+            }
+        }
+    }
+    
+    
+    
     ////
     public func requestPostOld(strURL:String, params : [String:Any], success:@escaping(Dictionary<String,Any>) ->Void, failure:@escaping (Error) ->Void ) {
         

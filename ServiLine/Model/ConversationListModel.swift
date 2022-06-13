@@ -22,6 +22,7 @@ class ConversationListModel: NSObject {
     var strNotificationTitle  : String = ""
     var strNotificationUserName  : String = ""
     var strNotificationImage  : String = ""
+    var strNotificationMsg : String = ""
     var isSelected : Bool = false
     
     init(dict : [String:Any]) {
@@ -81,6 +82,10 @@ class ConversationListModel: NSObject {
         
         if let time_ago = dict["notification_title"] as? String{
             self.strNotificationTitle = time_ago
+        }
+        
+        if let notification = dict["notification"]as? String{
+            self.strNotificationMsg = notification
         }
         
         if let blocked = dict["blocked"] as? String{

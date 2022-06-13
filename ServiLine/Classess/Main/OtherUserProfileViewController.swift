@@ -42,13 +42,13 @@ class OtherUserProfileViewController: UIViewController {
         self.vwPopUp.isHidden = true
         self.cvImages.delegate = self
         self.cvImages.dataSource = self
-        self.call_GetProfile(strUserID: objAppShareData.UserDetail.strUserId, strOtherUserID: self.strUserID)
+       
         // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-       
+        self.call_GetProfile(strUserID: objAppShareData.UserDetail.strUserId, strOtherUserID: self.strUserID)
     }
     
     
@@ -61,7 +61,7 @@ class OtherUserProfileViewController: UIViewController {
         case 0:
             let ratingCount:Int = Int(self.objUserDetail!.isRating) ?? 0
             if ratingCount >= 3{
-                
+                objAlert.showAlert(message: "Límite de valoración.", title: "", controller: self)
             }else{
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "RatingViewController")as! RatingViewController
                 vc.obj = self.objUserDetail
@@ -71,19 +71,20 @@ class OtherUserProfileViewController: UIViewController {
         case 1:
             self.btnYesPopUp.tag = 1
             if self.objUserDetail?.isFavorite == "1"{
-                self.lblMessage.text = "Are you sure you want to remove \(self.objUserDetail?.strUserName ?? "") from favorite?"
+                self.lblMessage.text = "Deseas eliminar \(self.objUserDetail?.strUserName ?? "") de favorito?"
             }else{
-                self.lblMessage.text = "Are you sure you want to add \(self.objUserDetail?.strUserName ?? "") from favorite?"
+                self.lblMessage.text = "Quieres añadir \(self.objUserDetail?.strUserName ?? "") a favoritos?"
             }
             self.vwPopUp.isHidden = false
         case 2:
             self.call_BlockUnblockUser(strUserID: objAppShareData.UserDetail.strUserId, strToUserID: self.strUserID)
         default:
             self.btnYesPopUp.tag = 3
+            
             if self.objUserDetail?.isReport == "1"{
-                self.lblMessage.text = "Are you sure you want to remove \(self.objUserDetail?.strUserName ?? "") from Report?"
+                self.lblMessage.text = "¿Estás seguro de que quieres eliminar? \(self.objUserDetail?.strUserName ?? "") del informe"
             }else{
-                self.lblMessage.text = "Are you sure you want to add \(self.objUserDetail?.strUserName ?? "") into your report list?"
+                self.lblMessage.text = "Quieres hacer una denuncia \(self.objUserDetail?.strUserName ?? "")?"
             }
             self.vwPopUp.isHidden = false
           
@@ -104,6 +105,32 @@ class OtherUserProfileViewController: UIViewController {
     }
     
    
+    @IBAction func btnOpenWebsite(_ sender: Any) {
+        
+        if self.lblWebsite.text != ""{
+            
+            if self.lblWebsite.text!.contains("https://"){
+                
+            }else{
+                var makeUrl = self.lblWebsite.text!.lowercased()
+                makeUrl = makeUrl.trim()
+                makeUrl = makeUrl.replacingOccurrences(of: "www.", with: "https://")
+                print(makeUrl)
+                let url = URL(string: makeUrl)
+                if UIApplication.shared.canOpenURL(url!) {
+                    UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+                }else{
+                    objAlert.showAlert(message: "URL no válida", title: "Alert", controller: self)
+                }
+            }
+            
+        }else{
+            
+        }
+       
+        
+    }
+    
     @IBAction func btnYesPopUp(_ sender: UIButton) {
         
         switch sender.tag {
@@ -462,5 +489,41 @@ extension OtherUserProfileViewController{
         } failure: { (Error) in
             objWebServiceManager.hideIndicator()
         }
+    }
+}
+
+
+extension String {
+    func isValidUrl() -> Bool {
+        let regex = "((http|https|ftp)://)?((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+"
+        let predicate = NSPredicate(format: "SELF MATCHES %@", regex)
+        return predicate.evaluate(with: self)
+    }
+}
+
+extension String {
+
+    /// Return first available URL in the string else nil
+    func checkForURL() -> NSRange? {
+        guard let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) else {
+            return nil
+        }
+        let matches = detector.matches(in: self, options: [], range: NSRange(location: 0, length: self.utf16.count))
+
+        for match in matches {
+            guard Range(match.range, in: self) != nil else { continue }
+            return match.range
+        }
+        return nil
+    }
+
+    func getURLIfPresent() -> String? {
+        guard let range = self.checkForURL() else{
+            return nil
+        }
+        guard let stringRange = Range(range,in:self) else {
+            return nil
+        }
+        return String(self[stringRange])
     }
 }

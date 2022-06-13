@@ -52,6 +52,9 @@ class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,
     //MARK:- Variables
     var imagePicker = UIImagePickerController()
     var pickedImage:UIImage?
+    var pickedDoc:Data?
+    var docExtension = ""
+    var myDocUrl = ""
     
     var controller = UIImagePickerController()
     let videoFileName = "/video.mp4"
@@ -119,8 +122,8 @@ class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,
            self.imgVwUser.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo"))
         }
         
-     //   let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
-      //  self.tblChat.addGestureRecognizer(longPress)
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
+        self.tblChat.addGestureRecognizer(longPress)
         
        // self.call_GetChatList(strUserID: objAppShareData.UserDetail.strUserId, strSenderID: self.strSenderID)
         if self.timer == nil{
@@ -202,7 +205,7 @@ class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,
                 UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
             }
             
-            objAlert.showAlertCallBack(alertLeftBtn: "", alertRightBtn: "OK", title: "", message: "Image download succesfully ", controller: self) {
+            objAlert.showAlertCallBack(alertLeftBtn: "", alertRightBtn: "OK", title: "", message: "Descarga de imagen con éxito", controller: self) {
                 self.vwContainFullImage.isHidden = true
             }
         }else{
@@ -304,10 +307,12 @@ class ChatDetailViewController: UIViewController,UINavigationControllerDelegate,
             
             do {
                 let document = try Data(contentsOf: url.absoluteURL)
-                print(document)
-             //   parent.file = document
-              //  parent.fileName = url.lastPathComponent
+                self.pickedDoc = document
                 print("File Selected: " + url.path)
+                print(url.pathExtension)
+                self.docExtension = "file/\(url.pathExtension)"
+                self.myDocUrl = url.path
+                self.callWebserviceForSendDocument(strSenderID: objAppShareData.UserDetail.strUserId, strReceiverID: self.strSenderID, strType: "file")
             }
             catch {
                 print("Error selecting file: " + error.localizedDescription)
@@ -736,7 +741,7 @@ extension ChatDetailViewController: UITextViewDelegate{
         self.txtVwChat.text = self.txtVwChat.text?.trimmingCharacters(in: .whitespacesAndNewlines)
         
         if self.txtVwChat.text == "" {
-            objAlert.showAlert(message: "Please enter some text", title: "Alert", controller: self)
+            objAlert.showAlert(message: "Introduzca mensaje", title: "", controller: self)
            // AppSharedClass.shared.showAlert(title: "Alert", message: "Please enter some text", view: self)
             return
         }else{
@@ -900,7 +905,7 @@ extension ChatDetailViewController:UITableViewDelegate,UITableViewDataSource{
         self.strMsgID = sender.tag
         
         switch self.arrChatMessages[sender.tag].strType {
-        case "image":
+        case "image", "Image":
             let obj = self.arrChatMessages[sender.tag]
             self.strSelectedImageUrl = obj.strImageUrl
             let profilePic = obj.strImageUrl
@@ -910,32 +915,45 @@ extension ChatDetailViewController:UITableViewDelegate,UITableViewDataSource{
             }
 
             self.vwContainFullImage.isHidden = false
-        case "file":
+        case "file", "File":
+            objWebServiceManager.showIndicator()
             
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
-            vc.strIsComingFrom = "Document"
-            vc.strUrl =  self.arrChatMessages[sender.tag].strChatDocumentUrl.trim()
-            self.navigationController?.pushViewController(vc, animated: true)
+           // self.downloadFileAF(strUrl: url)
             
-//            let url = URL(string: self.arrChatMessages[sender.tag].strChatDocumentUrl.trim())!
-//            FileDownloader.loadFileAsync(url: url) { (path, error) in
-//                if error == nil{
-//                    objAlert.showAlert(message: "File download succesfully on document direcotry.", title: "Success", controller: self)
-//                }else{
-//                    objAlert.showAlert(message: "File download error", title: "Failed", controller: self)
-//                }
-//                print("PDF File downloaded to : \(path!)")
-//            }
             
-        case "video":
+//            let vc = self.storyboard?.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
+//            vc.strIsComingFrom = "Document"
+//            vc.strUrl =  self.arrChatMessages[sender.tag].strChatDocumentUrl.trim()
+//            self.navigationController?.pushViewController(vc, animated: true)
+//
+            let url = URL(string: self.arrChatMessages[sender.tag].strChatDocumentUrl.trim())!
+            FileDownloader.loadFileAsync(url: url) { (path,alreadyDownload, error) in
+                if error == nil{
+                    DispatchQueue.main.async {
+                        if alreadyDownload == "File already exists"{
+                            objAlert.showAlert(message: "Archivo ya descargado en su directorio \n Path:- Files/Serviline/", title: "Éxito", controller: self)
+                        }else{
+                            objAlert.showAlert(message: "Descarga de archivos con éxito en el directorio del documento.", title: "Éxito", controller: self)
+                        }
+                    }
+                   
+                }else{
+                    DispatchQueue.main.async {
+                        objAlert.showAlert(message: "File download error", title: "Failed", controller: self)
+                    }
+                }
+                objWebServiceManager.hideIndicator()
+            }
+            
+        case "video", "Video":
             let url = URL(string: self.arrChatMessages[sender.tag].strChatVideoUrl) ?? URL(fileURLWithPath: "")
             playVideo(url: url)
         default:
             break
         }
-        
-       
     }
+    
+    
 
     func playVideo(url: URL) {
             let player = AVPlayer(url: url)
@@ -944,20 +962,20 @@ extension ChatDetailViewController:UITableViewDelegate,UITableViewDataSource{
             self.present(vc, animated: true) { vc.player?.play() }
         }
     
-//    @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
-//        if sender.state == .began {
-//            let touchPoint = sender.location(in: tblChat)
-////            if let indexPath = tblChat.indexPathForRow(at: touchPoint) {
-////                print(indexPath.row)
-////                // your code here, get the row for the indexPath or do whatever you want
-////
-////                let type = self.arrChatMessages[indexPath.row].strType
-////                if type == "Text" || type == "text"{
-////                    self.openActionSheet(index: indexPath.row)
-////                }
-////            }
-//        }
-//    }
+    @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            let touchPoint = sender.location(in: tblChat)
+            if let indexPath = tblChat.indexPathForRow(at: touchPoint) {
+                print(indexPath.row)
+                // your code here, get the row for the indexPath or do whatever you want
+
+                let type = self.arrChatMessages[indexPath.row].strType
+                if type == "Text" || type == "text"{
+                    self.openActionSheet(index: indexPath.row)
+                }
+            }
+        }
+    }
 //
     
     
@@ -965,24 +983,24 @@ extension ChatDetailViewController:UITableViewDelegate,UITableViewDataSource{
         
         let actionsheet = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         
-        actionsheet.addAction(UIAlertAction(title: "Eliminar mensaje", style: UIAlertAction.Style.default, handler: { (action) -> Void in
+        actionsheet.addAction(UIAlertAction(title: "Borrar mensaje", style: UIAlertAction.Style.default, handler: { (action) -> Void in
          //Delete Message
             
-            objAlert.showAlertCallBack(alertLeftBtn: "no", alertRightBtn: "si", title: "", message: "¿Quieres borrar este mensaje?", controller: self) {
-            //    let msgID = self.arrChatMessages[index].strMsgIDForDelete
-              //  let rec_ID = self.arrChatMessages[index].strReceiverID
-            //    self.call_DeleteChatMsgSinle(strUserID: objAppShareData.UserDetail.strUserId, strMsgID: msgID)
+            objAlert.showAlertCallBack(alertLeftBtn: "SI", alertRightBtn: "NO", title: "", message: "Quieres borrar mensaje?", controller: self) {
+                let msgID = self.arrChatMessages[index].strMsgIDForDelete
+               // let rec_ID = self.arrChatMessages[index].strReceiverID
+                self.call_DeleteChatMsgSinle(strUserID: objAppShareData.UserDetail.strUserId, strMsgID: msgID)
                 
             }
         }))
         
-        actionsheet.addAction(UIAlertAction(title: "Copiar mensaje", style: UIAlertAction.Style.default, handler: { (action) -> Void in
+        actionsheet.addAction(UIAlertAction(title: "Copiar", style: UIAlertAction.Style.default, handler: { (action) -> Void in
             //Copy Message
-       //    UIPasteboard.general.string = self.arrChatMessages[index].strOpponentChatMessage
-            objAlert.showAlert(message: "Texto copiado", title: "Alert", controller: self)
+            UIPasteboard.general.string = self.arrChatMessages[index].strOpponentChatMessage
+            objAlert.showAlert(message: "Mensaje copiado", title: "Alert", controller: self)
             
         }))
-        actionsheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.destructive, handler: { (action) -> Void in
+        actionsheet.addAction(UIAlertAction(title: "Cancelar", style: UIAlertAction.Style.destructive, handler: { (action) -> Void in
             
         }))
         self.present(actionsheet, animated: true, completion: nil)
@@ -1276,46 +1294,46 @@ extension ChatDetailViewController{
         }
    }
 //
-//    //MARK:- Delete Singhe Message
-//    func call_DeleteChatMsgSinle(strUserID:String, strMsgID:String){
-//
-//        if !objWebServiceManager.isNetworkAvailable(){
-//            objWebServiceManager.hideIndicator()
-//            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
-//            return
-//        }
-//
-//        objWebServiceManager.showIndicator()
-//
-//        let parameter = ["user_id":strUserID,
-//                         "id":strMsgID]as [String:Any]
-//
-//
-//        objWebServiceManager.requestGet(strURL: WsUrl.url_deleteChatSingleMessage, params: parameter, queryParams: [:], strCustomValidation: "") { (response) in
-//            objWebServiceManager.hideIndicator()
-//            let status = (response["status"] as? Int)
-//            let message = (response["message"] as? String)
-//
-//            print(response)
-//
-//            if status == MessageConstant.k_StatusCode{
-//                self.initilizeFirstTimeOnly = false
-//                //self.call_GetChatList(strUserID: strUserID, strSenderID: self.strSenderID)
-//
-//            }else{
-//                objWebServiceManager.hideIndicator()
-//
-//                if (response["result"]as? String) != nil{
-//                    self.tblChat.displayBackgroundText(text: "ningún record fue encontrado")
-//                }else{
-//                    objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
-//                }
-//            }
-//        } failure: { (Error) in
-//            print(Error)
-//            objWebServiceManager.hideIndicator()
-//        }
-//    }
+    //MARK:- Delete Singhe Message
+    func call_DeleteChatMsgSinle(strUserID:String, strMsgID:String){
+
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
+            return
+        }
+
+        objWebServiceManager.showIndicator()
+
+        let parameter = ["user_id":strUserID,
+                         "message_id":strMsgID]as [String:Any]
+
+
+        objWebServiceManager.requestPost(strURL: WsUrl.url_deleteChatSingleMessage, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { (response) in
+            objWebServiceManager.hideIndicator()
+            let status = (response["status"] as? Int)
+            let message = (response["message"] as? String)
+
+            print(response)
+
+            if status == MessageConstant.k_StatusCode{
+                self.initilizeFirstTimeOnly = false
+                //self.call_GetChatList(strUserID: strUserID, strSenderID: self.strSenderID)
+
+            }else{
+                objWebServiceManager.hideIndicator()
+
+                if (response["result"]as? String) != nil{
+                    self.tblChat.displayBackgroundText(text: "no message found")
+                }else{
+                    objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+                }
+            }
+        } failure: { (Error) in
+            print(Error)
+            objWebServiceManager.hideIndicator()
+        }
+    }
 //
 //    //MARK:- Delete Singhe Message
 //    func call_ClearConversation(strUserID:String){
@@ -1376,31 +1394,43 @@ extension ChatDetailViewController{
         }
         objWebServiceManager.showIndicator()
         self.view.endEditing(true)
-
+        
+        var dicrParam = [String:Any]()
         var imageData = [Data]()
         var imgData : Data?
-        if self.pickedImage != nil{
-           // imgData = (self.pickedImage?.jpegData(compressionQuality: 1.0))!
-            imgData = (self.pickedImage?.pngData())// jpegData(compressionQuality: 1.0))!
-        }
-        else {
-            imgData = (self.imgVwUser.image?.pngData()) //jpegData(compressionQuality: 1.0))!
-        }
-        imageData.append(imgData!)
+        var imageParam = [String]()
+        var mimeType = ""
+        var fileName = ""
+        
+       
+           
+            if self.pickedImage != nil{
+               // imgData = (self.pickedImage?.jpegData(compressionQuality: 1.0))!
+                imgData = (self.pickedImage?.pngData())// jpegData(compressionQuality: 1.0))!
+            }
+            else {
+                imgData = (self.imgVwUser.image?.pngData()) //jpegData(compressionQuality: 1.0))!
+            }
+            imageData.append(imgData!)
 
-        let imageParam = ["chat_image"]
+             imageParam = ["chat_image"]
 
-        print(imageData)
+            mimeType = "image/png"
+            fileName = "chat_image"
+            print(imageData)
 
-        let dicrParam = ["sender_id":strSenderID,
-                         "receiver_id":strReceiverID,
-                         "chat_message":"",
-                         "type":strType
-        ]as [String:Any]
+            dicrParam = ["sender_id":strSenderID,
+                             "receiver_id":strReceiverID,
+                             "chat_message":"",
+                             "type":strType
+            ]as [String:Any]
+        
+
+   
 
         print(dicrParam)
 
-        objWebServiceManager.uploadMultipartWithImagesData(strURL: WsUrl.url_insertChat, params: dicrParam, showIndicator: true, customValidation: "", imageData: imgData, imageToUpload: imageData, imagesParam: imageParam, fileName: "chat_image", mimeType: "image/png") { (response) in
+        objWebServiceManager.uploadMultipartWithImagesData(strURL: WsUrl.url_insertChat, params: dicrParam, showIndicator: true, customValidation: "", imageData: imgData, imageToUpload: imageData, imagesParam: imageParam, fileName: fileName, mimeType: mimeType) { (response) in
             objWebServiceManager.hideIndicator()
             print(response)
             let status = (response["status"] as? Int)
@@ -1499,6 +1529,79 @@ extension ChatDetailViewController{
         }
     }
 
+    
+    //================== Upload Document ================//
+    
+    func callWebserviceForSendDocument(strSenderID:String,strReceiverID:String,strType:String){
+
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+
+            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
+            return
+        }
+        objWebServiceManager.showIndicator()
+        self.view.endEditing(true)
+        
+        var dicrParam = [String:Any]()
+        var imageData = [Data]()
+        var imgData : Data?
+        var imageParam = [String]()
+        var mimeType = ""
+        var fileName = ""
+        
+            
+            if self.pickedDoc != nil{
+               imgData = pickedDoc
+            }
+            else {
+                imgData = pickedDoc
+            }
+        print(pickedDoc)
+            imageData.append(imgData!)
+            
+            mimeType = self.docExtension
+
+        fileName = "file.pdf"
+             imageParam = ["chat_document"]
+
+
+            dicrParam = ["sender_id":strSenderID,
+                             "receiver_id":strReceiverID,
+                           //  "chat_document":"",
+                         "sender_path":self.myDocUrl,
+                             "type":strType
+            ]as [String:Any]
+            
+
+        print(dicrParam)
+
+        objWebServiceManager.uploadMultipartWithDocumentData(strURL: WsUrl.url_insertChat, params: dicrParam, showIndicator: true, customValidation: "", imageData: imgData, imageToUpload: imageData, imagesParam: imageParam, fileName: fileName, mimeType: mimeType) { (response) in
+            objWebServiceManager.hideIndicator()
+            print(response)
+            let status = (response["status"] as? Int)
+            let message = (response["message"] as? String)
+
+
+            if let result = response["result"]as? [String:Any]{
+               
+                    self.subVw.isHidden = true
+                    self.subVwSelection.isHidden = true
+                    self.sbVwMainSticker.isHidden = true
+
+                    self.isSendMessage = true
+                    self.initilizeFirstTimeOnly = false
+                   // self.call_GetChatList(strUserID: objAppShareData.UserDetail.strUserId, strSenderID: self.strSenderID)
+        
+            }else{
+                objWebServiceManager.hideIndicator()
+                objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+            }
+
+        } failure: { (Error) in
+            print(Error)
+        }
+    }
 
 
    }

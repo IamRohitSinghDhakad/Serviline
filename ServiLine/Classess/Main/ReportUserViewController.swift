@@ -29,7 +29,7 @@ class ReportUserViewController: UIViewController {
             let url = URL(string: myProfilePic)
             self.imVwUserReport.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo"))
         }
-        self.lblMsgReportUser.text = objAppShareData.UserDetail.strUserName + " has been added a report and we have received \n The reason for your complaint. We will study amd evaluate your message we will act accordingly Thank You!!!"
+        self.lblMsgReportUser.text = objAppShareData.UserDetail.strUserName + " se ha añadido y recibido tu informe"
         
         let profilePic = self.objUserDetail!.strProfilePicture
         if profilePic != "" {
@@ -37,7 +37,7 @@ class ReportUserViewController: UIViewController {
             self.imgVwUser.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo"))
         }
         
-        self.lblDescription.text = "You want to report \(objUserDetail?.strUserName ?? "") for some situation what have you suffered or observed Briefly write your reason and we will study the particular case."
+        self.lblDescription.text = "Quieres hacer una denuncia \(objUserDetail?.strUserName ?? "") Escribanos brevemente sus razones y nosotros estudiaremos el caso."
 
         // Do any additional setup after loading the view.
     }
@@ -55,7 +55,7 @@ class ReportUserViewController: UIViewController {
         self.txtVw.text = self.txtVw.text?.trim()
         
         if (self.txtVw.text!.isEmpty){
-            objAlert.showAlert(message: "Please enter some text", title: "Alert", controller: self)
+            objAlert.showAlert(message: "por favor ingrese un texto", title: "", controller: self)
         }
         else{
             self.call_ReportUaser(strUserID: objAppShareData.UserDetail.strUserId, strToUserID: self.objUserDetail!.strUserId)

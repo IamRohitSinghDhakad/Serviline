@@ -24,7 +24,7 @@ class ForgotPasswordViewController: UIViewController {
     
     @IBAction func btnOnSubmit(_ sender: Any) {
         if (self.tfEmail.text!.isEmpty){
-            objAlert.showAlert(message: "Please enter email first", title: "Alert", controller: self)
+            objAlert.showAlert(message: "Escribir email", title: "", controller: self)
         }else{
             self.call_WsForgotPassword()
         }
@@ -59,7 +59,7 @@ extension ForgotPasswordViewController{
             let message = (response["message"] as? String)
             if statusCode == MessageConstant.k_StatusCode{
                 
-                objAlert.showAlertCallBack(alertLeftBtn: "", alertRightBtn: "OK", title: "", message: message ?? "Resent link send on your register email.", controller: self) {
+                objAlert.showAlertCallBack(alertLeftBtn: "", alertRightBtn: "OK", title: "", message: message ?? "Enviar enlace de reenvío en su correo electrónico de registro.", controller: self) {
                     self.onBackPressed()
                 }
                 

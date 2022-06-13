@@ -67,20 +67,28 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
     func openSelectionScreen(strIsComingFrom:String, strTitle:String){
          let vc = self.storyboard?.instantiateViewController(withIdentifier: "PopUpViewController")as! PopUpViewController
          vc.isComingFrom = strIsComingFrom
+        if strIsComingFrom == "6"{
+            vc.isMultiple = "Yes"
+        }
         vc.strTitle = strTitle
         if strIsComingFrom == "1"{
             vc.closerForSelectionButton = { dict
                 in
                 print(dict)
                 if dict.count != 0{
-                    if dict["type"] as! String != "user"{
-                        self.vwServiceSector.isHidden = false
-                        self.strType = "Provider"
-                    }else{
+                    if dict["type"] as! String == "Usuario"{
                         self.vwServiceSector.isHidden = true
                         self.strType = "User"
+                        self.lblUserType.text = dict["type"] as? String
+                    }else if dict["type"] as! String == "Profesional"{
+                        self.vwServiceSector.isHidden = false
+                        self.strType = "Provider"
+                        self.lblUserType.text = dict["type"] as? String
                     }
-                    self.lblUserType.text = dict["type"] as? String
+                    else{
+                        self.lblUserType.text = "Usuario/Profesional"
+                    }
+                    
                 }
             }
         }else{
@@ -89,7 +97,7 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
             vc.strProvinceID = self.strProvinceID
             vc.strMunicipalID = self.strMunicipalID
             
-            print(self.strNationID,self.strCommunityID,self.strProvinceID,self.strMunicipalID)
+          //  print(self.strNationID,self.strCommunityID,self.strProvinceID,self.strMunicipalID)
             
             
             vc.closerForSelectionTable = { dict
@@ -103,9 +111,9 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
                         self.strCommunityID = ""
                         self.strProvinceID = ""
                         self.strMunicipalID = ""
-                        self.lblCommunity.text = "Community"
-                        self.lblProvince.text = "Province"
-                        self.lblMuncipality.text = "Muncipality / City"
+                        self.lblCommunity.text = "Comunidad"
+                        self.lblProvince.text = "Provincia"
+                        self.lblMuncipality.text = "Municipio/Ciudad"
                     }
                     
                     if let communityID = dict["Community_id"]as? String{
@@ -113,15 +121,15 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
                         self.lblCommunity.text = dict["Community"]as? String
                         self.strProvinceID = ""
                         self.strMunicipalID = ""
-                        self.lblProvince.text = "Province"
-                        self.lblMuncipality.text = "Muncipality / City"
+                        self.lblProvince.text = "Provincia"
+                        self.lblMuncipality.text = "Municipio/Ciudad"
                     }
                     
                     if let Province = dict["Province_id"]as? String{
                         self.strProvinceID = Province
                         self.lblProvince.text = dict["Province"]as? String
                         self.strMunicipalID = ""
-                        self.lblMuncipality.text = "Muncipality / City"
+                        self.lblMuncipality.text = "Municipio/Ciudad"
                     }
                     
                     if let MunicipalID = dict["Municipal_id"]as? String{
@@ -159,32 +167,32 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
         self.tfConfirmEmail.text = self.tfConfirmEmail.text!.trim()
         self.tfPassword.text = self.tfPassword.text!.trim()
         
-        if self.lblUserType.text == "User / Professional"  {
-            objAlert.showAlert(message: "Please select UserType", title:MessageConstant.k_AlertTitle, controller: self)
+        if self.lblUserType.text == "Usuario/Profesional"  {
+            objAlert.showAlert(message: "Selecciona tipo de perfil", title:MessageConstant.k_AlertTitle, controller: self)
         }
         else if (tfName.text?.isEmpty)! {
-            objAlert.showAlert(message: "Please enter name", title:MessageConstant.k_AlertTitle, controller: self)
+            objAlert.showAlert(message: "Entrar nombre", title:MessageConstant.k_AlertTitle, controller: self)
         }else if (tfEmail.text?.isEmpty)! {
-            objAlert.showAlert(message: MessageConstant.BlankEmail, title:MessageConstant.k_AlertTitle, controller: self)
+            objAlert.showAlert(message: "Escribir email", title:MessageConstant.k_AlertTitle, controller: self)
         }else if !objValidationManager.validateEmail(with: tfEmail.text!){
-            objAlert.showAlert(message: MessageConstant.ValidEmail, title:MessageConstant.k_AlertTitle, controller: self)
+            objAlert.showAlert(message: "Introducir correo electrónico valido", title:MessageConstant.k_AlertTitle, controller: self)
         }else if (tfConfirmEmail.text?.isEmpty)! {
-            objAlert.showAlert(message: "Please enter confirm email.", title:MessageConstant.k_AlertTitle, controller: self)
+            objAlert.showAlert(message: "Por favor escribe confirm email.", title:MessageConstant.k_AlertTitle, controller: self)
         }else if tfConfirmEmail.text! != self.tfEmail.text! {
-            objAlert.showAlert(message: "Confirm email not match", title:MessageConstant.k_AlertTitle, controller: self)
+            objAlert.showAlert(message: "Email no coincide", title:MessageConstant.k_AlertTitle, controller: self)
         }else if (tfPassword.text?.isEmpty)! {
-            objAlert.showAlert(message: MessageConstant.BlankPassword, title:MessageConstant.k_AlertTitle, controller: self)
-        }else if (lblNation.text! == "Nation") {
-            objAlert.showAlert(message: "Please select nation first", title:MessageConstant.k_AlertTitle, controller: self)
-        }else if (lblCommunity.text! == "Community") {
-            objAlert.showAlert(message: "Please select community first", title:MessageConstant.k_AlertTitle, controller: self)
-        }else if (lblProvince.text! == "Province") {
-            objAlert.showAlert(message: "Please select province first", title:MessageConstant.k_AlertTitle, controller: self)
-        }else if (lblMuncipality.text! == "Muncipality / City") {
-            objAlert.showAlert(message: "Please select muncipal first", title:MessageConstant.k_AlertTitle, controller: self)
-        }else if self.strType != "User"{
-            if  (lblServiceSector.text! == "Service Sector"){
-                objAlert.showAlert(message: "Please select sector first", title:MessageConstant.k_AlertTitle, controller: self)
+            objAlert.showAlert(message: "Contraseña", title:MessageConstant.k_AlertTitle, controller: self)
+        }else if (lblNation.text! == "País") {
+            objAlert.showAlert(message: "Selecciona País!!!", title:MessageConstant.k_AlertTitle, controller: self)
+        }else if (lblCommunity.text! == "Comunidad") {
+            objAlert.showAlert(message: "Selecciona Comunidad!!!", title:MessageConstant.k_AlertTitle, controller: self)
+        }else if (lblProvince.text! == "Provincia") {
+            objAlert.showAlert(message: "Selecciona Provincia!!!", title:MessageConstant.k_AlertTitle, controller: self)
+        }else if (lblMuncipality.text! == "Municipio/Ciudad") {
+            objAlert.showAlert(message: "Selecciona Municipio!!!", title:MessageConstant.k_AlertTitle, controller: self)
+        }else if self.strType != "Usuario"{
+            if  (lblServiceSector.text! == "Sector de Servicios"){
+                objAlert.showAlert(message: "Selección Sector Profesional", title:MessageConstant.k_AlertTitle, controller: self)
             }else{
                 self.callWebserviceForSignUp()
             }
@@ -203,45 +211,45 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
     @IBAction func btnOnPresentOptions(_ sender: UIButton) {
         switch sender.tag {
         case 0:
-            self.openSelectionScreen(strIsComingFrom: "2", strTitle: "Nation")
+            self.openSelectionScreen(strIsComingFrom: "2", strTitle: "País")
             print("Nation is ")
         case 1:
             if self.strNationID == ""{
-                objAlert.showAlert(message: "Please select nation first", title: "Alert", controller: self)
+                objAlert.showAlert(message: "Selecciona País!!!", title: "Alert", controller: self)
             }else{
-                self.openSelectionScreen(strIsComingFrom: "3", strTitle: "Community")
+                self.openSelectionScreen(strIsComingFrom: "3", strTitle: "Comunidad")
             }
             print("Community is ")
         case 2:
             if self.strCommunityID == ""{
-                objAlert.showAlert(message: "Please select community first", title: "Alert", controller: self)
+                objAlert.showAlert(message: "Selecciona Comunidad!!!", title: "Alert", controller: self)
             }else{
-                self.openSelectionScreen(strIsComingFrom: "4", strTitle: "Provience")
+                self.openSelectionScreen(strIsComingFrom: "4", strTitle: "Provincia")
             }
             print("Province is ")
         case 3:
             
             if self.strProvinceID == ""{
-                objAlert.showAlert(message: "Please select provience first", title: "Alert", controller: self)
+                objAlert.showAlert(message: "Selecciona Provincia!!!", title: "Alert", controller: self)
             }else{
-                self.openSelectionScreen(strIsComingFrom: "5", strTitle: "Muncipal")
+                self.openSelectionScreen(strIsComingFrom: "5", strTitle: "Municipio/Ciudad")
             }
             print("Muncipal City is ")
         case 4:
             if self.strProvinceID == ""{
-                objAlert.showAlert(message: "Please select Muncipal first", title: "Alert", controller: self)
+                objAlert.showAlert(message: "Selecciona Municipio!!!", title: "Alert", controller: self)
             }else{
-                self.openSelectionScreen(strIsComingFrom: "6", strTitle: "Sector")
+                self.openSelectionScreen(strIsComingFrom: "6", strTitle: "Sector de Servicios")
             }
            
-            print("Service sector is ")
         default:
             break
         }
     }
     
     @IBAction func btnOnLogin(_ sender: Any) {
-        onBackPressed()
+        //onBackPressed()
+        self.pushVc(viewConterlerId: "LoginViewController")
     }
     
 }
@@ -402,7 +410,7 @@ extension SignUpViewController{
             
                 let user_details  = response["result"] as? [String:Any]
 
-                self.lblVerifyDesc.text = "Please verify your email we have send verification details on \(self.tfEmail.text!)."
+                self.lblVerifyDesc.text = "por favor verifica tu email. hemos enviado los detalles de la verificación en \(self.tfEmail.text!)."
                 self.vwVerify.isHidden = false
                 
                 

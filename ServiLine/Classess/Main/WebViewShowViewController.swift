@@ -26,18 +26,20 @@ class WebViewShowViewController: UIViewController {
         
         self.lblTitle.text = self.strIsComingFrom
         // Do any additional setup after loading the view.
-        
+        //["Contacto y sugerencias", "Política de Privacidad", "Condiciones de Uso", "Política de Cookies","Info Social, Fiscal y Jurídica", "Eliminar perfil", "Acerca de", "Salir"]
         switch strIsComingFrom {
-        case "Condition Of Use":
+        case "Contacto y sugerencias":
             self.loadUrl(strUrl: "https://ambitious.in.net/Arun/serviline/index.php/api/page/Conditions%20of%20use")
-        case "Privacy Check":
+        case "Política de Privacidad":
             self.loadUrl(strUrl: "https://ambitious.in.net/Arun/serviline/index.php/api/page/Privacy%20Policy")
-        case "Cookies Privacy":
+        case "Política de Cookies":
             self.loadUrl(strUrl: "https://ambitious.in.net/Arun/serviline/index.php/api/page/Cookies%20Policy")
-        case "About Us":
+        case "Acerca de":
             self.loadUrl(strUrl: "https://ambitious.in.net/Arun/serviline/index.php/api/page/About%20Us")
         case "Document":
             self.loadUrl(strUrl: self.strUrl)
+        case "Info Social, Fiscal y Jurídica":
+            self.loadUrl(strUrl: "https://ambitious.in.net/Arun/serviline/index.php/api/page/Tax%20and%20Legal")
         default:
             self.loadUrl(strUrl: "https://ambitious.in.net/Arun/serviline/index.php/api/page/Contact%20and%20Suggestions")
         }
@@ -98,4 +100,22 @@ extension WebViewShowViewController: WKNavigationDelegate{
         self.activityIndicator.removeFromSuperview()
         
     }
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        guard case .linkActivated = navigationAction.navigationType,
+              let url = navigationAction.request.url
+        else {
+            decisionHandler(.allow)
+            return
+        }
+        decisionHandler(.cancel)
+        
+        if UIApplication.shared.canOpenURL(url) {
+            print(url)
+             UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }else{
+            objAlert.showAlert(message: "URL no válida", title: "Alert", controller: self)
+        }
+   }
 }
+

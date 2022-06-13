@@ -16,6 +16,7 @@ class HomeViewController: UIViewController, GetLocationProtocol {
     @IBOutlet var txtVw: RDTextView!
     @IBOutlet var imgVwShowHidePopUp: UIImageView!
     @IBOutlet var vwSecorreqPopUp: UIView!
+    @IBOutlet var vwMembershipPopUp: UIView!
     
     var strSectorID = ""
     var strNationID = ""
@@ -26,6 +27,8 @@ class HomeViewController: UIViewController, GetLocationProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.vwMembershipPopUp.isHidden = true
+        self.call_GetProfile(strUserID: objAppShareData.UserDetail.strUserId)
         self.imgVwShowHidePopUp.image = UIImage.init(named: "unchecked")
         self.vwSecorreqPopUp.isHidden = true
         
@@ -36,6 +39,7 @@ class HomeViewController: UIViewController, GetLocationProtocol {
                 self.vwMsg.isHidden = true
             }
         }
+        objAppShareData.dictHomeLocationInfo.removeAll()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,8 +57,8 @@ class HomeViewController: UIViewController, GetLocationProtocol {
     
     @IBAction func btnOnOk(_ sender: Any) {
         self.vwSecorreqPopUp.isHidden = true
-        self.lblSelectedSector.text = "Select Sector"
-        self.lblLocation.text = "Select Location"
+        self.lblSelectedSector.text = "Selección Sector Profesional"
+        self.lblLocation.text = "Selección ubicación"
         self.txtVw.text = ""
         self.strSectorID = ""
         self.strNationID = ""
@@ -66,6 +70,13 @@ class HomeViewController: UIViewController, GetLocationProtocol {
 
     @IBAction func btnOnOpenSideMenu(_ sender: Any) {
         self.sideMenuController?.revealMenu()
+    }
+    
+    @IBAction func btnOkOnMembership(_ sender: Any) {
+        self.vwMembershipPopUp.isHidden = true
+        
+        self.pushVc(viewConterlerId: "MembershipViewController")
+        
     }
     
     @IBAction func btnOnDoNotShowAgainPopUp(_ sender: Any) {
@@ -92,13 +103,14 @@ class HomeViewController: UIViewController, GetLocationProtocol {
     }
     
     @IBAction func btnOnSend(_ sender: Any) {
-        if self.lblSelectedSector.text == "Select Sector"{
-            objAlert.showAlert(message: "Please select Service Sector", title: "Alert", controller: self)
+        
+        if self.lblSelectedSector.text == "Seleccióna Sector Profesional"{
+            objAlert.showAlert(message: "Seleccióna Sector Profesional", title: "", controller: self)
             
-        }else if self.lblLocation.text == "Select Location"{
-            objAlert.showAlert(message: "Please select Location", title: "Alert", controller: self)
+        }else if self.lblLocation.text == "Seleccióna ubicación"{
+            objAlert.showAlert(message: "Seleccióna ubicación", title: "", controller: self)
         }else if self.txtVw.text == ""{
-            objAlert.showAlert(message: "Please enter message", title: "Alert", controller: self)
+            objAlert.showAlert(message: "Introduzca mensaje", title: "", controller: self)
         }else{
             self.call_WsSendServiceReq(strText: self.txtVw.text!, strUserID: objAppShareData.UserDetail.strUserId)
         }
@@ -149,7 +161,7 @@ class HomeViewController: UIViewController, GetLocationProtocol {
             self.strProvienceID = provience_id
         }
         
-        if let comunity_id = strData["comunity_id"]as? String{
+        if let comunity_id = strData["community_id"]as? String{
             self.strCommunityID = comunity_id
         }
         
@@ -196,7 +208,7 @@ extension HomeViewController{
                 if let user_details  = response["result"] as? [[String:Any]] {
   
                     self.vwSecorreqPopUp.isHidden = false
-                   
+                    objAppShareData.dictHomeLocationInfo.removeAll()
                 }
                 else {
                     objAlert.showAlert(message: "Something went wrong!", title: "", controller: self)
@@ -217,6 +229,58 @@ extension HomeViewController{
         }
         
         
+    }
+    
+    func call_GetProfile(strUserID:String){
+        
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
+            return
+        }
+        
+        objWebServiceManager.showIndicator()
+        
+        let parameter = ["user_id":strUserID,
+                         "login_user_id":strUserID]as [String:Any]
+        
+        
+        objWebServiceManager.requestPost(strURL: WsUrl.url_getUserProfile, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: true) { response in
+            
+            objWebServiceManager.hideIndicator()
+            let status = (response["status"] as? Int)
+            let message = (response["message"] as? String)
+            
+            print(response)
+            
+            if status == MessageConstant.k_StatusCode{
+                
+                if let user_details  = response["result"] as? [String:Any] {
+                       
+                    print(user_details)
+                    let obj = userDetailModel.init(dict: user_details)
+                   
+                    if obj.strAllowFree == "0"{
+                        if obj.strIsPlanActive == "0"{
+                            self.vwMembershipPopUp.isHidden = false
+                        }else{
+                            self.vwMembershipPopUp.isHidden = true
+                        }
+                    }
+                    
+                }
+                
+            }else{
+                objWebServiceManager.hideIndicator()
+                objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+                
+            }
+            
+            
+        } failure: { (Error) in
+            print(Error)
+            objWebServiceManager.hideIndicator()
+        }
     }
     
 }

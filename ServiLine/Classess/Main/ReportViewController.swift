@@ -10,12 +10,14 @@ import UIKit
 class ReportViewController: UIViewController {
 
     @IBOutlet var tblVw: UITableView!
+    @IBOutlet var vwNoRecordFound: UIView!
     
     var arrReportUserList = [FavoriteListModel]()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.vwNoRecordFound.isHidden = true
         self.tblVw.delegate = self
         self.tblVw.dataSource = self
     }
@@ -108,21 +110,27 @@ extension ReportViewController{
                     }
                     
                     if self.arrReportUserList.count == 0{
-                        self.tblVw.displayBackgroundText(text: "No Record Found!")
+                        self.vwNoRecordFound.isHidden = false
+                       // self.tblVw.displayBackgroundText(text: "No Record Found!")
                     }else{
-                        self.tblVw.displayBackgroundText(text: "")
+                        self.vwNoRecordFound.isHidden = true
+                        //self.tblVw.displayBackgroundText(text: "")
                     }
                     self.tblVw.reloadData()
                 }
             }else{
+                
                 objWebServiceManager.hideIndicator()
-                if response["result"]as? String == "Any reports not found"{
-                    self.arrReportUserList.removeAll()
-                    self.tblVw.displayBackgroundText(text: "No Record Found!")
-                    self.tblVw.reloadData()
-                }else{
-                    objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
-                }
+                
+                self.vwNoRecordFound.isHidden = false
+                
+//                if response["result"]as? String == "Any reports not found"{
+//                    self.arrReportUserList.removeAll()
+//                    self.tblVw.displayBackgroundText(text: "No Record Found!")
+//                    self.tblVw.reloadData()
+//                }else{
+//                    objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+//                }
             }
         } failure: { (Error) in
             print(Error)

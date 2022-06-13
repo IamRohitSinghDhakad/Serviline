@@ -28,7 +28,7 @@ class RatingViewController: UIViewController {
             self.imgVwUser.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo"))
         }
         
-        self.lblUserDesc.text = "How would you rate \(obj?.strUserName ?? "") work and profile."
+        self.lblUserDesc.text = "Cómo calificarías \(obj?.strUserName ?? "") trabajo y perfil."
         
         
     }
@@ -39,9 +39,7 @@ class RatingViewController: UIViewController {
     }
     
     @IBAction func btnOnDone(_ sender: Any) {
-        
         self.call_RateValue(strRating: self.rating)
-        
     }
     
 }
@@ -71,14 +69,7 @@ extension RatingViewController{
         }
         
         objWebServiceManager.showIndicator()
-        
-        /*
-         @POST("rating")
-         Call<ResponseBody> rating(@Query("user_id") String user_id,
-                                   @Query("vendor_id") String vendor_id,
-                                   @Query("rating") String rating,
-                                   @Query("review") String review);
-         */
+
         
         let parameter = ["user_id":objAppShareData.UserDetail.strUserId,
                          "vendor_id":obj?.strUserId ?? "",
@@ -98,7 +89,7 @@ extension RatingViewController{
                 if let dictData  = response["result"] as? [[String:Any]]{
                     if message == "success"{
 
-                        objAlert.showAlertSingleButtonCallBack(alertBtn: "OK", title: "Success", message: "Rating provide succesfully", controller: self) {
+                        objAlert.showAlertSingleButtonCallBack(alertBtn: "OK", title: "", message: "\(self.obj?.strName ?? "") ha sido calificado", controller: self) {
                             self.onBackPressed()
                         }
 

@@ -12,6 +12,7 @@ class OptionsTableViewCell: UITableViewCell {
     
     @IBOutlet var lblTitle: UILabel!
     @IBOutlet var vwBorder: UIView!
+    @IBOutlet var vwTick: UIView!
     
     
     override func awakeFromNib() {

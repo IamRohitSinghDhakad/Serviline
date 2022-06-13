@@ -44,6 +44,10 @@
 		F9AAAA1F27DBBB2E0035FFC7 /* MessageSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AAAA1E27DBBB2E0035FFC7 /* MessageSettingViewController.swift */; };
 		F9AAAA2127DBBB3F0035FFC7 /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AAAA2027DBBB3F0035FFC7 /* ReportViewController.swift */; };
 		F9AAAA2327DBBB4F0035FFC7 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AAAA2227DBBB4F0035FFC7 /* SettingViewController.swift */; };
+		F9B0593B2826602500493BB9 /* MembershipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B0593A2826602500493BB9 /* MembershipViewController.swift */; };
+		F9B05940282662BD00493BB9 /* TPVVInLibrary.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B0593F282662BD00493BB9 /* TPVVInLibrary.xcframework */; };
+		F9B05941282662FA00493BB9 /* TPVVInLibrary.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B0593F282662BD00493BB9 /* TPVVInLibrary.xcframework */; };
+		F9B05942282662FA00493BB9 /* TPVVInLibrary.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F9B0593F282662BD00493BB9 /* TPVVInLibrary.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F9B05E7D27FCAE0000355179 /* ChatDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B05E7C27FCAE0000355179 /* ChatDetailModel.swift */; };
 		F9CD367D27DA1A1C00486920 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD367C27DA1A1C00486920 /* AppDelegate.swift */; };
 		F9CD368127DA1A1C00486920 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD368027DA1A1C00486920 /* ViewController.swift */; };
@@ -89,6 +93,20 @@
 		F9F3F8602805D873004B0C10 /* DeleteProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F3F85F2805D873004B0C10 /* DeleteProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		F9B05943282662FA00493BB9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F9B05942282662FA00493BB9 /* TPVVInLibrary.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		85671479CBA6FE70C734D833 /* Pods_ServiLine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ServiLine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EBB094790B342CDC4756288 /* Pods-ServiLine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ServiLine.release.xcconfig"; path = "Target Support Files/Pods-ServiLine/Pods-ServiLine.release.xcconfig"; sourceTree = "<group>"; };
@@ -130,6 +148,8 @@
 		F9AAAA1E27DBBB2E0035FFC7 /* MessageSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSettingViewController.swift; sourceTree = "<group>"; };
 		F9AAAA2027DBBB3F0035FFC7 /* ReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
 		F9AAAA2227DBBB4F0035FFC7 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		F9B0593A2826602500493BB9 /* MembershipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembershipViewController.swift; sourceTree = "<group>"; };
+		F9B0593F282662BD00493BB9 /* TPVVInLibrary.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = TPVVInLibrary.xcframework; sourceTree = "<group>"; };
 		F9B05E7C27FCAE0000355179 /* ChatDetailModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatDetailModel.swift; sourceTree = "<group>"; };
 		F9CD367927DA1A1C00486920 /* ServiLine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ServiLine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9CD367C27DA1A1C00486920 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -186,7 +206,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9B05940282662BD00493BB9 /* TPVVInLibrary.xcframework in Frameworks */,
 				736FCA542AD8B73958046694 /* Pods_ServiLine.framework in Frameworks */,
+				F9B05941282662FA00493BB9 /* TPVVInLibrary.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,6 +271,7 @@
 		F9CD367027DA1A1C00486920 = {
 			isa = PBXGroup;
 			children = (
+				F9B0593F282662BD00493BB9 /* TPVVInLibrary.xcframework */,
 				F9CD367B27DA1A1C00486920 /* ServiLine */,
 				F9CD367A27DA1A1C00486920 /* Products */,
 				76764200956F5A6D7A95F1FF /* Pods */,
@@ -475,6 +498,7 @@
 				F97A47F527DE6F6C00B88927 /* EditProfileViewController.swift */,
 				F94DA72B2800A0C600480E92 /* EditImageVideoViewController.swift */,
 				F9F3F85F2805D873004B0C10 /* DeleteProfileViewController.swift */,
+				F9B0593A2826602500493BB9 /* MembershipViewController.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -508,6 +532,7 @@
 				F9CD367627DA1A1C00486920 /* Frameworks */,
 				F9CD367727DA1A1C00486920 /* Resources */,
 				8D7CDD8EC69EDBAD77211106 /* [CP] Embed Pods Frameworks */,
+				F9B05943282662FA00493BB9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -614,6 +639,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9B0593B2826602500493BB9 /* MembershipViewController.swift in Sources */,
 				F94DC82327DF4F59003D30B0 /* WelcomeViewController.swift in Sources */,
 				F9CD36EC27DA30A900486920 /* LoginViewController.swift in Sources */,
 				F993057627F0D8EB00699C26 /* FavoriteTableViewCell.swift in Sources */,
@@ -839,20 +865,23 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7J79HT2HBV;
+				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ServiLine/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Servi Line";
-				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "ServiLine app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes permissions library, which references this permission in its code.";
-				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "ServiLine would like to make data available to nearby bluetooth devices even when you're not using the app.";
-				INFOPLIST_KEY_NSCameraUsageDescription = "$(ServiLine) App requires access to the photo library to upload your profile photo.";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "$(ServiLine)\"We need access to your location to show you relevant search results";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(ServiLine)\"We need access to your location to show you relevant search results, Your current location will be used for search nearby users and provide you best result.";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(ServiLine)\"App need access to microphone to record video for upload on your profile.";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "$(ServiLine)\"We need access to your Gallery so you can save images on your device.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "$(ServiLine)\"We need access to your Gallery so you can save images on your device.";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Paing app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes permissions library, which references this permission in its code.";
+				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Paing would like to make data available to nearby bluetooth devices even when you're not using the app.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(Paing) App requires access to the photo library to upload your profile photo.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "$(Paing)\"We need access to your location to show you relevant search results";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(Paing)\"We need access to your location to show you relevant search results, Your current location will be used for search nearby users and provide you best result.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(Paing)\"App need access to microphone to record video for upload on your profile.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "$(Paing)\"We need access to your Gallery so you can save images on your device.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "$(Paing)\"We need access to your Gallery so you can save images on your device.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
@@ -880,20 +909,23 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7J79HT2HBV;
+				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ServiLine/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Servi Line";
-				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "ServiLine app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes permissions library, which references this permission in its code.";
-				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "ServiLine would like to make data available to nearby bluetooth devices even when you're not using the app.";
-				INFOPLIST_KEY_NSCameraUsageDescription = "$(ServiLine) App requires access to the photo library to upload your profile photo.";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "$(ServiLine)\"We need access to your location to show you relevant search results";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(ServiLine)\"We need access to your location to show you relevant search results, Your current location will be used for search nearby users and provide you best result.";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(ServiLine)\"App need access to microphone to record video for upload on your profile.";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "$(ServiLine)\"We need access to your Gallery so you can save images on your device.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "$(ServiLine)\"We need access to your Gallery so you can save images on your device.";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Paing app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes permissions library, which references this permission in its code.";
+				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Paing would like to make data available to nearby bluetooth devices even when you're not using the app.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "$(Paing) App requires access to the photo library to upload your profile photo.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "$(Paing)\"We need access to your location to show you relevant search results";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(Paing)\"We need access to your location to show you relevant search results, Your current location will be used for search nearby users and provide you best result.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(Paing)\"App need access to microphone to record video for upload on your profile.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "$(Paing)\"We need access to your Gallery so you can save images on your device.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "$(Paing)\"We need access to your Gallery so you can save images on your device.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;

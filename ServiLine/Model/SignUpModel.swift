@@ -77,7 +77,9 @@ class userDetailModel: NSObject {
     var isRating:String = ""
     var isBlock:String = ""
     var strNotificationStatus:String = ""
-    
+    var strAllowFree:String = ""
+    var strIsPlanActive:String = ""
+    var strSectorName:String = ""
     
     init(dict : [String:Any]) {
         
@@ -211,6 +213,11 @@ class userDetailModel: NSObject {
             self.strSectorID = "\(sector_id)"
         }
         
+        if let sector_name = dict["sector_name"] as? String{
+            self.strSectorName = sector_name
+        }
+        
+        
         
         if let website = dict["website"] as? String{
             self.strWebsite = website
@@ -265,6 +272,21 @@ class userDetailModel: NSObject {
         }else if let phone_number = dict["mobile"] as? Int{
             self.strPhoneNumber = "\(phone_number)"
         }
+        
+        if let allow_free = dict["allow_free"] as? String{
+            self.strAllowFree = allow_free
+        }else if let allow_free = dict["allow_free"] as? Int{
+            self.strAllowFree = "\(allow_free)"
+        }
+        
+        if let isPlanActive = dict["isPlanActive"] as? String{
+            self.strIsPlanActive = isPlanActive
+        }else if let isPlanActive = dict["isPlanActive"] as? Int{
+            self.strIsPlanActive = "\(isPlanActive)"
+        }
+        
+        
+        
         
         if let dob = dict["dob"] as? String{
             self.strDob = dob

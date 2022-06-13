@@ -8,15 +8,20 @@
 import UIKit
 import SDWebImage
 
-class ShowImageFullViewController: UIViewController {
+class ShowImageFullViewController: UIViewController, UIScrollViewDelegate {
     
 
+    @IBOutlet var scrollVw: UIScrollView!
     @IBOutlet var imgVwFull: UIImageView!
     
     var strImageUrl : String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.scrollVw.delegate = self
+        self.scrollVw.minimumZoomScale = 1.0
+        self.scrollVw.maximumZoomScale = 10.0
         
         let profilePic = strImageUrl
         if profilePic != "" {
@@ -32,4 +37,11 @@ class ShowImageFullViewController: UIViewController {
     }
     
     
+}
+
+
+extension ShowImageFullViewController {
+   func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+       return imgVwFull
+}
 }

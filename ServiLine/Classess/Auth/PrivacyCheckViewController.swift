@@ -38,13 +38,13 @@ class PrivacyCheckViewController: UIViewController {
     
     @IBAction func btnOnConditionOfUse(_ sender: Any) {
         let vc = mainStoryboard.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
-        vc.strIsComingFrom = "Condition Of Use"
+        vc.strIsComingFrom = "Condiciones de Uso"
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func btnOnPrivacyPolicy(_ sender: Any) {
         let vc = mainStoryboard.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
-        vc.strIsComingFrom = "Privacy Check"
+        vc.strIsComingFrom = "Política de Privacidad"
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -52,10 +52,10 @@ class PrivacyCheckViewController: UIViewController {
     @IBAction func btnOnContinue(_ sender: Any) {
         
         if self.img1.image != UIImage.init(named: "checkbox_white"){
-            objAlert.showAlert(message: "Please select Condition of use", title: "Alert", controller: self)
+            objAlert.showAlert(message: "Por favor selecciona Condiciones de Uso", title: "", controller: self)
             
         }else  if self.img2.image != UIImage.init(named: "checkbox_white"){
-            objAlert.showAlert(message: "Please select Privacy Policy", title: "Alert", controller: self)
+            objAlert.showAlert(message: "Por favor selecciona Política de Privacidad", title: "", controller: self)
         }else{
             switch self.strIsComingFrom {
             case "1":

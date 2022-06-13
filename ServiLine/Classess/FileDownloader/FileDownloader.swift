@@ -86,8 +86,9 @@ class FileDownloader {
         }
     }
 
-    static func loadFileAsync(url: URL, completion: @escaping (String?, Error?) -> Void)
+    static func loadFileAsync(url: URL, completion: @escaping (String?,String?, Error?) -> Void)
     {
+       
         let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         print(documentsUrl)
 
@@ -98,7 +99,7 @@ class FileDownloader {
         if FileManager().fileExists(atPath: destinationUrl.path)
         {
             print("File already exists [\(destinationUrl.path)]")
-            completion(destinationUrl.path, "File already exists" as? Error)
+            completion(destinationUrl.path, "File already exists", "File already exists" as? Error)
         }
         else
         {
@@ -118,23 +119,23 @@ class FileDownloader {
                             {
                                 if let _ = try? data.write(to: destinationUrl, options: Data.WritingOptions.atomic)
                                 {
-                                    completion(destinationUrl.path, error)
+                                    completion(destinationUrl.path, "", error)
                                 }
                                 else
                                 {
-                                    completion(destinationUrl.path, error)
+                                    completion(destinationUrl.path, "", error)
                                 }
                             }
                             else
                             {
-                                completion(destinationUrl.path, error)
+                                completion(destinationUrl.path, "", error)
                             }
                         }
                     }
                 }
                 else
                 {
-                    completion(destinationUrl.path, error)
+                    completion(destinationUrl.path, "", error)
                 }
             })
             task.resume()

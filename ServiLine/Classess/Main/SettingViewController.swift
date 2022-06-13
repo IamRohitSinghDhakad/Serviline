@@ -13,13 +13,22 @@ class SettingViewController: UIViewController {
     @IBOutlet var vwSubVw: UIView!
     
     var arrOptions = [String]()
+    var userType =  String()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.vwSubVw.isHidden = true
         
-        self.arrOptions = ["Contact and Suggestions", "Privacy Policy", "Condition of Use", "Cookies Policy", "Delete Profile", "About us", "Exit"]
+        userType = objAppShareData.UserDetail.strUserType
+        print(userType)
+        if userType == "provider" || userType == "Provider"{
+            self.arrOptions = ["Contacto y sugerencias", "Política de Privacidad", "Condiciones de Uso", "Política de Cookies","Info Social, Fiscal y Jurídica", "Eliminar perfil","Membresía", "Acerca de", "Salir"]
+        }else{
+            self.arrOptions = ["Contacto y sugerencias", "Política de Privacidad", "Condiciones de Uso", "Política de Cookies","Info Social, Fiscal y Jurídica", "Eliminar perfil", "Acerca de", "Salir"]
+        }
+        
+        
 
     }
     
@@ -58,29 +67,49 @@ extension SettingViewController:UITableViewDelegate,UITableViewDataSource{
         switch indexPath.row {
         case 0:
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
-            vc.strIsComingFrom = "Contact and Suggestion"
+            vc.strIsComingFrom = "Contacto y sugerencias"
             self.navigationController?.pushViewController(vc, animated: true)
         case 1:
             
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
-            vc.strIsComingFrom = "Privacy Check"
+            vc.strIsComingFrom = "Política de Privacidad"
             self.navigationController?.pushViewController(vc, animated: true)
         case 2:
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
-            vc.strIsComingFrom = "Condition Of Use"
+            vc.strIsComingFrom = "Condiciones de Uso"
             self.navigationController?.pushViewController(vc, animated: true)
         case 3:
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
-            vc.strIsComingFrom = "Cookies Privacy"
+            vc.strIsComingFrom = "Política de Cookies"
             self.navigationController?.pushViewController(vc, animated: true)
         case 4:
-            self.vwSubVw.isHidden = false
-        case 5:
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
-            vc.strIsComingFrom = "About Us"
+            vc.strIsComingFrom = "Info Social, Fiscal y Jurídica"
             self.navigationController?.pushViewController(vc, animated: true)
+        case 5:
+            self.vwSubVw.isHidden = false
+        case 6:
+            if userType == "provider" || userType == "Provider"{
+                self.pushVc(viewConterlerId: "MembershipViewController")
+            }else{
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
+                vc.strIsComingFrom = "Acerca de"
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+           
+        case 7:
+            if userType == "provider" || userType == "Provider"{
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
+                vc.strIsComingFrom = "Acerca de"
+                self.navigationController?.pushViewController(vc, animated: true)
+            }else{
+                objAlert.showAlertCallBack(alertLeftBtn: "SI", alertRightBtn: "No", title: "", message: "Quieres salir?", controller: self) {
+                    exit(0)
+                }
+            }
+         
         default:
-            objAlert.showAlertCallBack(alertLeftBtn: "Yes", alertRightBtn: "No", title: "", message: "Are you sure you want to exit?", controller: self) {
+            objAlert.showAlertCallBack(alertLeftBtn: "SI", alertRightBtn: "No", title: "", message: "Quieres salir?", controller: self) {
                 exit(0)
             }
            

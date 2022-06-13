@@ -110,6 +110,36 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate,Pr
     @IBAction func btnOnAddImages(_ sender: Any) {
         self.setImage()
     }
+    @IBAction func btnOpenWebsite(_ sender: Any) {
+        if self.lblHyperLink.text != ""{
+            
+            if self.lblHyperLink.text!.contains("https://"){
+                
+            }else{
+                var makeUrl = self.lblHyperLink.text!.lowercased()
+                makeUrl = makeUrl.trim()
+                makeUrl = makeUrl.replacingOccurrences(of: "www.", with: "https://")
+                print(makeUrl)
+                let url = URL(string: makeUrl)
+                if UIApplication.shared.canOpenURL(url!) {
+                    UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+                }else{
+                    objAlert.showAlert(message: "URL no válida", title: "", controller: self)
+                }
+            }
+            
+        }else{
+            
+        }
+//        guard let url = URL(string: self.lblHyperLink.text!) else {
+//            return
+//         }
+//        if UIApplication.shared.canOpenURL(url) {
+//             UIApplication.shared.open(url, options: [:], completionHandler: nil)
+//        }else{
+//            objAlert.showAlert(message: "Url not valid please check!", title: "Alert", controller: self)
+//        }
+    }
     
 }
 

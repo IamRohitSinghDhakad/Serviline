@@ -32,18 +32,18 @@ class AppSideMenuViewController: UIViewController {
     @IBOutlet weak var selectionMenuTrailingConstraint: NSLayoutConstraint!
     
     var selectedIndexpath = 0
-    var strBadgeCount = ""
+    var strBadgeCount : Int?
     
-    private let menus: [SideMenuOptions] = [SideMenuOptions(menuName: "HOME", menuImageName: "home", menuSelectedImageName: "home_selected"),
-                                            SideMenuOptions(menuName: "PROFILE", menuImageName: "profile", menuSelectedImageName: "user_selected"),
-                                            SideMenuOptions(menuName: "MESSAGE", menuImageName: "msh", menuSelectedImageName: "chat_selected"),
-                                            SideMenuOptions(menuName: "FAVORITE", menuImageName: "favorite", menuSelectedImageName: "afilication_selected"),
-                                            SideMenuOptions(menuName: "NOTIFICATION", menuImageName: "noti", menuSelectedImageName: "lock_selected"),
-                                            SideMenuOptions(menuName: "BLOCKED", menuImageName: "blocked", menuSelectedImageName: "noti_selected"),
-                                            SideMenuOptions(menuName: "MESSAGE SETTING", menuImageName: "setting_msg", menuSelectedImageName: "setting_selected"),
-                                            SideMenuOptions(menuName: "REPORT", menuImageName: "report", menuSelectedImageName: "blog_selected"),
-                                            SideMenuOptions(menuName: "SETTING", menuImageName: "adjust", menuSelectedImageName: "top2"),
-                                            SideMenuOptions(menuName: "LOGOUT", menuImageName: "logout", menuSelectedImageName: "logout_selected")]
+    private let menus: [SideMenuOptions] = [SideMenuOptions(menuName: "Inicio", menuImageName: "home", menuSelectedImageName: "home_selected"),
+                                            SideMenuOptions(menuName: "Perfil", menuImageName: "profile", menuSelectedImageName: "user_selected"),
+                                            SideMenuOptions(menuName: "Mensajes", menuImageName: "msh", menuSelectedImageName: "chat_selected"),
+                                            SideMenuOptions(menuName: "Favoritos", menuImageName: "favorite", menuSelectedImageName: "afilication_selected"),
+                                            SideMenuOptions(menuName: "Notificaciones", menuImageName: "noti", menuSelectedImageName: "lock_selected"),
+                                            SideMenuOptions(menuName: "Bloqueados", menuImageName: "blocked", menuSelectedImageName: "noti_selected"),
+                                            SideMenuOptions(menuName: "Ajuste Mensajes", menuImageName: "setting_msg", menuSelectedImageName: "setting_selected"),
+                                            SideMenuOptions(menuName: "Denunciados", menuImageName: "report", menuSelectedImageName: "blog_selected"),
+                                            SideMenuOptions(menuName: "Info", menuImageName: "adjust", menuSelectedImageName: "top2"),
+                                            SideMenuOptions(menuName: "Cerrar sesión", menuImageName: "logout", menuSelectedImageName: "logout_selected")]
     
     
     //MARK: - Override Methods
@@ -64,7 +64,10 @@ class AppSideMenuViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("badge count update")
+        if let badgeCount = UserDefaults.standard.value(forKey: "badge")as? Int{
+            self.strBadgeCount = badgeCount
+        }
+        print("badge count update\(self.strBadgeCount)")
         
         let profilePic = objAppShareData.UserDetail.strProfilePicture
         if profilePic != "" {
@@ -74,7 +77,7 @@ class AppSideMenuViewController: UIViewController {
         
         self.lblName.text = objAppShareData.UserDetail.strUserName
         
-        self.tableView.updateRow(row: 5)
+        self.tableView.updateRow(row: 4)
         
 //        if let badgeCount = UserDefaults.standard.value(forKey: "badge")as? Int{
 //            
@@ -194,29 +197,29 @@ extension AppSideMenuViewController: UITableViewDelegate, UITableViewDataSource 
     // swiftlint:disable force_cast
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AppSideMenuTableViewCell", for: indexPath) as! AppSideMenuTableViewCell
-        let row = indexPath.row
-        cell.menuImage.image = UIImage(named: menus[row].menuImageName)
         
-        if row == 4{
-            if let badgeCount = UserDefaults.standard.value(forKey: "badge")as? Int{
-                print(badgeCount)
-                if badgeCount != 0{
-                    cell.lblBadgeCount.isHidden = false
-                    cell.lblBadgeCount.text = "\(badgeCount)"
+        if indexPath.row == 4{
+            if self.strBadgeCount != 0 {
+                if self.strBadgeCount == nil{
+                    cell.lblBadgeCount.isHidden = true
+                }else{
+                cell.lblBadgeCount.isHidden = false
+                    cell.lblBadgeCount.text = "\(self.strBadgeCount ?? 1)"
+                }
+                   
                 }else{
                     cell.lblBadgeCount.isHidden = true
                 }
-            }else{
-                cell.lblBadgeCount.isHidden = true
-            }
         }else{
             cell.lblBadgeCount.isHidden = true
         }
         
-        
-        cell.menuName.text = menus[row].menuName
+        cell.menuImage.image = UIImage(named: menus[indexPath.row].menuImageName)
+        cell.menuName.text = menus[indexPath.row].menuName
         return cell
     }
+    
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
@@ -226,7 +229,7 @@ extension AppSideMenuViewController: UITableViewDelegate, UITableViewDataSource 
         if row == 9 {
             sideMenuController?.hideMenu()
             
-            objAlert.showAlertCallBack(alertLeftBtn: "Yes", alertRightBtn: "No", title: "Logout?", message: "Are you sure you want to logout?", controller: self) {
+            objAlert.showAlertCallBack(alertLeftBtn: "SI", alertRightBtn: "NO", title: "Cerrar sesión?", message: "De verdad quieres Cerrar sesión?", controller: self) {
                // self.call_WSLogout(strUserID: objAppShareData.UserDetail.strUserId)
                 AppSharedData.sharedObject().signOut()
             }

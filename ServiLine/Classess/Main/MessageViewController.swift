@@ -11,6 +11,7 @@ class MessageViewController: UIViewController {
 
     @IBOutlet var tblVw: UITableView!
     @IBOutlet var vwContainsButton: UIView!
+    @IBOutlet var vwNoRecordFound: UIView!
     
     var arrMessageList = [ConversationListModel]()
     var isShowingCheckBox = false
@@ -18,11 +19,10 @@ class MessageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-      
         self.tblVw.estimatedRowHeight = 160
         self.tblVw.delegate = self
         self.tblVw.dataSource = self
+        self.vwNoRecordFound.isHidden = true
     }
     
     
@@ -45,15 +45,14 @@ class MessageViewController: UIViewController {
         var arrID = [String]()
         let arr = self.arrMessageList.filter{$0.isSelected == true}
         for data in arr{
-            arrID.append(data.strNotificationId)
+            arrID.append(data.strSenderIDForChat)
         }
         
         if arrID.count == 0{
             
         }else{
             let finalString = arrID.joined(separator: ",")
-            print(finalString)
-           // self.call_DeleteUserNotification(id: finalString)
+            self.call_DeleteUserConversation(senderId: finalString)
         }
        
     }
@@ -140,7 +139,9 @@ extension MessageViewController{
         let parameter = ["user_id":strUserID]as [String:Any]
         
         
-        objWebServiceManager.requestGet(strURL: WsUrl.url_getConversationList, params: parameter, queryParams: [:], strCustomValidation: "") { (response) in
+       // objWebServiceManager.requestGet(strURL: WsUrl.url_getConversationList, params: parameter, queryParams: [:], strCustomValidation: "") { (response) in
+        objWebServiceManager.requestPost(strURL: WsUrl.url_getConversationList, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
+            
             objWebServiceManager.hideIndicator()
             let status = (response["status"] as? Int)
             let message = (response["message"] as? String)
@@ -160,23 +161,71 @@ extension MessageViewController{
                    // self.arrMessageList.reverse()
                     
                     if self.arrMessageList.count == 0{
-                        self.tblVw.displayBackgroundText(text: "No Record Found!")
+                        //self.tblVw.displayBackgroundText(text: "No Record Found!")
+                        self.vwNoRecordFound.isHidden = false
                     }else{
-                        self.tblVw.displayBackgroundText(text: "")
+                        //self.tblVw.displayBackgroundText(text: "")
+                        self.vwNoRecordFound.isHidden = true
                     }
                     
                     self.tblVw.reloadData()
                 }
             }else{
                 objWebServiceManager.hideIndicator()
-                
-                if (response["result"]as? String) != nil{
-                    self.tblVw.reloadData()
-                    self.tblVw.displayBackgroundText(text: "No Record Found!")
-                }else{
-                    objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
-                }
+                self.vwNoRecordFound.isHidden = false
+//
+//                if (response["result"]as? String) != nil{
+//                    self.tblVw.reloadData()
+//                    self.tblVw.displayBackgroundText(text: "No Record Found!")
+//                }else{
+//                    objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+//                }
             }
+        } failure: { (Error) in
+            print(Error)
+            objWebServiceManager.hideIndicator()
+        }
+    }
+    
+    
+    
+    func call_DeleteUserConversation(senderId: String) {
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+            objAlert.showAlert(message: "No Internet Connection", title: "Alert", controller: self)
+            return
+        }
+        
+        objWebServiceManager.showIndicator()
+        
+        let parameter = ["receiver_id" : senderId,
+                         "sender_id": objAppShareData.UserDetail.strUserId] as [String:Any]
+        print(parameter)
+        
+       // objWebServiceManager.requestGet(strURL: WsUrl.url_clearConversation, params: parameter, queryParams: [:], strCustomValidation: "") { (response) in
+        objWebServiceManager.requestPost(strURL: WsUrl.url_clearConversation, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
+            
+            objWebServiceManager.hideIndicator()
+            
+            let status = (response["status"] as? Int)
+            _ = (response["message"] as? String)
+            
+            print(response)
+            
+            if status == MessageConstant.k_StatusCode{
+                
+               
+                self.vwContainsButton.isHidden = true
+                self.isShowingCheckBox = false
+                self.call_GetChatList(strUserID: objAppShareData.UserDetail.strUserId)
+                
+            }else{
+                objWebServiceManager.hideIndicator()
+               // objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+                
+            }
+            
+            
         } failure: { (Error) in
             print(Error)
             objWebServiceManager.hideIndicator()

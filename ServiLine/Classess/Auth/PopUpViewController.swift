@@ -23,6 +23,7 @@ class PopUpViewController: UIViewController {
     
     var strType = ""
     var isComingFrom = ""
+    var isMultiple = ""
     var strNationID = ""
     var strCommunityID = ""
     var strProvinceID = ""
@@ -41,6 +42,12 @@ class PopUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        print(strNationID)
+        print(strProvinceID)
+        print(strCommunityID)
+        print(strMunicipalID)
+        
         self.lblTitle.text = self.strTitle
         
         self.tfSearch.delegate = self
@@ -86,37 +93,56 @@ class PopUpViewController: UIViewController {
        
         var dict = [String:Any]()
         
-        /*
-         dict["update_subcat"] = self.selectedSubCat
-         dict["price_min_value"] = self.strRangeFilterMinValue
-         dict["price_max_value"] = self.strRangeFilterMaxValue
-         dict["gender"] = self.strSelectedGender
-         dict["selected_SubCategory"] = self.strSelectedSubCategory
-         dict["selected_Countries"] = self.strSelectedCountries
-         */
-        
-        switch self.isComingFrom {
-        case "2":
-            dict["nation_id"] = self.strNationID
-            dict["nation"] = self.strNationTitle
-            self.closerForSelectionTable?(dict)
-        case "3":
-            dict["Community_id"] = self.strCommunityID
-            dict["Community"] = self.strCommunityTitle
-            self.closerForSelectionTable?(dict)
-        case "4":
-            dict["Province_id"] = self.strProvinceID
-            dict["Province"] = self.strProvinceTitle
-            self.closerForSelectionTable?(dict)
-        case "5":
-            dict["Municipal_id"] = self.strMunicipalID
-            dict["Municipal"] = self.strMunicipalTitle
-            self.closerForSelectionTable?(dict)
-        default:
-            dict["Sector_id"] = self.strSectorID
-            dict["Sector"] = self.strSectorTitle
-            self.closerForSelectionTable?(dict)
+         let filtered = self.arrOptionsFiltered.filter{ $0.isSelected == true }
+            
+        print(filtered)
+        if filtered.count != 0{
+            
+            var arrId = [String]()
+            var arrNames = [String]()
+            for i in 0...filtered.count-1{
+                arrId.append(filtered[i].strID)
+                arrNames.append(filtered[i].strName)
+            }
+            
+            let Id = arrId.joined(separator: ",")
+            let name = arrNames.joined(separator: ",")
+            
+            print(Id)
+            print(name)
+            
+            switch self.isComingFrom {
+            case "2":
+    //            dict["nation_id"] = self.strNationID
+    //            dict["nation"] = self.strNationTitle
+                dict["nation_id"] = Id
+                dict["nation"] = name
+                self.closerForSelectionTable?(dict)
+            case "3":
+    //            dict["Community_id"] = self.strCommunityID
+    //            dict["Community"] = self.strCommunityTitle
+                dict["Community_id"] = Id
+                dict["Community"] = name
+                self.closerForSelectionTable?(dict)
+            case "4":
+                dict["Province_id"] = Id
+                dict["Province"] = name
+                self.closerForSelectionTable?(dict)
+            case "5":
+    //            dict["Municipal_id"] = self.strMunicipalID
+    //            dict["Municipal"] = self.strMunicipalTitle
+                dict["Municipal_id"] = Id
+                dict["Municipal"] = name
+                self.closerForSelectionTable?(dict)
+            default:
+    //            dict["Sector_id"] = self.strSectorID
+    //            dict["Sector"] = self.strSectorTitle
+                dict["Sector_id"] = Id
+                dict["Sector"] = name
+                self.closerForSelectionTable?(dict)
+            }
         }
+          
         onBackPressed()
     }
     
@@ -137,11 +163,11 @@ class PopUpViewController: UIViewController {
         switch sender.tag {
         case 0:
             print("user")
-            self.strType = "user"
+            self.strType = "Usuario"
             self.imgVwRadio1.image = UIImage.init(named: "radio_button_selected")
         default:
             print("profession")
-            self.strType = "provider"
+            self.strType = "Profesional"
             self.imgVwRadio2.image = UIImage.init(named: "radio_button_selected")
         }
     }
@@ -165,7 +191,7 @@ extension PopUpViewController{
                 self.arrOptionsFiltered = self.arrOptions
             }
             if self.arrOptionsFiltered.count == 0{
-                self.tblVw.displayBackgroundText(text: "No Record Found")
+                self.tblVw.displayBackgroundText(text: "ningún record fue encontrado")
             }else{
                 self.tblVw.displayBackgroundText(text: "")
             }
@@ -186,11 +212,12 @@ extension PopUpViewController: UITableViewDelegate,UITableViewDataSource{
         
         cell.lblTitle.text = self.arrOptionsFiltered[indexPath.row].strName
         
-        
-        if self.arrOptions[indexPath.row].isSelected == true{
+        if self.arrOptionsFiltered[indexPath.row].isSelected == true{
             cell.vwBorder.borderColor = UIColor.init(named: "Pink")
+            cell.vwTick.isHidden = false
         }else{
             cell.vwBorder.borderColor = UIColor.lightGray
+            cell.vwTick.isHidden = true
         }
         
         return cell
@@ -204,22 +231,43 @@ extension PopUpViewController: UITableViewDelegate,UITableViewDataSource{
         case "2":
             self.strNationID = self.arrOptionsFiltered[indexPath.row].strID
             self.strNationTitle = self.arrOptionsFiltered[indexPath.row].strName
+            self.arrOptionsFiltered.filter({$0.isSelected == true}).first?.isSelected = false
+            obj.isSelected = true
         case "3":
             self.strCommunityID = self.arrOptionsFiltered[indexPath.row].strID
             self.strCommunityTitle = self.arrOptionsFiltered[indexPath.row].strName
+            self.arrOptionsFiltered.filter({$0.isSelected == true}).first?.isSelected = false
+            obj.isSelected = true
         case "4":
             self.strProvinceID = self.arrOptionsFiltered[indexPath.row].strID
             self.strProvinceTitle = self.arrOptionsFiltered[indexPath.row].strName
+            self.arrOptionsFiltered.filter({$0.isSelected == true}).first?.isSelected = false
+            obj.isSelected = true
         case "5":
             self.strMunicipalID = self.arrOptionsFiltered[indexPath.row].strID
             self.strMunicipalTitle = self.arrOptionsFiltered[indexPath.row].strName
+            self.arrOptionsFiltered.filter({$0.isSelected == true}).first?.isSelected = false
+            obj.isSelected = true
         default:
             self.strSectorID = self.arrOptionsFiltered[indexPath.row].strID
             self.strSectorTitle = self.arrOptionsFiltered[indexPath.row].strName
+            if self.isMultiple == "Yes"{
+                if obj.isSelected == true{
+                    obj.isSelected = false
+                }else{
+                    obj.isSelected = true
+                }
+            }else{
+                self.arrOptionsFiltered.filter({$0.isSelected == true}).first?.isSelected = false
+                obj.isSelected = true
+            }
+           
         }
         
-        self.arrOptionsFiltered.filter({$0.isSelected == true}).first?.isSelected = false
-        obj.isSelected = true
+        
+        
+        
+        
         
         self.tblVw.reloadData()
     }
@@ -256,6 +304,11 @@ extension PopUpViewController{
                     for data in user_details{
                         let obj = OptionsModelClass.init(dict: data)
                         self.arrOptions.append(obj)
+                        if self.strNationID == obj.strID{
+                            obj.isSelected = true
+                        }else{
+                            obj.isSelected = false
+                        }
                     }
                     
                     self.arrOptionsFiltered = self.arrOptions
@@ -310,6 +363,11 @@ extension PopUpViewController{
                     for data in user_details{
                         let obj = OptionsModelClass.init(dict: data)
                         self.arrOptions.append(obj)
+                        if self.strCommunityID == obj.strID{
+                            obj.isSelected = true
+                        }else{
+                            obj.isSelected = false
+                        }
                     }
                     self.arrOptionsFiltered = self.arrOptions
                     
@@ -368,6 +426,11 @@ extension PopUpViewController{
                     for data in user_details{
                         let obj = OptionsModelClass.init(dict: data)
                         self.arrOptions.append(obj)
+                        if self.strProvinceID == obj.strID{
+                            obj.isSelected = true
+                        }else{
+                            obj.isSelected = false
+                        }
                     }
                     
                     self.arrOptionsFiltered = self.arrOptions
@@ -423,6 +486,11 @@ extension PopUpViewController{
                     for data in user_details{
                         let obj = OptionsModelClass.init(dict: data)
                         self.arrOptions.append(obj)
+                        if self.strMunicipalID == obj.strID{
+                            obj.isSelected = true
+                        }else{
+                            obj.isSelected = false
+                        }
                     }
                     
                     self.arrOptionsFiltered = self.arrOptions

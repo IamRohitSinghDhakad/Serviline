@@ -9,8 +9,8 @@ import Foundation
 import UIKit
 
 
-let BASE_URL = "https://ambitious.in.net/Arun/serviline/index.php/api/"//Local
-//let BASE_URL = "https://paing-spain.com/admin/index.php/api/"//Live
+//let BASE_URL = "https://ambitious.in.net/Arun/serviline/index.php/api/"//Local
+let BASE_URL = "https://servi-line.info/index.php/api/"//Live
 
 
 struct WsUrl{
@@ -54,7 +54,7 @@ struct WsUrl{
     static let url_insertChat = BASE_URL + "insert_chat"
     static let url_ForgotPassword  = BASE_URL + "forgot_password"
     static let url_DeleteNotification = BASE_URL + "delete_notification?"
-    static let url_deleteChatSingleMessage = BASE_URL + "delete_chat_message?"
+    static let url_deleteChatSingleMessage = BASE_URL + "delete_message"
     static let url_clearConversation = BASE_URL + "clear_conversation"
     static let url_DeleteBlogComment = BASE_URL + "blog_comment_delete?"
     static let url_deleteVideoComment = BASE_URL + "video_comment_delete"
@@ -67,6 +67,7 @@ struct WsUrl{
     static let url_DeleteUserImage = BASE_URL + "delete_user_image"
     static let url_Logout = BASE_URL + "logout?"
     static let url_notificationSend = BASE_URL + "send_notification?"
+    static let url_GetPlan = BASE_URL + "get_plan?"
 
 }
 

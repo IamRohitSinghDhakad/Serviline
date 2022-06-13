@@ -10,6 +10,7 @@ import UIKit
 class FavoriteViewController: UIViewController {
 
     @IBOutlet var tblVw: UITableView!
+    @IBOutlet var vwNoRecordFound: UIView!
     
     var arrFavList = [FavoriteListModel]()
     
@@ -18,6 +19,7 @@ class FavoriteViewController: UIViewController {
 
         self.tblVw.delegate = self
         self.tblVw.dataSource = self
+        self.vwNoRecordFound.isHidden = true
         // Do any additional setup after loading the view.
     }
     
@@ -36,6 +38,7 @@ class FavoriteViewController: UIViewController {
 
 
 extension FavoriteViewController: UITableViewDelegate,UITableViewDataSource{
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.arrFavList.count
     }
@@ -107,18 +110,30 @@ extension FavoriteViewController{
                         let obj = FavoriteListModel.init(dict: dictdata)
                         self.arrFavList.append(obj)
                     }
+                    
+                    if self.arrFavList.count == 0{
+                        //self.tblVw.displayBackgroundText(text: "No Record Found!")
+                        self.vwNoRecordFound.isHidden = false
+                    }else{
+                        //self.tblVw.displayBackgroundText(text: "")
+                        self.vwNoRecordFound.isHidden = true
+                    }
+                    
                     self.tblVw.reloadData()
+                    
+                    
+                    
                 }
             }else{
                 objWebServiceManager.hideIndicator()
-                
-                if (response["result"]as? String) != nil{
-                    self.arrFavList.removeAll()
-                    self.tblVw.reloadData()
-                    self.tblVw.displayBackgroundText(text: "No Record Found!")
-                }else{
-                    objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
-                }
+                self.vwNoRecordFound.isHidden = false
+//                if (response["result"]as? String) != nil{
+//                    self.arrFavList.removeAll()
+//                    self.tblVw.reloadData()
+//                    self.tblVw.displayBackgroundText(text: "No Record Found!")
+//                }else{
+//                    objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+//                }
             }
         } failure: { (Error) in
             objWebServiceManager.hideIndicator()
