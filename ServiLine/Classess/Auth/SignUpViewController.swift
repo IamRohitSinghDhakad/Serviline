@@ -34,6 +34,8 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
     var strProvinceID = ""
     var strMunicipalID = ""
     var strSectorID = ""
+    var otp = ""
+    var userID = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +62,11 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
     
     @IBAction func btnOnDone(_ sender: Any) {
         self.vwVerify.isHidden = true
-        onBackPressed()
+        //onBackPressed()
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "OTPVerifyViewController")as! OTPVerifyViewController
+        vc.orignalOTP = self.otp
+        vc.strUserID = self.userID
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     
@@ -190,8 +196,8 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
             objAlert.showAlert(message: "Selecciona Provincia!!!", title:MessageConstant.k_AlertTitle, controller: self)
         }else if (lblMuncipality.text! == "Municipio/Ciudad") {
             objAlert.showAlert(message: "Selecciona Municipio!!!", title:MessageConstant.k_AlertTitle, controller: self)
-        }else if self.strType != "Usuario"{
-            if  (lblServiceSector.text! == "Sector de Servicios"){
+        }else if self.strType != "User"{
+            if  (lblServiceSector.text! == "Sector Profesional de Servicio"){
                 objAlert.showAlert(message: "Selección Sector Profesional", title:MessageConstant.k_AlertTitle, controller: self)
             }else{
                 self.callWebserviceForSignUp()
@@ -396,13 +402,14 @@ extension SignUpViewController{
             "password":self.tfPassword.text!,
             "municipality_id":self.strMunicipalID,
             "sector_id":self.strSectorID,
-            "ios_register_id":objAppShareData.strFirebaseToken]as [String:Any]
+            "register_id":objAppShareData.strFirebaseToken,
+            "device_type":"IOS"]as [String:Any]
         
        print(dicrParam)
         
         objWebServiceManager.uploadMultipartWithImagesData(strURL: WsUrl.url_SignUp, params: dicrParam, showIndicator: true, customValidation: "", imageData: imgData, imageToUpload: imageData, imagesParam: imageParam, fileName: "user_image", mimeType: "image/jpeg") { (response) in
             objWebServiceManager.hideIndicator()
-           // print(response)
+            print(response)
             let status = (response["status"] as? Int)
             let message = (response["message"] as? String)
             
@@ -410,18 +417,20 @@ extension SignUpViewController{
             
                 let user_details  = response["result"] as? [String:Any]
 
+                if let strOtp = user_details?["otp"]as? String{
+                    self.otp = strOtp
+                }else if let strOtp = user_details?["otp"]as? Int{
+                    self.otp = "\(strOtp)"
+                }
+                
+                if let strUserid = user_details?["user_id"]as? String{
+                    self.userID = strUserid
+                }else if let strUserid = user_details?["user_id"]as? Int{
+                    self.userID = "\(strUserid)"
+                }
+                
                 self.lblVerifyDesc.text = "por favor verifica tu email. hemos enviado los detalles de la verificación en \(self.tfEmail.text!)."
                 self.vwVerify.isHidden = false
-                
-                
-//                objAppShareData.SaveUpdateUserInfoFromAppshareData(userDetail: user_details ?? [:])
-//                objAppShareData.fetchUserInfoFromAppshareData()
-//
-//                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-//                let vc = (self.mainStoryboard.instantiateViewController(withIdentifier: "SideMenuController") as? SideMenuController)!
-//                let navController = UINavigationController(rootViewController: vc)
-//                navController.isNavigationBarHidden = true
-//                appDelegate.window?.rootViewController = navController
 
             }else{
                 objWebServiceManager.hideIndicator()

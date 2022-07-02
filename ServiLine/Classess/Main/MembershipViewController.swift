@@ -7,6 +7,7 @@
 
 import UIKit
 import TPVVInLibrary
+import StoreKit
 
 
 class MembershipViewController: UIViewController {
@@ -16,11 +17,16 @@ class MembershipViewController: UIViewController {
     var strAmount: String?
     var identifier:String?
     
+    var myProduct: SKProduct?
+    
     @IBOutlet var imgVwUser: UIImageView!
     @IBOutlet var lblAmount: UILabel!
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        fetchProduct()
         
         let profilePic = objAppShareData.UserDetail.strProfilePicture
         if profilePic != "" {
@@ -53,19 +59,24 @@ class MembershipViewController: UIViewController {
     
     @IBAction func btnMakePayment(_ sender: Any) {
         
-        let strOrderNo = self.randomString(of: 8)
+        guard let myProduct = myProduct else{return}
         
-      
-     
+        if SKPaymentQueue.canMakePayments(){
+            let payment = SKPayment(product: myProduct)
+            SKPaymentQueue.default().add(self)
+            SKPaymentQueue.default().add(payment)
+        }
         
-        let wpView = WebViewPaymentController(orderNumber: strOrderNo, amount: Double(strAmount ?? "5.0")!,
-                                              productDescription: "Monthly", transactionType: TPVVInLibrary.TransactionType.normal, identifier:TPVVConfiguration.shared.REQUEST_REFERENCE,
-                                              extraParams: [:])
-
-        wpView.delegate = self
-
-        present(wpView, animated: true, completion: nil)
-        
+//        let strOrderNo = self.randomString(of: 8)
+//
+//        let wpView = WebViewPaymentController(orderNumber: strOrderNo, amount: Double(strAmount ?? "5.0")!,
+//                                              productDescription: "Monthly", transactionType: TPVVInLibrary.TransactionType.normal, identifier:TPVVConfiguration.shared.REQUEST_REFERENCE,
+//                                              extraParams: [:])
+//
+//        wpView.delegate = self
+//
+//        present(wpView, animated: true, completion: nil)
+//
         
     }
     
@@ -163,3 +174,57 @@ extension MembershipViewController{
     }
 }
 
+
+
+extension MembershipViewController : SKProductsRequestDelegate, SKPaymentTransactionObserver{
+   
+    
+    func fetchProduct(){
+        
+        let request = SKProductsRequest(productIdentifiers: ["com.ios.ServiLine.Monthly_Plan"])
+        request.delegate = self
+        request.start()
+    }
+    
+    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
+        if let product = response.products.first{
+            myProduct = product
+            print(product.productIdentifier)
+            print(product.price)
+            print(product.priceLocale)
+            print(product.localizedTitle)
+            print(product.localizedDescription)
+            print(product.productIdentifier)
+            
+        }
+    }
+    
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        for transaction in transactions {
+            switch transaction.transactionState {
+                
+            case.purchasing:
+                print("purchasing")
+               // SKPaymentQueue.default().finishTransaction(transaction)
+               // SKPaymentQueue.default().remove(self)
+                break
+            case.purchased, .restored:
+                print("purchased" ,"restored")
+                SKPaymentQueue.default().finishTransaction(transaction)
+                SKPaymentQueue.default().remove(self)
+                break
+            case.failed, .deferred:
+                print("Failed")
+                SKPaymentQueue.default().finishTransaction(transaction)
+                SKPaymentQueue.default().remove(self)
+                break
+            default:
+                break
+                
+                
+            }
+        }
+    }
+    
+    
+}
