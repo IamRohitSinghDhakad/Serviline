@@ -286,8 +286,6 @@ class userDetailModel: NSObject {
         }
         
         
-        
-        
         if let dob = dict["dob"] as? String{
             self.strDob = dob
         }

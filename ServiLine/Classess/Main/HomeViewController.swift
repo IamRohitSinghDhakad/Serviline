@@ -28,7 +28,7 @@ class HomeViewController: UIViewController, GetLocationProtocol {
         super.viewDidLoad()
 
         self.vwMembershipPopUp.isHidden = true
-        self.call_GetProfile(strUserID: objAppShareData.UserDetail.strUserId)
+        
         self.imgVwShowHidePopUp.image = UIImage.init(named: "unchecked")
         self.vwSecorreqPopUp.isHidden = true
         
@@ -44,7 +44,7 @@ class HomeViewController: UIViewController, GetLocationProtocol {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        self.call_GetProfile(strUserID: objAppShareData.UserDetail.strUserId)
     }
     
     

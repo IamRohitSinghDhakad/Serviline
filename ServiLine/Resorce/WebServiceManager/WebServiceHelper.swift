@@ -29,7 +29,6 @@ struct WsUrl{
     static let url_GetUserList = BASE_URL + "get_users"
     static let url_SectorReq = BASE_URL + "sector_request"
     static let url_ServiceRequest = BASE_URL + "service_request"
-    
     static let url_GetUserImage = BASE_URL + "get_user_image"
     static let url_getUserProfile  = BASE_URL + "get_profile"
     static let url_getNotification  = BASE_URL + "get_notification"
@@ -40,7 +39,6 @@ struct WsUrl{
     static let url_getReportList = BASE_URL + "my_report_users"
     static let url_getBlockUnblock = BASE_URL + "block_in_user"
     static let url_getBlogList = BASE_URL + "get_blog?"
-    
     static let url_getVideos = BASE_URL + "get_video"
     static let url_likeVideo = BASE_URL + "video_like"
     static let url_deleteVideo = BASE_URL + "delete_video"
@@ -68,6 +66,7 @@ struct WsUrl{
     static let url_Logout = BASE_URL + "logout?"
     static let url_notificationSend = BASE_URL + "send_notification?"
     static let url_GetPlan = BASE_URL + "get_plan?"
+    static let url_CompleteMembership = "https://servi-line.info/index.php/api/update_plan?user_id="
 
 }
 

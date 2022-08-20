@@ -46,8 +46,6 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate,Pr
         self.cvImages.dataSource = self
         let strUserID = objAppShareData.UserDetail.strUserId
         self.call_GetProfile(strUserID: strUserID)
-            // self.arrImages = [UIImage.init(named: "bg"), UIImage.init(named: "bg")]
-        // Do any additional setup after loading the view.
     }
     
     func isUpdatedDelegate(isUpdate: Bool) {
@@ -127,18 +125,7 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate,Pr
                     objAlert.showAlert(message: "URL no válida", title: "", controller: self)
                 }
             }
-            
-        }else{
-            
         }
-//        guard let url = URL(string: self.lblHyperLink.text!) else {
-//            return
-//         }
-//        if UIApplication.shared.canOpenURL(url) {
-//             UIApplication.shared.open(url, options: [:], completionHandler: nil)
-//        }else{
-//            objAlert.showAlert(message: "Url not valid please check!", title: "Alert", controller: self)
-//        }
     }
     
 }
@@ -188,7 +175,6 @@ extension ProfileViewController: UIImagePickerControllerDelegate{
         }
     }
     
-    // Open gallery
     func openGallery()
     {
         imagePicker.allowsEditing = true
@@ -204,16 +190,11 @@ extension ProfileViewController: UIImagePickerControllerDelegate{
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let editedImage = info[.editedImage] as? UIImage {
             self.pickedImage = editedImage
-          //  self.imgVwUser.image = self.pickedImage
-            //  self.cornerImage(image: self.imgUpload,color:#colorLiteral(red: 0.8, green: 0.8, blue: 0.8, alpha: 1) ,width: 0.5 )
-            
             self.call_UploadImage()
             
             imagePicker.dismiss(animated: true, completion: nil)
         } else if let originalImage = info[.originalImage] as? UIImage {
             self.pickedImage = originalImage
-          //  self.imgVwUser.image = pickedImage
-          
             self.call_UploadImage()
             
             imagePicker.dismiss(animated: true, completion: nil)
@@ -229,11 +210,9 @@ extension ProfileViewController: UIImagePickerControllerDelegate{
     }
     
     func makeRounded() {
-        
         self.imgVwUser.layer.borderWidth = 0
         self.imgVwUser.layer.masksToBounds = false
-        //self.imgUpload.layer.borderColor = UIColor.blackColor().CGColor
-        self.imgVwUser.layer.cornerRadius = self.imgVwUser.frame.height/2 //This will change with corners of image and height/2 will make this circle shape
+        self.imgVwUser.layer.cornerRadius = self.imgVwUser.frame.height/2
         self.imgVwUser.clipsToBounds = true
     }
     
@@ -242,8 +221,6 @@ extension ProfileViewController: UIImagePickerControllerDelegate{
 
 extension ProfileViewController: UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-      //  let height = self.arrayPhotoCollection.count * 128
-//
         return self.arrayPhotoCollection.count
     }
     
@@ -283,12 +260,6 @@ extension ProfileViewController: UICollectionViewDelegate,UICollectionViewDataSo
             obj.isSelected = obj.isSelected == true ? false : true
             self.cvImages.reloadData()
         }
-        
-//        if obj.isSelected == true{
-//
-//        }else{
-//
-//        }
     }
     
     
@@ -332,24 +303,18 @@ extension ProfileViewController{
             let status = (response["status"] as? Int)
             let message = (response["message"] as? String)
             
-            print(response)
-            
             if status == MessageConstant.k_StatusCode{
                 
                 if let user_details  = response["result"] as? [String:Any] {
-                       
-                    
-                    let obj = userDetailModel.init(dict: user_details)
-                    self.objUserDetail = obj
+                let obj = userDetailModel.init(dict: user_details)
+                let type = obj.strUserType.lowercased()
+                self.objUserDetail = obj
+                   
                     let profilePic = obj.strProfilePicture
                     if profilePic != "" {
                         let url = URL(string: profilePic)
                         self.imgVwUser.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo"))
                     }
-                    
-                    
-                    let type = obj.strUserType
-                    
                     if type == "provider"{
                         self.lblUserName.text = obj.strUserName + " (Professional)"
                     }else{
@@ -359,15 +324,10 @@ extension ProfileViewController{
                     self.lblRatingValue.text = "(\(obj.strUserRating))"
                     self.vwRating.rating = obj.strUserRating
                     self.lblHyperLink.text = obj.strWebsite
-                    print(obj.strNation + "," + obj.strProvince + "," + obj.strMunicipality + "," + obj.strCommunity)
                     self.lblTags.text = obj.strNation + "," + obj.strProvince + "," + obj.strMunicipality + "," + obj.strCommunity
                     self.lblDescription.text = obj.strAboutMe
                     
-                    print(strUserID)
                     self.call_GetUserImage(strUserID: strUserID)
-                    
-                      //  objAppShareData.SaveUpdateUserInfoFromAppshareData(userDetail: user_details)
-                      //  objAppShareData.fetchUserInfoFromAppshareData()
                     
                 }
                 
@@ -379,7 +339,6 @@ extension ProfileViewController{
             
             
         } failure: { (Error) in
-            print(Error)
             objWebServiceManager.hideIndicator()
         }
     }
@@ -395,10 +354,6 @@ extension ProfileViewController{
         let parameter = ["user_id" : strUserID] as [String:Any]
         
         objWebServiceManager.requestPost(strURL: WsUrl.url_GetUserImage, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
-        
-      //  objWebServiceManager.requestGet(strURL: WsUrl.url_GetUserImage, params: parameter, queryParams: [:], strCustomValidation: "") { (response) in
-            
-           print(response)
             objWebServiceManager.hideIndicator()
             
             let status = (response["status"] as? Int)
@@ -423,8 +378,6 @@ extension ProfileViewController{
                 
             }else{
                 objWebServiceManager.hideIndicator()
-               // objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
-                
             }
             
             
@@ -450,7 +403,6 @@ extension ProfileViewController{
         var imageData = [Data]()
         var imgData : Data?
         if self.pickedImage != nil{
-           // imgData = (self.pickedImage?.jpegData(compressionQuality: 1.0))!
             imgData = (self.pickedImage?.pngData())// jpegData(compressionQuality: 1.0))!
         }
         else {
@@ -460,14 +412,9 @@ extension ProfileViewController{
         
         let imageParam = ["file"]
         
-        print(imageData)
-        
         let dictParam = ["user_id":objAppShareData.UserDetail.strUserId
         ]as [String:Any]
         
-        print(dictParam)
-            
-//        objWebServiceManager.uploadMultipartWithImagesData(strURL: WsUrl.url_AddUserImage, params: dicrParam, showIndicator: false, customValidation: "", imageData: nil, imageToUpload: imageData, imagesParam: imageParam, fileName: "user_image", mimeType: (self.type! == .video) ? "video/mp4" : "image/jpeg") { (response) in
         objWebServiceManager.uploadMultipartWithImagesData(strURL: WsUrl.url_AddUserImage, params: dictParam, showIndicator: true, customValidation: "", imageData: imgData, imageToUpload: imageData, imagesParam: imageParam, fileName: "file", mimeType: "image/png") { (response) in
                 objWebServiceManager.hideIndicator()
                 let status = (response["status"] as? Int)
@@ -476,8 +423,6 @@ extension ProfileViewController{
                     print(response)
                     self.call_GetUserImage(strUserID: objAppShareData.UserDetail.strUserId)
                    
-        
-                    
                 }else{
                     objWebServiceManager.hideIndicator()
                     objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
@@ -485,7 +430,6 @@ extension ProfileViewController{
                 }
                 
             } failure: { (Error) in
-                print(Error)
                 objWebServiceManager.hideIndicator()
             }
 
@@ -502,15 +446,12 @@ extension ProfileViewController{
         objWebServiceManager.showIndicator()
         
         let parameter = ["user_image_id" : id] as [String:Any]
-        print(parameter)
         
         objWebServiceManager.requestGet(strURL: WsUrl.url_DeleteUserImage, params: parameter, queryParams: [:], strCustomValidation: "") { (response) in
             objWebServiceManager.hideIndicator()
             let status = (response["status"] as? Int)
             let message = (response["message"] as? String)
-            
-            print(response)
-            
+                        
             if status == MessageConstant.k_StatusCode{
                 
                 self.call_GetUserImage(strUserID: objAppShareData.UserDetail.strUserId)
@@ -518,13 +459,10 @@ extension ProfileViewController{
                 
             }else{
                 objWebServiceManager.hideIndicator()
-               // objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
                 
             }
             
-            
         } failure: { (Error) in
-            print(Error)
             objWebServiceManager.hideIndicator()
         }
     }
@@ -548,8 +486,6 @@ extension ProfileViewController: UIGestureRecognizerDelegate{
 
         let p = gestureRecognizer.location(in: self.cvImages)
         
-      //  let p = gestureRecognizer.location(in: collectionView)
-
         if let indexPath = self.cvImages?.indexPathForItem(at: p) {
             print("Long press at item: \(indexPath.row)")
             let obj = self.arrayPhotoCollection[indexPath.row]

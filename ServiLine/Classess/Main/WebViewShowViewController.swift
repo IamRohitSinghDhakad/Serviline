@@ -29,19 +29,23 @@ class WebViewShowViewController: UIViewController {
         //["Contacto y sugerencias", "Política de Privacidad", "Condiciones de Uso", "Política de Cookies","Info Social, Fiscal y Jurídica", "Eliminar perfil", "Acerca de", "Salir"]
         switch strIsComingFrom {
         case "Contacto y sugerencias":
-            self.loadUrl(strUrl: "https://ambitious.in.net/Arun/serviline/index.php/api/page/Conditions%20of%20use")
+            self.loadUrl(strUrl: "https://servi-line.info/index.php/api/page/Conditions%20of%20use")
         case "Política de Privacidad":
-            self.loadUrl(strUrl: "https://ambitious.in.net/Arun/serviline/index.php/api/page/Privacy%20Policy")
+            self.loadUrl(strUrl: "https://servi-line.info/index.php/api/page/Privacy%20Policy")
+        case "Condiciones de Uso":
+            self.loadUrl(strUrl: "https://servi-line.info/index.php/api/page/Conditions%20of%20use")
         case "Política de Cookies":
-            self.loadUrl(strUrl: "https://ambitious.in.net/Arun/serviline/index.php/api/page/Cookies%20Policy")
+            self.loadUrl(strUrl: "https://servi-line.info/index.php/api/page/Cookies%20Policy")
         case "Acerca de":
-            self.loadUrl(strUrl: "https://ambitious.in.net/Arun/serviline/index.php/api/page/About%20Us")
+            self.loadUrl(strUrl: "https://servi-line.info/index.php/api/page/About%20Us")
         case "Document":
             self.loadUrl(strUrl: self.strUrl)
         case "Info Social, Fiscal y Jurídica":
-            self.loadUrl(strUrl: "https://ambitious.in.net/Arun/serviline/index.php/api/page/Tax%20and%20Legal")
+            self.loadUrl(strUrl: "https://servi-line.info/index.php/api/page/Tax%20and%20Legal")
+        case "membership":
+            self.loadUrl(strUrl: self.strUrl)
         default:
-            self.loadUrl(strUrl: "https://ambitious.in.net/Arun/serviline/index.php/api/page/Contact%20and%20Suggestions")
+            self.loadUrl(strUrl: "https://servi-line.info/index.php/api/page/Contact%20and%20Suggestions")
         }
        
         

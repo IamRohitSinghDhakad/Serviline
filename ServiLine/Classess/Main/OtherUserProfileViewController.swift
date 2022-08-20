@@ -27,6 +27,7 @@ class OtherUserProfileViewController: UIViewController {
     @IBOutlet var vwBlockUser: UIView!
     @IBOutlet var btnUnblock: UIButton!
     @IBOutlet var btnMessage: UIButton!
+    @IBOutlet var imgNotAvailable: UIView!
     
     @IBOutlet var cvHgtConstant: NSLayoutConstraint!
     @IBOutlet var cvImages: UICollectionView!
@@ -38,6 +39,7 @@ class OtherUserProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.imgNotAvailable.isHidden = true
         self.vwBlockUser.isHidden = true
         self.vwPopUp.isHidden = true
         self.cvImages.delegate = self
@@ -96,7 +98,10 @@ class OtherUserProfileViewController: UIViewController {
     
     
     @IBAction func btnOnMessage(_ sender: Any) {
-        self.pushVc(viewConterlerId: "ChatDetailViewController")
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ChatDetailViewController")as! ChatDetailViewController
+        vc.strSenderID = self.objUserDetail?.strUserId ?? ""
+        vc.strUserImage = self.objUserDetail?.strProfilePicture ?? ""
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     
@@ -337,10 +342,21 @@ extension OtherUserProfileViewController{
                     let height = self.cvImages.collectionViewLayout.collectionViewContentSize.height
                     self.cvHgtConstant.constant = CGFloat(height)
                     self.view.setNeedsLayout()
+                    if self.arrayPhotoCollection.count == 0{
+                        self.imgNotAvailable.isHidden = false
+                    }else{
+                        self.imgNotAvailable.isHidden = true
+                    }
+                    
                     //  self.view.layoutIfNeeded()
                 }
                 
             }else{
+                if self.arrayPhotoCollection.count == 0{
+                    self.imgNotAvailable.isHidden = false
+                }else{
+                    self.imgNotAvailable.isHidden = true
+                }
                 objWebServiceManager.hideIndicator()
                // objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
                 

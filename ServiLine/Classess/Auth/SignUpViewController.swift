@@ -39,12 +39,12 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.vwVerify.isHidden = true
         self.tfPassword.isSecureTextEntry = true
         self.imagePicker.delegate = self
-        // Do any additional setup after loading the view.
         self.vwServiceSector.isHidden = true
+        self.pickedImage = UIImage.init(named: "default_profile")
+        self.imgVwUser.image = UIImage.init(named: "default_profile")
     }
     
     @IBAction func btnShowHidePassword(_ sender: Any) {
@@ -56,7 +56,12 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     @IBAction func btnOpenCamera(_ sender: Any) {
-        self.setImage()
+        if self.strType.lowercased() == "provider"{
+            self.setImage()
+        }else{
+            objAlert.showAlert(message: "Solo el proveedor puede seleccionar una imagen", title: "", controller: self)
+        }
+        
     }
     
     
@@ -86,6 +91,8 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
                         self.vwServiceSector.isHidden = true
                         self.strType = "User"
                         self.lblUserType.text = dict["type"] as? String
+                        self.pickedImage = UIImage.init(named: "default_profile")
+                        self.imgVwUser.image = UIImage.init(named: "default_profile")
                     }else if dict["type"] as! String == "Profesional"{
                         self.vwServiceSector.isHidden = false
                         self.strType = "Provider"
@@ -157,12 +164,6 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
      }
      
     @IBAction func btnOnregister(_ sender: Any) {
-     //   self.callWebserviceForSignUp()
-//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-//        let vc = (self.mainStoryboard.instantiateViewController(withIdentifier: "SideMenuController") as? SideMenuController)!
-//        let navController = UINavigationController(rootViewController: vc)
-//        navController.isNavigationBarHidden = true
-//        appDelegate.window?.rootViewController = navController
         self.validateForSignUp()
     }
     
@@ -208,9 +209,6 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     @IBAction func btnOnUserSelection(_ sender: Any) {
-//        let vc = self.storyboard?.instantiateViewController(withIdentifier: "PopUpViewController") as! PopUpViewController
-//        vc.isComingFrom = "1"
-//        self.present(vc, animated: true, completion: nil)
         self.openSelectionScreen(strIsComingFrom: "1", strTitle: "")
     }
     
@@ -254,7 +252,6 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     @IBAction func btnOnLogin(_ sender: Any) {
-        //onBackPressed()
         self.pushVc(viewConterlerId: "LoginViewController")
     }
     

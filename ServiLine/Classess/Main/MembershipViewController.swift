@@ -6,52 +6,50 @@
 //
 
 import UIKit
-import TPVVInLibrary
 import StoreKit
+import Alamofire
 
+enum PricePackage: Int {
+    case weekly = 0
+    case monthly = 1
+    case yearly = 2
+    case restore = 3
+}
 
 class MembershipViewController: UIViewController {
     
-
-    var orderID: String?
-    var strAmount: String?
-    var identifier:String?
-    
-    var myProduct: SKProduct?
-    
     @IBOutlet var imgVwUser: UIImageView!
     @IBOutlet var lblAmount: UILabel!
+    @IBOutlet var vwMembershipPopUp: UIView!
     
+    var selectedPackage : PricePackage = .monthly
+    var products: [SKProduct] = []
+    var myProduct : Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        fetchProduct()
-        
         let profilePic = objAppShareData.UserDetail.strProfilePicture
         if profilePic != "" {
             let url = URL(string: profilePic)
            self.imgVwUser.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo"))
         }
         
-        TPVVConfiguration.shared.appLicense = "iWj7y0xGwx5dcYfdN7f" //"vjqzC1kU9RuWP0Q3OXzO" //
-        
-        TPVVConfiguration.shared.appEnviroment = EnviromentType.Real
-        
-        TPVVConfiguration.shared.appFuc = "356431767"
-        
-        TPVVConfiguration.shared.appTerminal = "001"
-        
-        TPVVConfiguration.shared.appCurrency = "978"
-        
-        TPVVConfiguration.shared.appURLOK = "https://ambitious.in.net/Arun/serviline/index.php/api/update_plan?user_id=\(objAppShareData.UserDetail.strUserId)"
-        
-        // TPVVConfiguration.shared.appURLKO = "https://ambitious.in.net/Arun/serviline/index.php/api/plan_failed?title=title&subtitle=testing"
-        
-        self.identifier = "356431767"
         self.call_GetMemebershipPlans()
     }
     
+    func checkInternetForPurchase() {
+        if (NetworkReachabilityManager()!.isReachable) {
+            ActivityIndicatorViewController.sharedInstance.startIndicator()
+            products = []
+            self.makePurchase()
+        }else{
+            let alert = UIAlertController(title: "Alert", message: "please check internet", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            ActivityIndicatorViewController.sharedInstance.stopIndicator()
+            
+        }
+    }
 
     @IBAction func btnBackOnHeader(_ sender: Any) {
         self.onBackPressed()
@@ -59,24 +57,7 @@ class MembershipViewController: UIViewController {
     
     @IBAction func btnMakePayment(_ sender: Any) {
         
-        guard let myProduct = myProduct else{return}
-        
-        if SKPaymentQueue.canMakePayments(){
-            let payment = SKPayment(product: myProduct)
-            SKPaymentQueue.default().add(self)
-            SKPaymentQueue.default().add(payment)
-        }
-        
-//        let strOrderNo = self.randomString(of: 8)
-//
-//        let wpView = WebViewPaymentController(orderNumber: strOrderNo, amount: Double(strAmount ?? "5.0")!,
-//                                              productDescription: "Monthly", transactionType: TPVVInLibrary.TransactionType.normal, identifier:TPVVConfiguration.shared.REQUEST_REFERENCE,
-//                                              extraParams: [:])
-//
-//        wpView.delegate = self
-//
-//        present(wpView, animated: true, completion: nil)
-//
+       checkInternetForPurchase()
         
     }
     
@@ -115,10 +96,10 @@ extension MembershipViewController{
                    // var purchaseAmount:Double?
                     
                     for dictData in arrData{
-                        let amount = dictData["price"]as? String ?? ""
+                        let amount = dictData["price"]as? String ?? "5"
                        // purchaseAmount = Double(amount)
-                        self.strAmount = amount
-                        self.lblAmount.text = "\(self.strAmount ?? "5")€"
+                       // self.strAmount = amount
+                        self.lblAmount.text = "suscríbete por \(amount)€ mensual"
                     }
                     
                 }else{
@@ -140,91 +121,68 @@ extension MembershipViewController{
     }
 }
 
-
-
-extension MembershipViewController: WebViewPaymentResponseDelegate {
-
-func responsePaymentKO(response: (WebViewPaymentResponseKO)) {
-    //TPVVConfiguration.shared.appURLKO = "https://ambitious.in.net/Arun/serviline/index.php/api/plan_failed?title=title&subtitle=testing"
-   
-    
-    }
-
-func responsePaymentOK(response: (WebViewPaymentResponseOK)) {
-   // TPVVConfiguration.shared.appURLOK = "https://ambitious.in.net/Arun/serviline/index.php/api/update_plan?user_id=\(objAppShareData.UserDetail.strUserId)"
-    
-    objAlert.showAlert(message: "Su pago se ha realizado con éxito.", title: "Éxito", controller: self)
-    
-
-    }
-    
-    
-}
-                            
-
 extension MembershipViewController{
     
-    func randomString(of length: Int) -> String {
-        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        var s = ""
-        for _ in 0 ..< length {
-            s.append(letters.randomElement()!)
-        }
-        return s
-    }
-}
-
-
-
-extension MembershipViewController : SKProductsRequestDelegate, SKPaymentTransactionObserver{
-   
-    
-    func fetchProduct(){
-        
-        let request = SKProductsRequest(productIdentifiers: ["com.ios.ServiLine.Monthly_Plan"])
-        request.delegate = self
-        request.start()
-    }
-    
-    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
-        if let product = response.products.first{
-            myProduct = product
-            print(product.productIdentifier)
-            print(product.price)
-            print(product.priceLocale)
-            print(product.localizedTitle)
-            print(product.localizedDescription)
-            print(product.productIdentifier)
+    func makePurchase() {
+        ObjectIAPProducts.store.requestProducts{ [weak self] success, products in
+            guard let self = self else {
+                ActivityIndicatorViewController.sharedInstance.stopIndicator()
+                return }
+            if success {
+                print("products: \(String(describing: products))")
+                if products == nil {
+                    ActivityIndicatorViewController.sharedInstance.stopIndicator()
+                    return }
+                if products!.count > 0 {
+                    self.products = products!
+                    
+                    let product = products![self.myProduct]
+                    
+                    if ObjectIAPProducts.store.isProductPurchased(product.productIdentifier) {
+                        ActivityIndicatorViewController.sharedInstance.stopIndicator()
+                        
+                        DispatchQueue.main.async {
+                            let alert = UIAlertController(title: "", message: "Artículo ya comprado", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                              //  ObjectIAPProducts.store.restorePurchases()
+                            }))
+                            self.present(alert, animated: true, completion: nil)
+                        }
+                       
+                    }else{
+                      ObjectIAPProducts.store.buyProduct(products![self.myProduct])
+                        if ObjectIAPProducts.store.isProductPurchased(product.productIdentifier) == true{
+                            self.showToast(message: "Puchase Succesfull", font: .systemFont(ofSize: 12))
+                            let vc = self.mainStoryboard.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
+                            vc.strIsComingFrom = "membership"
+                            vc.strUrl = WsUrl.url_CompleteMembership + objAppShareData.UserDetail.strUserId
+                            self.navigationController?.pushViewController(vc, animated: true)
+                        }else{
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                if ObjectIAPProducts.store.isProductPurchased(product.productIdentifier) == true{
+                                    self.showToast(message: "Puchase Succesfull after delay", font: .systemFont(ofSize: 12))
+                                    let vc = self.mainStoryboard.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
+                                    vc.strIsComingFrom = "membership"
+                                    vc.strUrl = WsUrl.url_CompleteMembership + objAppShareData.UserDetail.strUserId
+                                    self.navigationController?.pushViewController(vc, animated: true)
+                                }
+                            }
+                        }
+                    }
+                }
+                else {
+                    ActivityIndicatorViewController.sharedInstance.stopIndicator()
+                }
+            }
+            else {
+                ActivityIndicatorViewController.sharedInstance.stopIndicator()
+            }
             
         }
     }
     
-    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        for transaction in transactions {
-            switch transaction.transactionState {
-                
-            case.purchasing:
-                print("purchasing")
-               // SKPaymentQueue.default().finishTransaction(transaction)
-               // SKPaymentQueue.default().remove(self)
-                break
-            case.purchased, .restored:
-                print("purchased" ,"restored")
-                SKPaymentQueue.default().finishTransaction(transaction)
-                SKPaymentQueue.default().remove(self)
-                break
-            case.failed, .deferred:
-                print("Failed")
-                SKPaymentQueue.default().finishTransaction(transaction)
-                SKPaymentQueue.default().remove(self)
-                break
-            default:
-                break
-                
-                
-            }
-        }
+    func getReceipt(){
+        
     }
-    
     
 }

@@ -46,9 +46,6 @@
 		F9AAAA2127DBBB3F0035FFC7 /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AAAA2027DBBB3F0035FFC7 /* ReportViewController.swift */; };
 		F9AAAA2327DBBB4F0035FFC7 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AAAA2227DBBB4F0035FFC7 /* SettingViewController.swift */; };
 		F9B0593B2826602500493BB9 /* MembershipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B0593A2826602500493BB9 /* MembershipViewController.swift */; };
-		F9B05940282662BD00493BB9 /* TPVVInLibrary.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B0593F282662BD00493BB9 /* TPVVInLibrary.xcframework */; };
-		F9B05941282662FA00493BB9 /* TPVVInLibrary.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B0593F282662BD00493BB9 /* TPVVInLibrary.xcframework */; };
-		F9B05942282662FA00493BB9 /* TPVVInLibrary.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F9B0593F282662BD00493BB9 /* TPVVInLibrary.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F9B05E7D27FCAE0000355179 /* ChatDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B05E7C27FCAE0000355179 /* ChatDetailModel.swift */; };
 		F9CD367D27DA1A1C00486920 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD367C27DA1A1C00486920 /* AppDelegate.swift */; };
 		F9CD368127DA1A1C00486920 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD368027DA1A1C00486920 /* ViewController.swift */; };
@@ -90,24 +87,13 @@
 		F9CD36E827DA222900486920 /* AppSideMenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD36E627DA222900486920 /* AppSideMenuTableViewCell.swift */; };
 		F9CD36EA27DA307200486920 /* PrivacyCheckViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD36E927DA307200486920 /* PrivacyCheckViewController.swift */; };
 		F9CD36EC27DA30A900486920 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD36EB27DA30A900486920 /* LoginViewController.swift */; };
+		F9E0F3F72870296300AE33FC /* ObjectIAPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E0F3F52870296300AE33FC /* ObjectIAPHelper.swift */; };
+		F9E0F3F82870296300AE33FC /* ObjectIAPProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E0F3F62870296300AE33FC /* ObjectIAPProducts.swift */; };
+		F9E0F3FB28702AAE00AE33FC /* ActivityIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E0F3FA28702AAE00AE33FC /* ActivityIndicatorViewController.swift */; };
 		F9E76ECA281331410095484A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9E76EC9281331410095484A /* GoogleService-Info.plist */; };
 		F9E87872285B94F500D24941 /* OTPVerifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E87871285B94F500D24941 /* OTPVerifyViewController.swift */; };
 		F9F3F8602805D873004B0C10 /* DeleteProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F3F85F2805D873004B0C10 /* DeleteProfileViewController.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		F9B05943282662FA00493BB9 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				F9B05942282662FA00493BB9 /* TPVVInLibrary.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		85671479CBA6FE70C734D833 /* Pods_ServiLine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ServiLine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -152,7 +138,6 @@
 		F9AAAA2027DBBB3F0035FFC7 /* ReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
 		F9AAAA2227DBBB4F0035FFC7 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		F9B0593A2826602500493BB9 /* MembershipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembershipViewController.swift; sourceTree = "<group>"; };
-		F9B0593F282662BD00493BB9 /* TPVVInLibrary.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = TPVVInLibrary.xcframework; sourceTree = "<group>"; };
 		F9B05E7C27FCAE0000355179 /* ChatDetailModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatDetailModel.swift; sourceTree = "<group>"; };
 		F9CD367927DA1A1C00486920 /* ServiLine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ServiLine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9CD367C27DA1A1C00486920 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -200,6 +185,9 @@
 		F9CD36E627DA222900486920 /* AppSideMenuTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSideMenuTableViewCell.swift; sourceTree = "<group>"; };
 		F9CD36E927DA307200486920 /* PrivacyCheckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyCheckViewController.swift; sourceTree = "<group>"; };
 		F9CD36EB27DA30A900486920 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		F9E0F3F52870296300AE33FC /* ObjectIAPHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectIAPHelper.swift; sourceTree = "<group>"; };
+		F9E0F3F62870296300AE33FC /* ObjectIAPProducts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectIAPProducts.swift; sourceTree = "<group>"; };
+		F9E0F3FA28702AAE00AE33FC /* ActivityIndicatorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorViewController.swift; sourceTree = "<group>"; };
 		F9E76EC9281331410095484A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F9E87871285B94F500D24941 /* OTPVerifyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPVerifyViewController.swift; sourceTree = "<group>"; };
 		F9F3F85F2805D873004B0C10 /* DeleteProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteProfileViewController.swift; sourceTree = "<group>"; };
@@ -210,9 +198,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9B05940282662BD00493BB9 /* TPVVInLibrary.xcframework in Frameworks */,
 				736FCA542AD8B73958046694 /* Pods_ServiLine.framework in Frameworks */,
-				F9B05941282662FA00493BB9 /* TPVVInLibrary.xcframework in Frameworks */,
 				F99021AB28676B5800DBD450 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -277,7 +263,6 @@
 		F9CD367027DA1A1C00486920 = {
 			isa = PBXGroup;
 			children = (
-				F9B0593F282662BD00493BB9 /* TPVVInLibrary.xcframework */,
 				F9CD367B27DA1A1C00486920 /* ServiLine */,
 				F9CD367A27DA1A1C00486920 /* Products */,
 				76764200956F5A6D7A95F1FF /* Pods */,
@@ -340,6 +325,7 @@
 		F9CD369627DA1DB400486920 /* Resorce */ = {
 			isa = PBXGroup;
 			children = (
+				F9E0F3F32870293B00AE33FC /* Utility */,
 				F94F1B6C27F5E075000C193B /* FloatingRatingView */,
 				F9CD369727DA1DB400486920 /* WebServiceManager */,
 				F9CD369A27DA1DB400486920 /* SideMenu */,
@@ -527,6 +513,32 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		F9E0F3F32870293B00AE33FC /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				F9E0F3F928702AAE00AE33FC /* ActivityIndicatorViewController */,
+				F9E0F3F42870296300AE33FC /* IAP */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		F9E0F3F42870296300AE33FC /* IAP */ = {
+			isa = PBXGroup;
+			children = (
+				F9E0F3F52870296300AE33FC /* ObjectIAPHelper.swift */,
+				F9E0F3F62870296300AE33FC /* ObjectIAPProducts.swift */,
+			);
+			path = IAP;
+			sourceTree = "<group>";
+		};
+		F9E0F3F928702AAE00AE33FC /* ActivityIndicatorViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F9E0F3FA28702AAE00AE33FC /* ActivityIndicatorViewController.swift */,
+			);
+			path = ActivityIndicatorViewController;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -539,7 +551,6 @@
 				F9CD367627DA1A1C00486920 /* Frameworks */,
 				F9CD367727DA1A1C00486920 /* Resources */,
 				8D7CDD8EC69EDBAD77211106 /* [CP] Embed Pods Frameworks */,
-				F9B05943282662FA00493BB9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -659,6 +670,7 @@
 				F97A47F227DE672C00B88927 /* SelectLocationViewController.swift in Sources */,
 				F9CD36C827DA1DB400486920 /* UIViewController+Container.swift in Sources */,
 				F9AAAA1B27DBBB000035FFC7 /* NotificationViewController.swift in Sources */,
+				F9E0F3F82870296300AE33FC /* ObjectIAPProducts.swift in Sources */,
 				F9CD36D427DA1DB400486920 /* SearchHistoryManager.swift in Sources */,
 				F9CD36D127DA1DB400486920 /* LocationSearchResultsViewController.swift in Sources */,
 				F9CD36BE27DA1DB400486920 /* AppSharedData.swift in Sources */,
@@ -712,6 +724,7 @@
 				F9E87872285B94F500D24941 /* OTPVerifyViewController.swift in Sources */,
 				F94F1B6E27F5E088000C193B /* FloatRatingView.swift in Sources */,
 				F9CD36C027DA1DB400486920 /* UserModel.swift in Sources */,
+				F9E0F3FB28702AAE00AE33FC /* ActivityIndicatorViewController.swift in Sources */,
 				F9CD36EA27DA307200486920 /* PrivacyCheckViewController.swift in Sources */,
 				F9B05E7D27FCAE0000355179 /* ChatDetailModel.swift in Sources */,
 				F93993FC27DA7DED0063E262 /* PopUpViewController.swift in Sources */,
@@ -722,6 +735,7 @@
 				F9CD36BD27DA1DB400486920 /* UserDefaultExtension.swift in Sources */,
 				F93993FA27DA7DDB0063E262 /* SignUpViewController.swift in Sources */,
 				F94B61B127EB0137008B6505 /* OptionsModelClass.swift in Sources */,
+				F9E0F3F72870296300AE33FC /* ObjectIAPHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -881,14 +895,14 @@
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Our app does not request this permission or utilize this functionality.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Paing would like to make data available to nearby bluetooth devices even when you're not using the app.";
-				INFOPLIST_KEY_NSCameraUsageDescription = "${Servi Line} Needs Camera Usage  for uploading profile picture and media.";
+				INFOPLIST_KEY_NSCameraUsageDescription = " Needs Camera Usage  for uploading profile picture and media.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "\"We need access to your location to show you relevant search results";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "${Servi Line} want's your current location to show you best serch result and provide you best service";
-				INFOPLIST_KEY_NSLocationUsageDescription = "${PServi Line} want's your current location to show you best serch result and provide you best service";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "${PServi Line} want's your current location to show you best serch result and provide you best service";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "${Servi Line} need permission for record a video.";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "${Servi Line} needs to access your liberary for saving the images into your device.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "${Servi Line} need access to your gallery to upload a profile picture.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = " want's your current location to show you best serch result and provide you best service";
+				INFOPLIST_KEY_NSLocationUsageDescription = " want's your current location to show you best serch result and provide you best service";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = " want's your current location to show you best serch result and provide you best service";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = " need permission for record a video.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = " needs to access your liberary for saving the images into your device.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = " need access to your gallery to upload a profile picture.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -900,7 +914,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ios.ServiLine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -929,14 +943,14 @@
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Our app does not request this permission or utilize this functionality.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Paing would like to make data available to nearby bluetooth devices even when you're not using the app.";
-				INFOPLIST_KEY_NSCameraUsageDescription = "${Servi Line} Needs Camera Usage  for uploading profile picture and media.";
+				INFOPLIST_KEY_NSCameraUsageDescription = " Needs Camera Usage  for uploading profile picture and media.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "\"We need access to your location to show you relevant search results";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "${Servi Line} want's your current location to show you best serch result and provide you best service";
-				INFOPLIST_KEY_NSLocationUsageDescription = "${PServi Line} want's your current location to show you best serch result and provide you best service";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "${PServi Line} want's your current location to show you best serch result and provide you best service";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "${Servi Line} need permission for record a video.";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "${Servi Line} needs to access your liberary for saving the images into your device.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "${Servi Line} need access to your gallery to upload a profile picture.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = " want's your current location to show you best serch result and provide you best service";
+				INFOPLIST_KEY_NSLocationUsageDescription = " want's your current location to show you best serch result and provide you best service";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = " want's your current location to show you best serch result and provide you best service";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = " need permission for record a video.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = " needs to access your liberary for saving the images into your device.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = " need access to your gallery to upload a profile picture.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -948,7 +962,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ios.ServiLine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

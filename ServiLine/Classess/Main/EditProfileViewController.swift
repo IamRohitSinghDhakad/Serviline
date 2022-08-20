@@ -12,7 +12,7 @@ protocol ProfileUpdateProtocol: AnyObject {
     func isUpdatedDelegate(isUpdate:Bool)
 }
 
-class EditProfileViewController: UIViewController, UINavigationControllerDelegate {
+class EditProfileViewController: UIViewController, UINavigationControllerDelegate, UITextViewDelegate {
     
     @IBOutlet var tfName: UITextField!
     @IBOutlet var tfEmail: UITextField!
@@ -46,6 +46,7 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
         self.vwSector.isHidden = true
         self.imagePicker.delegate = self
         self.tfPwd.isSecureTextEntry = true
+        self.txtVw.delegate = self
         self.setUserData()
         // Do any additional setup after loading the view.
     }
@@ -95,7 +96,11 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
     }
     
     @IBAction func btnOnOpenCamera(_ sender: Any) {
-        self.setImage()
+        if self.strType.lowercased() == "provider"{
+            self.setImage()
+        }else{
+            objAlert.showAlert(message: "Solo el professional puede seleccionar una imagen", title: "", controller: self)
+        }
     }
     
     @IBAction func btnOnShowPwd(_ sender: Any) {
@@ -140,6 +145,11 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
         default:
             break
         }
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
+        return newText.count <= 300
     }
     
     func openSelectionScreen(strIsComingFrom:String, strTitle:String){
@@ -306,17 +316,10 @@ extension EditProfileViewController: UIImagePickerControllerDelegate{
         if let editedImage = info[.editedImage] as? UIImage {
             self.pickedImage = editedImage
             self.imgVwUser.image = self.pickedImage
-            //  self.cornerImage(image: self.imgUpload,color:#colorLiteral(red: 0.8, green: 0.8, blue: 0.8, alpha: 1) ,width: 0.5 )
-            
-           // self.call_UploadImage()
-            
             imagePicker.dismiss(animated: true, completion: nil)
         } else if let originalImage = info[.originalImage] as? UIImage {
             self.pickedImage = originalImage
             self.imgVwUser.image = pickedImage
-          
-           // self.call_UploadImage()
-            
             imagePicker.dismiss(animated: true, completion: nil)
         }
     }
@@ -333,8 +336,7 @@ extension EditProfileViewController: UIImagePickerControllerDelegate{
         
         self.imgVwUser.layer.borderWidth = 0
         self.imgVwUser.layer.masksToBounds = false
-        //self.imgUpload.layer.borderColor = UIColor.blackColor().CGColor
-        self.imgVwUser.layer.cornerRadius = self.imgVwUser.frame.height/2 //This will change with corners of image and height/2 will make this circle shape
+        self.imgVwUser.layer.cornerRadius = self.imgVwUser.frame.height/2
         self.imgVwUser.clipsToBounds = true
     }
     
@@ -383,12 +385,9 @@ extension EditProfileViewController{
             "website":self.tfWebsite.text!,
             "bio":self.txtVw.text!,
             "ios_register_id":objAppShareData.strFirebaseToken]as [String:Any]
-        
-       print(dicrParam)
-        
+                
         objWebServiceManager.uploadMultipartWithImagesData(strURL: WsUrl.url_completeProfile, params: dicrParam, showIndicator: true, customValidation: "", imageData: imgData, imageToUpload: imageData, imagesParam: imageParam, fileName: "user_image", mimeType: "image/jpeg") { (response) in
             objWebServiceManager.hideIndicator()
-            print(response)
             let status = (response["status"] as? Int)
             let message = (response["message"] as? String)
             

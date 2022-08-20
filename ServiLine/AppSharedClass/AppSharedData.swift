@@ -31,6 +31,11 @@ class AppSharedData: NSObject {
     var isFromNotification = Bool()
     var isNotificationDict = [String:Any]()
     var dictHomeLocationInfo = [String:Any]()
+    var isItemPurchased = Bool()
+    
+    //IAP
+    static let kProductMonthly = "com.ios.ServiLine_monthly_purchase"
+    static let kPurchasedProductId = "kPurchasedProductId"
     
     open var isLoggedIn: Bool {
         get {
@@ -78,6 +83,35 @@ class AppSharedData: NSObject {
         let navController = UINavigationController(rootViewController: vc)
         navController.isNavigationBarHidden = true
         appDelegate.window?.rootViewController = navController
+    }
+    
+    func call_updateMembership(){
+        
+        if !objWebServiceManager.isNetworkAvailable(){
+            objWebServiceManager.hideIndicator()
+            return
+        }
+        
+        objWebServiceManager.showIndicator()
+        
+        
+        let parameter = ["user_id":self.UserDetail.strUserId,
+                         ]as [String:Any]
+        print(parameter)
+        
+        
+        objWebServiceManager.requestPost(strURL: WsUrl.url_CompleteMembership + self.UserDetail.strUserId, queryParams: [:], params: parameter, strCustomValidation: "", showIndicator: false) { response in
+            
+            print(response)
+            
+            objWebServiceManager.hideIndicator()
+            let status = (response["status"] as? Int)
+            let message = (response["message"] as? String)
+            
+            
+        } failure: { (Error) in
+            objWebServiceManager.hideIndicator()
+        }
     }
     
 }

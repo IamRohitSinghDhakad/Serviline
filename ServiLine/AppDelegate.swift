@@ -10,7 +10,6 @@ import IQKeyboardManagerSwift
 import Firebase
 import FirebaseMessaging
 import UserNotifications
-import TPVVInLibrary
 
 
 
@@ -36,7 +35,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let deviceID = UIDevice.current.identifierForVendor!.uuidString
         UserDefaults.standard.setValue(deviceID, forKey: UserDefaults.Keys.strVenderId)
-        print(deviceID)
         
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.enableAutoToolbar = true
@@ -45,28 +43,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         self.registerForRemoteNotification()
         Messaging.messaging().delegate = self
-        
-        TPVVConfiguration.shared.appLicense = "vjqzC1kU9RuWP0Q3OXzO"
-        
-        TPVVConfiguration.shared.appEnviroment = EnviromentType.Test
-        
-        TPVVConfiguration.shared.appFuc = "356431767"
-        
-        TPVVConfiguration.shared.appTerminal = "001"
-        
-        TPVVConfiguration.shared.appCurrency = "978"
-        
-        
-        
-        /*
-         Usuario: 356431767
-         Password: prueba2022
-         Número de Comercio (Ds_Merchant_MerchantCode): 356431767
-         Número de Terminal (Ds_Merchant_Terminal): 001
-         Moneda del Terminal (Ds_Merchant_Currency): 978
-         Clave secreta de encriptación: sq7HjrUOBfKmC576ILgskD5srU870gJ7
-         Empresa Bobili-Bobili Solutions Número comercio 356431767
-         */
         
         (UIApplication.shared.delegate as? AppDelegate)?.self.window = window
         
