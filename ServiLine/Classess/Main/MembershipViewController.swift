@@ -34,7 +34,19 @@ class MembershipViewController: UIViewController {
            self.imgVwUser.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "logo"))
         }
         
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.itemPurchased),
+            name: .IAPHelperPurchaseNotification,
+            object: nil)
+
+
         self.call_GetMemebershipPlans()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
     }
     
     func checkInternetForPurchase() {
@@ -97,8 +109,6 @@ extension MembershipViewController{
                     
                     for dictData in arrData{
                         let amount = dictData["price"]as? String ?? "5"
-                       // purchaseAmount = Double(amount)
-                       // self.strAmount = amount
                         self.lblAmount.text = "suscríbete por \(amount)€ mensual"
                     }
                     
@@ -109,8 +119,7 @@ extension MembershipViewController{
                 
             }else{
                 if response["result"]as? String == "Any blocked users not found"{
-//                    self.btnMessage.isHidden = false
-//                    self.vwBlockUser.isHidden = true
+
                 }
                 objWebServiceManager.hideIndicator()
             
@@ -144,30 +153,13 @@ extension MembershipViewController{
                         DispatchQueue.main.async {
                             let alert = UIAlertController(title: "", message: "Artículo ya comprado", preferredStyle: .alert)
                             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-                              //  ObjectIAPProducts.store.restorePurchases()
+                            
                             }))
                             self.present(alert, animated: true, completion: nil)
                         }
                        
                     }else{
                       ObjectIAPProducts.store.buyProduct(products![self.myProduct])
-                        if ObjectIAPProducts.store.isProductPurchased(product.productIdentifier) == true{
-                            self.showToast(message: "Puchase Succesfull", font: .systemFont(ofSize: 12))
-                            let vc = self.mainStoryboard.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
-                            vc.strIsComingFrom = "membership"
-                            vc.strUrl = WsUrl.url_CompleteMembership + objAppShareData.UserDetail.strUserId
-                            self.navigationController?.pushViewController(vc, animated: true)
-                        }else{
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                if ObjectIAPProducts.store.isProductPurchased(product.productIdentifier) == true{
-                                    self.showToast(message: "Puchase Succesfull after delay", font: .systemFont(ofSize: 12))
-                                    let vc = self.mainStoryboard.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
-                                    vc.strIsComingFrom = "membership"
-                                    vc.strUrl = WsUrl.url_CompleteMembership + objAppShareData.UserDetail.strUserId
-                                    self.navigationController?.pushViewController(vc, animated: true)
-                                }
-                            }
-                        }
                     }
                 }
                 else {
@@ -181,8 +173,12 @@ extension MembershipViewController{
         }
     }
     
-    func getReceipt(){
+    @objc private func itemPurchased(notification: NSNotification){
         
-    }
+        self.showToast(message: "Puchase Succesfull", font: .systemFont(ofSize: 12))
+        let vc = self.mainStoryboard.instantiateViewController(withIdentifier: "WebViewShowViewController")as! WebViewShowViewController
+        vc.strIsComingFrom = "membership"
+        vc.strUrl = WsUrl.url_CompleteMembership + objAppShareData.UserDetail.strUserId
+        self.navigationController?.pushViewController(vc, animated: true)    }
     
 }

@@ -1913,8 +1913,8 @@
                                     <constraint firstItem="31E-Dp-o0U" firstAttribute="centerX" secondItem="wqs-lI-Dsg" secondAttribute="centerX" id="oax-Nq-Rml"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8It-Bf-Fb3">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8It-Bf-Fb3">
+                                <rect key="frame" x="-5" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="LRo-nx-cRr">
                                         <rect key="frame" x="40" y="0.0" width="295" height="667"/>

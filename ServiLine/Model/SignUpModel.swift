@@ -20,13 +20,10 @@ class SignUpModel: NSObject {
 
 class userDetailModel: NSObject {
     var straAuthToken          : String = ""
-  
-   
     var strDeviceId            : String = ""
     var strDeviceTimeZone        : String = ""
     var strDeviceType          : String = ""
     var strDeviceToken           : String = ""
-    
     var strEmail                : String = ""
     var strName                  : String = ""
     var strPassword             : String = ""
