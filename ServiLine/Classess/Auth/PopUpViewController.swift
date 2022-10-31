@@ -113,14 +113,10 @@ class PopUpViewController: UIViewController {
             
             switch self.isComingFrom {
             case "2":
-    //            dict["nation_id"] = self.strNationID
-    //            dict["nation"] = self.strNationTitle
                 dict["nation_id"] = Id
                 dict["nation"] = name
                 self.closerForSelectionTable?(dict)
             case "3":
-    //            dict["Community_id"] = self.strCommunityID
-    //            dict["Community"] = self.strCommunityTitle
                 dict["Community_id"] = Id
                 dict["Community"] = name
                 self.closerForSelectionTable?(dict)
@@ -129,14 +125,10 @@ class PopUpViewController: UIViewController {
                 dict["Province"] = name
                 self.closerForSelectionTable?(dict)
             case "5":
-    //            dict["Municipal_id"] = self.strMunicipalID
-    //            dict["Municipal"] = self.strMunicipalTitle
                 dict["Municipal_id"] = Id
                 dict["Municipal"] = name
                 self.closerForSelectionTable?(dict)
             default:
-    //            dict["Sector_id"] = self.strSectorID
-    //            dict["Sector"] = self.strSectorTitle
                 dict["Sector_id"] = Id
                 dict["Sector"] = name
                 self.closerForSelectionTable?(dict)

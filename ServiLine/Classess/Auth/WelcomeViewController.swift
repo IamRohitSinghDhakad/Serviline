@@ -63,7 +63,6 @@ class WelcomeViewController: UIViewController {
     }
     
     //MARK: - Redirection Methods
-    
     func goToNextController() {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         if AppSharedData.sharedObject().isLoggedIn {

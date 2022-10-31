@@ -57,8 +57,8 @@ class HomeViewController: UIViewController, GetLocationProtocol {
     
     @IBAction func btnOnOk(_ sender: Any) {
         self.vwSecorreqPopUp.isHidden = true
-        self.lblSelectedSector.text = "Selección Sector Profesional"
-        self.lblLocation.text = "Selección ubicación"
+        self.lblSelectedSector.text = "Selecciona Sector Profesional"
+        self.lblLocation.text = "Selecciona ubicación"
         self.txtVw.text = ""
         self.strSectorID = ""
         self.strNationID = ""
@@ -104,11 +104,11 @@ class HomeViewController: UIViewController, GetLocationProtocol {
     
     @IBAction func btnOnSend(_ sender: Any) {
         
-        if self.lblSelectedSector.text == "Seleccióna Sector Profesional"{
-            objAlert.showAlert(message: "Seleccióna Sector Profesional", title: "", controller: self)
+        if self.lblSelectedSector.text == "Selecciona Sector Profesional"{
+            objAlert.showAlert(message: "Selecciona Sector Profesional", title: "", controller: self)
             
-        }else if self.lblLocation.text == "Seleccióna ubicación"{
-            objAlert.showAlert(message: "Seleccióna ubicación", title: "", controller: self)
+        }else if self.lblLocation.text == "Selecciona ubicación"{
+            objAlert.showAlert(message: "Selecciona ubicación", title: "", controller: self)
         }else if self.txtVw.text == ""{
             objAlert.showAlert(message: "Introduzca mensaje", title: "", controller: self)
         }else{

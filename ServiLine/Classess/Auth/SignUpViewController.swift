@@ -23,7 +23,10 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
     @IBOutlet var vwServiceSector: UIView!
     @IBOutlet var vwVerify: UIView!
     @IBOutlet var lblVerifyDesc: UILabel!
-    
+    @IBOutlet var vwPais: UIView!
+    @IBOutlet var vwProvience: UIView!
+    @IBOutlet var vwMuncipal: UIView!
+    @IBOutlet var tfReferalCode: UITextField!
     
     //Variables
     var imagePicker = UIImagePickerController()
@@ -93,19 +96,27 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
                         self.lblUserType.text = dict["type"] as? String
                         self.pickedImage = UIImage.init(named: "default_profile")
                         self.imgVwUser.image = UIImage.init(named: "default_profile")
+                        self.HideUserOptions()
                     }else if dict["type"] as! String == "Profesional"{
                         self.vwServiceSector.isHidden = false
                         self.strType = "Provider"
                         self.lblUserType.text = dict["type"] as? String
+                        self.ShowUserOptions()
                     }
                     else{
-                        self.lblUserType.text = "Usuario/Profesional"
+                        self.lblUserType.text = "Particular/Profesional"
                     }
                     
                 }
             }
         }else{
-            vc.strNationID = self.strNationID
+            if self.strType == "User"{
+                vc.strNationID = "1"
+
+            }else{
+                vc.strNationID = self.strNationID
+
+            }
             vc.strCommunityID = self.strCommunityID
             vc.strProvinceID = self.strProvinceID
             vc.strMunicipalID = self.strMunicipalID
@@ -174,7 +185,7 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
         self.tfConfirmEmail.text = self.tfConfirmEmail.text!.trim()
         self.tfPassword.text = self.tfPassword.text!.trim()
         
-        if self.lblUserType.text == "Usuario/Profesional"  {
+        if self.lblUserType.text == "Particular/Profesional"  {
             objAlert.showAlert(message: "Selecciona tipo de perfil", title:MessageConstant.k_AlertTitle, controller: self)
         }
         else if (tfName.text?.isEmpty)! {
@@ -189,20 +200,25 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
             objAlert.showAlert(message: "Email no coincide", title:MessageConstant.k_AlertTitle, controller: self)
         }else if (tfPassword.text?.isEmpty)! {
             objAlert.showAlert(message: "Contraseña", title:MessageConstant.k_AlertTitle, controller: self)
-        }else if (lblNation.text! == "País") {
-            objAlert.showAlert(message: "Selecciona País!!!", title:MessageConstant.k_AlertTitle, controller: self)
-        }else if (lblCommunity.text! == "Comunidad") {
-            objAlert.showAlert(message: "Selecciona Comunidad!!!", title:MessageConstant.k_AlertTitle, controller: self)
-        }else if (lblProvince.text! == "Provincia") {
-            objAlert.showAlert(message: "Selecciona Provincia!!!", title:MessageConstant.k_AlertTitle, controller: self)
-        }else if (lblMuncipality.text! == "Municipio/Ciudad") {
-            objAlert.showAlert(message: "Selecciona Municipio!!!", title:MessageConstant.k_AlertTitle, controller: self)
-        }else if self.strType != "User"{
-            if  (lblServiceSector.text! == "Sector Profesional de Servicio"){
+        }
+        
+        else if self.strType != "User"{
+            if (lblNation.text! == "País") {
+                objAlert.showAlert(message: "Selecciona País!!!", title:MessageConstant.k_AlertTitle, controller: self)
+            }else if (lblCommunity.text! == "Comunidad") {
+                objAlert.showAlert(message: "Selecciona Comunidad!!!", title:MessageConstant.k_AlertTitle, controller: self)
+            }else if (lblProvince.text! == "Provincia") {
+                objAlert.showAlert(message: "Selecciona Provincia!!!", title:MessageConstant.k_AlertTitle, controller: self)
+            }else if (lblMuncipality.text! == "Municipio/Ciudad") {
+                objAlert.showAlert(message: "Selecciona Municipio!!!", title:MessageConstant.k_AlertTitle, controller: self)
+            }else if  (lblServiceSector.text! == "Sector Profesional de Servicio"){
                 objAlert.showAlert(message: "Selección Sector Profesional", title:MessageConstant.k_AlertTitle, controller: self)
             }else{
                 self.callWebserviceForSignUp()
             }
+        }
+        else if (lblCommunity.text! == "Comunidad") {
+            objAlert.showAlert(message: "Selecciona Comunidad!!!", title:MessageConstant.k_AlertTitle, controller: self)
         }else{
             self.callWebserviceForSignUp()
         }
@@ -218,12 +234,17 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
             self.openSelectionScreen(strIsComingFrom: "2", strTitle: "País")
             print("Nation is ")
         case 1:
-            if self.strNationID == ""{
-                objAlert.showAlert(message: "Selecciona País!!!", title: "Alert", controller: self)
-            }else{
+            if self.strType == "User"{
                 self.openSelectionScreen(strIsComingFrom: "3", strTitle: "Comunidad")
+            }else{
+                if self.strNationID == ""{
+                    objAlert.showAlert(message: "Selecciona País!!!", title: "Alert", controller: self)
+                }else{
+                    self.openSelectionScreen(strIsComingFrom: "3", strTitle: "Comunidad")
+                }
+                print("Community is ")
             }
-            print("Community is ")
+            
         case 2:
             if self.strCommunityID == ""{
                 objAlert.showAlert(message: "Selecciona Comunidad!!!", title: "Alert", controller: self)
@@ -393,13 +414,14 @@ extension SignUpViewController{
             "type":self.strType,
             "name":self.tfName.text!,
             "email":self.tfEmail.text!,
-            "nation_id":self.strNationID,
+            "nation_id":"1",//self.strNationID
             "community_id":self.strCommunityID,
             "province_id":self.strProvinceID,
             "password":self.tfPassword.text!,
             "municipality_id":self.strMunicipalID,
             "sector_id":self.strSectorID,
             "register_id":objAppShareData.strFirebaseToken,
+            "code":self.tfReferalCode.text!,
             "device_type":"IOS"]as [String:Any]
         
        print(dicrParam)
@@ -411,23 +433,24 @@ extension SignUpViewController{
             let message = (response["message"] as? String)
             
             if status == MessageConstant.k_StatusCode{
+                self.onBackPressed()
             
-                let user_details  = response["result"] as? [String:Any]
-
-                if let strOtp = user_details?["otp"]as? String{
-                    self.otp = strOtp
-                }else if let strOtp = user_details?["otp"]as? Int{
-                    self.otp = "\(strOtp)"
-                }
+//                let user_details  = response["result"] as? [String:Any]
+//
+//                if let strOtp = user_details?["otp"]as? String{
+//                    self.otp = strOtp
+//                }else if let strOtp = user_details?["otp"]as? Int{
+//                    self.otp = "\(strOtp)"
+//                }
+//
+//                if let strUserid = user_details?["user_id"]as? String{
+//                    self.userID = strUserid
+//                }else if let strUserid = user_details?["user_id"]as? Int{
+//                    self.userID = "\(strUserid)"
+//                }
                 
-                if let strUserid = user_details?["user_id"]as? String{
-                    self.userID = strUserid
-                }else if let strUserid = user_details?["user_id"]as? Int{
-                    self.userID = "\(strUserid)"
-                }
-                
-                self.lblVerifyDesc.text = "por favor verifica tu email. hemos enviado los detalles de la verificación en \(self.tfEmail.text!)."
-                self.vwVerify.isHidden = false
+               // self.lblVerifyDesc.text = "por favor verifica tu email. hemos enviado los detalles de la verificación en \(self.tfEmail.text!)."
+               // self.vwVerify.isHidden = false
 
             }else{
                 objWebServiceManager.hideIndicator()
@@ -439,4 +462,22 @@ extension SignUpViewController{
     }
     
     
+}
+
+
+extension SignUpViewController{
+    
+    func HideUserOptions(){
+        self.vwPais.isHidden = true
+        self.vwProvience.isHidden = true
+        self.vwMuncipal.isHidden = true
+        self.vwServiceSector.isHidden = true
+    }
+    
+    func ShowUserOptions(){
+        self.vwPais.isHidden = false
+        self.vwProvience.isHidden = false
+        self.vwMuncipal.isHidden = false
+        self.vwServiceSector.isHidden = false
+    }
 }

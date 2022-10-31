@@ -26,7 +26,10 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
     @IBOutlet var imgVwUser: UIImageView!
     @IBOutlet var lblSector: UILabel!
     @IBOutlet var vwSector: UIView!
-    
+    @IBOutlet var vwPais: UIView!
+    @IBOutlet var vwProvience: UIView!
+    @IBOutlet var vwMuncipal: UIView!
+    @IBOutlet var vwWeb: UIView!
     var isUpdatedDelegate:ProfileUpdateProtocol?
     
     var objUserDetail:userDetailModel?
@@ -47,6 +50,7 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
         self.imagePicker.delegate = self
         self.tfPwd.isSecureTextEntry = true
         self.txtVw.delegate = self
+        self.tfEmail.isUserInteractionEnabled = false
         self.setUserData()
         // Do any additional setup after loading the view.
     }
@@ -65,8 +69,10 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
         
         if self.strType == "Provider" || self.strType == "provider"{
             self.vwSector.isHidden = false
+            ShowUserOptions()
         }else{
             self.vwSector.isHidden = true
+            HideUserOptions()
         }
         
         self.tfName.text = userData.strUserName
@@ -112,21 +118,18 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
         switch sender.tag {
         case 0:
             self.openSelectionScreen(strIsComingFrom: "2", strTitle: "País")
-            print("Nation is ")
         case 1:
             if self.strNationID == ""{
                 objAlert.showAlert(message: "Selecciona País!!!", title: "Alert", controller: self)
             }else{
                 self.openSelectionScreen(strIsComingFrom: "3", strTitle: "Comunidad")
             }
-            print("Community is ")
         case 2:
             if self.strCommunityID == ""{
                 objAlert.showAlert(message: "Selecciona Comunidad!!!", title: "Alert", controller: self)
             }else{
                 self.openSelectionScreen(strIsComingFrom: "4", strTitle: "Provincia")
             }
-            print("Province is ")
         case 3:
             
             if self.strProvinceID == ""{
@@ -134,7 +137,6 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
             }else{
                 self.openSelectionScreen(strIsComingFrom: "5", strTitle: "Municipio/Ciudad")
             }
-            print("Muncipal City is ")
         case 4:
             if self.strProvinceID == ""{
                 objAlert.showAlert(message: "Selecciona Municipio!!!", title: "Alert", controller: self)
@@ -159,7 +161,13 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
             vc.isMultiple = "Yes"
         }
          vc.strTitle = strTitle
+        if self.strType == "User" || self.strType == "user"{
+            vc.strNationID = "1"
+
+        }else{
             vc.strNationID = self.strNationID
+
+        }
             vc.strCommunityID = self.strCommunityID
             vc.strProvinceID = self.strProvinceID
             vc.strMunicipalID = self.strMunicipalID
@@ -235,21 +243,25 @@ class EditProfileViewController: UIViewController, UINavigationControllerDelegat
         }else if (lblNation.text! == "País") {
             objAlert.showAlert(message: "Selecciona País!!!", title:MessageConstant.k_AlertTitle, controller: self)
         }
-        else if (lblCommunity.text! == "Comunidad") || self.lblCommunity.text == ""{
-            objAlert.showAlert(message: "Selecciona Comunidad!!!", title:MessageConstant.k_AlertTitle, controller: self)
-        }else if (lblProvision.text! == "Provincia") || self.lblProvision.text == ""{
-            objAlert.showAlert(message: "Selecciona Provincia!!!", title:MessageConstant.k_AlertTitle, controller: self)
-        }else if (lblMuncipal.text! == "Municipio/Ciudad") || self.lblMuncipal.text == ""{
-            objAlert.showAlert(message: "Selecciona Municipio!!!", title:MessageConstant.k_AlertTitle, controller: self)
-        }
-        else if self.strType == "Provider" || self.strType == "provider"{
-            if (lblSector.text! == "Sector") {
+        else if self.strType != "User"{
+            if (lblNation.text! == "País") {
+                objAlert.showAlert(message: "Selecciona País!!!", title:MessageConstant.k_AlertTitle, controller: self)
+            }else if (lblCommunity.text! == "Comunidad") {
+                objAlert.showAlert(message: "Selecciona Comunidad!!!", title:MessageConstant.k_AlertTitle, controller: self)
+            }else if (lblProvision.text! == "Provincia") {
+                objAlert.showAlert(message: "Selecciona Provincia!!!", title:MessageConstant.k_AlertTitle, controller: self)
+            }else if (lblMuncipal.text! == "Municipio/Ciudad") {
+                objAlert.showAlert(message: "Selecciona Municipio!!!", title:MessageConstant.k_AlertTitle, controller: self)
+            }else if  (lblSector.text! == "Sector"){
                 objAlert.showAlert(message: "Selección Sector Profesional", title:MessageConstant.k_AlertTitle, controller: self)
             }else{
                 self.callWebserviceForCompleteProfile()
             }
+        }
+        else if (lblCommunity.text! == "Comunidad") {
+            objAlert.showAlert(message: "Selecciona Comunidad!!!", title:MessageConstant.k_AlertTitle, controller: self)
         }else{
-                self.callWebserviceForCompleteProfile()
+            self.callWebserviceForCompleteProfile()
         }
     }
 }
@@ -377,7 +389,7 @@ extension EditProfileViewController{
             "name":self.tfName.text!,
             "email":self.tfEmail.text!,
             "password":self.tfPwd.text!,
-            "nation_id":self.strNationID,
+            "nation_id":"1",//self.strNationID
             "community_id":self.strCommunityID,
             "province_id":self.strProvinceID,
             "municipality_id":self.strMunicipalID,
@@ -415,4 +427,24 @@ extension EditProfileViewController{
     }
     
     
+}
+
+
+extension EditProfileViewController{
+    
+    func HideUserOptions(){
+        self.vwPais.isHidden = true
+        self.vwProvience.isHidden = true
+        self.vwMuncipal.isHidden = true
+        self.vwSector.isHidden = true
+        self.vwWeb.isHidden = true
+    }
+    
+    func ShowUserOptions(){
+        self.vwPais.isHidden = false
+        self.vwProvience.isHidden = false
+        self.vwMuncipal.isHidden = false
+        self.vwSector.isHidden = false
+        self.vwWeb.isHidden = false
+    }
 }

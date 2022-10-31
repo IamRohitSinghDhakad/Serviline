@@ -19,11 +19,6 @@ class OTPVerifyViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.tfOne.delegate = self
-        self.tfTwo.delegate = self
-        self.tfThree.delegate = self
-        self.tfFour.delegate = self
         // Do any additional setup after loading the view.
         self.setOTPWork()
     }

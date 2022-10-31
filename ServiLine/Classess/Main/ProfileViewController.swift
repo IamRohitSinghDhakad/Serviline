@@ -324,7 +324,12 @@ extension ProfileViewController{
                     self.lblRatingValue.text = "(\(obj.strUserRating))"
                     self.vwRating.rating = obj.strUserRating
                     self.lblHyperLink.text = obj.strWebsite
-                    self.lblTags.text = obj.strNation + "," + obj.strProvince + "," + obj.strMunicipality + "," + obj.strCommunity
+                    
+                    if type == "User" || type == "user"{
+                        self.lblTags.text = obj.strCommunity
+                    }else{
+                        self.lblTags.text = obj.strNation + "," + obj.strProvince + "," + obj.strMunicipality + "," + obj.strCommunity
+                    }
                     self.lblDescription.text = obj.strAboutMe
                     
                     self.call_GetUserImage(strUserID: strUserID)
