@@ -90,7 +90,7 @@ class SignUpViewController: UIViewController, UINavigationControllerDelegate {
                 in
                 print(dict)
                 if dict.count != 0{
-                    if dict["type"] as! String == "Usuario"{
+                    if dict["type"] as! String == "Particular"{
                         self.vwServiceSector.isHidden = true
                         self.strType = "User"
                         self.lblUserType.text = dict["type"] as? String
@@ -433,7 +433,17 @@ extension SignUpViewController{
             let message = (response["message"] as? String)
             
             if status == MessageConstant.k_StatusCode{
-                self.onBackPressed()
+                
+                guard let user_details  = response["result"] as? [String:Any] else{
+                    return
+                }
+              
+                
+                objAppShareData.SaveUpdateUserInfoFromAppshareData(userDetail: user_details)
+                objAppShareData.fetchUserInfoFromAppshareData()
+                self.makeRootController()
+                
+              //  self.onBackPressed()
             
 //                let user_details  = response["result"] as? [String:Any]
 //
@@ -466,6 +476,14 @@ extension SignUpViewController{
 
 
 extension SignUpViewController{
+    
+    func makeRootController(){
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let vc = (self.mainStoryboard.instantiateViewController(withIdentifier: "SideMenuController") as? SideMenuController)!
+        let navController = UINavigationController(rootViewController: vc)
+        navController.isNavigationBarHidden = true
+        appDelegate.window?.rootViewController = navController
+    }
     
     func HideUserOptions(){
         self.vwPais.isHidden = true

@@ -653,48 +653,7 @@ extension ChatDetailViewController{
         return input.rawValue
     }
     
-//    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-//
-//   //     if isComingFromRecording == true{
-//            // 1
-//            if let selectedVideo:URL = (info[UIImagePickerController.InfoKey.mediaURL] as? URL) {
-//                // Save video to the main photo album
-//               // let selectorToCall = #selector(self.videoSaved(_:didFinishSavingWithError:context:))
-//
-//                // 2
-//              //  UISaveVideoAtPathToSavedPhotosAlbum(selectedVideo.relativePath, self, selectorToCall, nil)
-//                // Save the video to the app directory
-////                let videoData = try? Data(contentsOf: selectedVideo)
-////                if videoData != nil{
-////                    self.videoData = videoData ?? Data()
-////                    self.assetURL = selectedVideo
-////                  //  self.callwebServicceApi()
-////                }
-//
-//
-//                    let duration = AVURLAsset(url: selectedVideo).duration.seconds
-//                        print(duration)
-//
-//                    // Do something with the URL
-//                    let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "EditImageVideoViewController") as? EditImageVideoViewController
-//                    vc?.type = .video
-//                    vc?.assetURL = selectedVideo
-//                    vc?.isComingFrom = "VidoBlog"
-//                    self.navigationController?.pushViewController(vc!, animated: true)
-//
-//
-//                //self.uploadVideoUrl(uploadUrl:] as! String)
-//                // print(self.videoUrl)
-//
-//            }
-//            // 3
-//            picker.dismiss(animated: true)
-//
-//
-//
-//
-//
-//    }
+
 }
 
 //MARK:- UItextViewHeightManage

@@ -260,19 +260,31 @@ extension HomeViewController{
                     print(user_details)
                     let obj = userDetailModel.init(dict: user_details)
                    
-                    if obj.strAllowFree == "0"{
-                        if obj.strIsPlanActive == "0"{
-                            self.vwMembershipPopUp.isHidden = false
-                        }else{
-                            self.vwMembershipPopUp.isHidden = true
+                    if obj.strStatus == "1"{
+                        if obj.strAllowFree == "0"{
+                            if obj.strIsPlanActive == "0"{
+                                self.vwMembershipPopUp.isHidden = false
+                            }else{
+                                self.vwMembershipPopUp.isHidden = true
+                            }
+                        }
+                    }else{
+                        
+                        objAlert.showAlertSingleButtonCallBack(alertBtn: "OK", title: "", message: "Su cuenta está desactivada indefinidamente.", controller: self) {
+                            objAppShareData.signOut()
                         }
                     }
-                    
                 }
                 
             }else{
                 objWebServiceManager.hideIndicator()
-                objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+                if let result  = response["result"] as? String {
+                    if result == "User not found"{
+                        objAppShareData.signOut()
+                    }
+                }else{
+                    objAlert.showAlert(message: message ?? "", title: "Alert", controller: self)
+                }
                 
             }
             

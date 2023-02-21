@@ -47,6 +47,11 @@
 		F9AAAA2327DBBB4F0035FFC7 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AAAA2227DBBB4F0035FFC7 /* SettingViewController.swift */; };
 		F9B0593B2826602500493BB9 /* MembershipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B0593A2826602500493BB9 /* MembershipViewController.swift */; };
 		F9B05E7D27FCAE0000355179 /* ChatDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B05E7C27FCAE0000355179 /* ChatDetailModel.swift */; };
+		F9B416B8294A2B72004F9929 /* PreguntasTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B416B7294A2B72004F9929 /* PreguntasTableViewCell.swift */; };
+		F9B416BA294A3044004F9929 /* PreguntasModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B416B9294A3044004F9929 /* PreguntasModel.swift */; };
+		F9C95DC9294D8BDA0079BBEA /* HistorialPreguntasViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C95DC8294D8BDA0079BBEA /* HistorialPreguntasViewController.swift */; };
+		F9C95DCB294D9B880079BBEA /* PreguntasChatListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C95DCA294D9B880079BBEA /* PreguntasChatListTableViewCell.swift */; };
+		F9C95DCD294DABE70079BBEA /* PreguntasTicketGenrateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C95DCC294DABE70079BBEA /* PreguntasTicketGenrateViewController.swift */; };
 		F9CD367D27DA1A1C00486920 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD367C27DA1A1C00486920 /* AppDelegate.swift */; };
 		F9CD368127DA1A1C00486920 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD368027DA1A1C00486920 /* ViewController.swift */; };
 		F9CD368427DA1A1C00486920 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9CD368227DA1A1C00486920 /* Main.storyboard */; };
@@ -92,6 +97,7 @@
 		F9E0F3FB28702AAE00AE33FC /* ActivityIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E0F3FA28702AAE00AE33FC /* ActivityIndicatorViewController.swift */; };
 		F9E76ECA281331410095484A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9E76EC9281331410095484A /* GoogleService-Info.plist */; };
 		F9E87872285B94F500D24941 /* OTPVerifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E87871285B94F500D24941 /* OTPVerifyViewController.swift */; };
+		F9E92CDB2948D8A400B906C4 /* PreguntasViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E92CDA2948D8A400B906C4 /* PreguntasViewController.swift */; };
 		F9F3F8602805D873004B0C10 /* DeleteProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F3F85F2805D873004B0C10 /* DeleteProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -139,6 +145,11 @@
 		F9AAAA2227DBBB4F0035FFC7 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		F9B0593A2826602500493BB9 /* MembershipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembershipViewController.swift; sourceTree = "<group>"; };
 		F9B05E7C27FCAE0000355179 /* ChatDetailModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatDetailModel.swift; sourceTree = "<group>"; };
+		F9B416B7294A2B72004F9929 /* PreguntasTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreguntasTableViewCell.swift; sourceTree = "<group>"; };
+		F9B416B9294A3044004F9929 /* PreguntasModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreguntasModel.swift; sourceTree = "<group>"; };
+		F9C95DC8294D8BDA0079BBEA /* HistorialPreguntasViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorialPreguntasViewController.swift; sourceTree = "<group>"; };
+		F9C95DCA294D9B880079BBEA /* PreguntasChatListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreguntasChatListTableViewCell.swift; sourceTree = "<group>"; };
+		F9C95DCC294DABE70079BBEA /* PreguntasTicketGenrateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreguntasTicketGenrateViewController.swift; sourceTree = "<group>"; };
 		F9CD367927DA1A1C00486920 /* ServiLine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ServiLine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9CD367C27DA1A1C00486920 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F9CD368027DA1A1C00486920 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -190,6 +201,7 @@
 		F9E0F3FA28702AAE00AE33FC /* ActivityIndicatorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorViewController.swift; sourceTree = "<group>"; };
 		F9E76EC9281331410095484A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F9E87871285B94F500D24941 /* OTPVerifyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPVerifyViewController.swift; sourceTree = "<group>"; };
+		F9E92CDA2948D8A400B906C4 /* PreguntasViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreguntasViewController.swift; sourceTree = "<group>"; };
 		F9F3F85F2805D873004B0C10 /* DeleteProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteProfileViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -256,6 +268,8 @@
 				F9A276BE27DBE8DD00D9DCAB /* MessageTableViewCell.swift */,
 				F982232927DCF89D00043B02 /* SettingTableViewCell.swift */,
 				F993057527F0D8EB00699C26 /* FavoriteTableViewCell.swift */,
+				F9B416B7294A2B72004F9929 /* PreguntasTableViewCell.swift */,
+				F9C95DCA294D9B880079BBEA /* PreguntasChatListTableViewCell.swift */,
 			);
 			path = CellClasses;
 			sourceTree = "<group>";
@@ -318,6 +332,7 @@
 				F900CB5727EF7FE100E3A8BA /* UserImageModel.swift */,
 				F993057127F0D16A00699C26 /* ConversationListModel.swift */,
 				F993057327F0D71900699C26 /* FavoriteListModel.swift */,
+				F9B416B9294A3044004F9929 /* PreguntasModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -492,6 +507,9 @@
 				F94DA72B2800A0C600480E92 /* EditImageVideoViewController.swift */,
 				F9F3F85F2805D873004B0C10 /* DeleteProfileViewController.swift */,
 				F9B0593A2826602500493BB9 /* MembershipViewController.swift */,
+				F9E92CDA2948D8A400B906C4 /* PreguntasViewController.swift */,
+				F9C95DC8294D8BDA0079BBEA /* HistorialPreguntasViewController.swift */,
+				F9C95DCC294DABE70079BBEA /* PreguntasTicketGenrateViewController.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -657,6 +675,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9E92CDB2948D8A400B906C4 /* PreguntasViewController.swift in Sources */,
 				F9B0593B2826602500493BB9 /* MembershipViewController.swift in Sources */,
 				F94DC82327DF4F59003D30B0 /* WelcomeViewController.swift in Sources */,
 				F9CD36EC27DA30A900486920 /* LoginViewController.swift in Sources */,
@@ -670,14 +689,17 @@
 				F97A47F227DE672C00B88927 /* SelectLocationViewController.swift in Sources */,
 				F9CD36C827DA1DB400486920 /* UIViewController+Container.swift in Sources */,
 				F9AAAA1B27DBBB000035FFC7 /* NotificationViewController.swift in Sources */,
+				F9C95DC9294D8BDA0079BBEA /* HistorialPreguntasViewController.swift in Sources */,
 				F9E0F3F82870296300AE33FC /* ObjectIAPProducts.swift in Sources */,
 				F9CD36D427DA1DB400486920 /* SearchHistoryManager.swift in Sources */,
+				F9B416B8294A2B72004F9929 /* PreguntasTableViewCell.swift in Sources */,
 				F9CD36D127DA1DB400486920 /* LocationSearchResultsViewController.swift in Sources */,
 				F9CD36BE27DA1DB400486920 /* AppSharedData.swift in Sources */,
 				F97A47F627DE6F6C00B88927 /* EditProfileViewController.swift in Sources */,
 				F9CD36C127DA1DB400486920 /* WebServiceManager.swift in Sources */,
 				F9AAAA1F27DBBB2E0035FFC7 /* MessageSettingViewController.swift in Sources */,
 				F982232A27DCF89D00043B02 /* SettingTableViewCell.swift in Sources */,
+				F9B416BA294A3044004F9929 /* PreguntasModel.swift in Sources */,
 				F9CD36C327DA1DB400486920 /* UIViewController+SideMenu.swift in Sources */,
 				F9AAAA2127DBBB3F0035FFC7 /* ReportViewController.swift in Sources */,
 				F9AAAA1927DBBAE80035FFC7 /* FavoriteViewController.swift in Sources */,
@@ -690,12 +712,14 @@
 				F9CD368127DA1A1C00486920 /* ViewController.swift in Sources */,
 				F94DA72C2800A0C700480E92 /* EditImageVideoViewController.swift in Sources */,
 				F9CD36E727DA222900486920 /* AppSideMenuViewController.swift in Sources */,
+				F9C95DCD294DABE70079BBEA /* PreguntasTicketGenrateViewController.swift in Sources */,
 				F9F3F8602805D873004B0C10 /* DeleteProfileViewController.swift in Sources */,
 				F9CD36D227DA1DB400486920 /* Location.swift in Sources */,
 				F9CD36E827DA222900486920 /* AppSideMenuTableViewCell.swift in Sources */,
 				F9AAAA2327DBBB4F0035FFC7 /* SettingViewController.swift in Sources */,
 				F9CD36CC27DA1DB400486920 /* BasicTransitionAnimator.swift in Sources */,
 				F993057227F0D16A00699C26 /* ConversationListModel.swift in Sources */,
+				F9C95DCB294D9B880079BBEA /* PreguntasChatListTableViewCell.swift in Sources */,
 				F9CD36D727DA1DB400486920 /* ValidationManager.swift in Sources */,
 				F9AAAA1D27DBBB1D0035FFC7 /* BlockedViewController.swift in Sources */,
 				F900CB5827EF7FE100E3A8BA /* UserImageModel.swift in Sources */,
@@ -891,7 +915,7 @@
 				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ServiLine/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Servi Line";
+				INFOPLIST_KEY_CFBundleDisplayName = "Servi Line Profesionales";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Our app does not request this permission or utilize this functionality.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Paing would like to make data available to nearby bluetooth devices even when you're not using the app.";
@@ -914,7 +938,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.10;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ios.ServiLine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -939,7 +963,7 @@
 				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ServiLine/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Servi Line";
+				INFOPLIST_KEY_CFBundleDisplayName = "Servi Line Profesionales";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Our app does not request this permission or utilize this functionality.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Paing would like to make data available to nearby bluetooth devices even when you're not using the app.";
@@ -962,7 +986,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.10;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ios.ServiLine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

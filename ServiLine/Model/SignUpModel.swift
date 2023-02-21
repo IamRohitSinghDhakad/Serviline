@@ -98,6 +98,12 @@ class userDetailModel: NSObject {
             self.strUserRating = rating
         }
         
+        if let status = dict["status"] as? String{
+            self.strStatus = status
+        }else if let status = dict["status"] as? Int{
+            self.strStatus = "\(status)"
+        }
+        
         if let username = dict["name"] as? String{
             self.strUserName = username.decodeEmoji
         }
@@ -338,50 +344,3 @@ class userDetailModel: NSObject {
         
     }
 }
-
-/*
- address = "";
- "allow_free" = 0;
- bio = "Hope you will choose me. anda ki roti ki sabji recipe in hindi with lyrics of a girl name in hindi full episode in english with song";
- "block_status" = 0;
- code = "";
- "community_id" = 1;
- "community_name" = "<null>";
- deletedRemark = "";
- deletedTime = "";
- email = "elvish2412@gmail.com";
- "email_verified" = 1;
- entrydt = "2022-04-01 07:21:29";
- expiry = "0000-00-00 00:00:00";
- "favorite_status" = 0;
- lat = "";
- lng = "";
- "membership_id" = 1;
- mobile = "";
- "municipality_id" = 1;
- "municipality_name" = "municipality 1";
- name = "Akankhsa Sharma";
- "nation_id" = 1;
- "nation_name" = "Espa\U00f1a";
- "notification_status" = 1;
- "other_block_status" = 0;
- password = 12345;
- "plan_id" = 0;
- "province_id" = 1;
- "province_name" = "Province 1";
- rating = "4.3";
- "rating_status" = 0;
- "register_id" = "eMDYvgwuRqKXVOSHTzwc9b:APA91bEx6PttnmIkJRC8Vldo0G8FzqjAQhfj1gN478SSzon4RFa2bct7zbBidEqX9b6PLGqUJz9tfbdbldDY2EXyga8wEuyrQKgRPXouqweCx-cL2qYPyt3OFx8Q2uQ4YRFcocT-yqQP";
- "report_status" = 0;
- "sector_id" = 0;
- "sector_name" = "<null>";
- selectedPlan =     {
- };
- "social_id" = "";
- "social_type" = "";
- status = 1;
- type = user;
- "user_id" = 4;
- "user_image" = "https://ambitious.in.net/Arun/serviline/uploads/user/3548IMG_1645701651993.png";
- website = "www.ambitious.in.net";
- */

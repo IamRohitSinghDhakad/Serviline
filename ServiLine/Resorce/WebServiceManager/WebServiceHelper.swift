@@ -66,6 +66,10 @@ struct WsUrl{
     static let url_Logout = BASE_URL + "logout?"
     static let url_notificationSend = BASE_URL + "send_notification?"
     static let url_GetPlan = BASE_URL + "get_plan?"
+    static let url_GetTickets = BASE_URL + "get_tickets?"
+    static let url_GetTicketsMessages = BASE_URL + "get_ticket_message?"
+    static let url_CreateTicketRequest = BASE_URL + "generate_ticket?"
+    static let url_InsertTicketMsg = BASE_URL + "insert_ticket_message?"
     static let url_CompleteMembership = "https://servi-line.info/index.php/api/update_plan?user_id="
 
 }
@@ -151,11 +155,7 @@ struct WsParam {
 
 
 //Api check for params
-
 struct WsParamsType {
-
     static let PathVariable = "Path Variable"
-
     static let QueryParams = "Query Params"
-
 }

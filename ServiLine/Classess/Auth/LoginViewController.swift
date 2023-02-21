@@ -83,8 +83,7 @@ extension LoginViewController{
         print(dicrParam)
         
         objWebServiceManager.requestPost(strURL: WsUrl.url_Login, queryParams: [:], params: dicrParam, strCustomValidation: "", showIndicator: false) { response in
-        
-     //   objWebServiceManager.requestGet(strURL: WsUrl.url_Login, params: dicrParam, queryParams: [:], strCustomValidation: "") { (response) in
+  
             objWebServiceManager.hideIndicator()
             
             let status = (response["status"] as? Int)
@@ -93,18 +92,22 @@ extension LoginViewController{
             if status == MessageConstant.k_StatusCode{
                 
                 if let user_details  = response["result"] as? [String:Any] {
-                    let email = user_details["email"]as! String
-                    if user_details["email_verified"]as! String == "0"{
-                        self.vwEmailVerify.isHidden = false
-                        self.lblVerifyDesc.text = "por favor verifica tu email. hemos enviado los detalles de la verificación en \(email)."
-                    }else{
-                        self.vwEmailVerify.isHidden = true
-                        objAppShareData.SaveUpdateUserInfoFromAppshareData(userDetail: user_details)
-                        objAppShareData.fetchUserInfoFromAppshareData()
-                        self.makeRootController()
-                    }
                     
-                   
+                    if user_details["status"]as! String == "1"{
+                        
+                        let email = user_details["email"]as! String
+                        if user_details["email_verified"]as! String == "0"{
+                            self.vwEmailVerify.isHidden = false
+                            self.lblVerifyDesc.text = "por favor verifica tu email. hemos enviado los detalles de la verificación en \(email)."
+                        }else{
+                            self.vwEmailVerify.isHidden = true
+                            objAppShareData.SaveUpdateUserInfoFromAppshareData(userDetail: user_details)
+                            objAppShareData.fetchUserInfoFromAppshareData()
+                            self.makeRootController()
+                        }
+                    }else{
+                        objAlert.showAlert(message: "Su cuenta está desactivada indefinidamente.", title: "", controller: self)
+                    }
                 }
                 else {
                     objAlert.showAlert(message: "Something went wrong!", title: "", controller: self)

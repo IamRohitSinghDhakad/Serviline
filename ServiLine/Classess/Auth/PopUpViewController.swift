@@ -155,7 +155,7 @@ class PopUpViewController: UIViewController {
         switch sender.tag {
         case 0:
             print("user")
-            self.strType = "Usuario"
+            self.strType = "Particular"
             self.imgVwRadio1.image = UIImage.init(named: "radio_button_selected")
         default:
             print("profession")

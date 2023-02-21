@@ -27,6 +27,7 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate,Pr
     @IBOutlet var cvHgtConstant: NSLayoutConstraint!
     @IBOutlet var vwRating: FloatRatingView!
     @IBOutlet var lblRatingValue: UILabel!
+    @IBOutlet weak var vwNoImages: UIView!
     
     //Variables
     var arrayPhotoCollection: [UserImageModel] = []
@@ -41,7 +42,7 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate,Pr
         super.viewDidLoad()
 
         self.imagePicker.delegate = self
-       
+        self.vwNoImages.isHidden = true
         self.cvImages.delegate = self
         self.cvImages.dataSource = self
         let strUserID = objAppShareData.UserDetail.strUserId
@@ -375,13 +376,30 @@ extension ProfileViewController{
                     }
                    
                     self.cvImages.reloadData()
+                    if self.arrayPhotoCollection.count != 0{
+                        self.vwNoImages.isHidden = true
+                    }else{
+                        self.vwNoImages.isHidden = false
+                    }
                     self.setupLongGestureRecognizerOnCollection()
                     let height = self.cvImages.collectionViewLayout.collectionViewContentSize.height
                     self.cvHgtConstant.constant = CGFloat(height)
                     self.view.setNeedsLayout()
+                }else{
+                   
                 }
                 
             }else{
+                if let arrData  = response["result"] as? String {
+                    if arrData == "Any Image Not Found"{
+                        self.arrayPhotoCollection.removeAll()
+                        self.cvImages.reloadData()
+                        let height = self.cvImages.collectionViewLayout.collectionViewContentSize.height
+                        self.cvHgtConstant.constant = CGFloat(height)
+                        self.view.setNeedsLayout()
+                        self.vwNoImages.isHidden = false
+                    }
+                }
                 objWebServiceManager.hideIndicator()
             }
             
@@ -453,6 +471,7 @@ extension ProfileViewController{
         let parameter = ["user_image_id" : id] as [String:Any]
         
         objWebServiceManager.requestGet(strURL: WsUrl.url_DeleteUserImage, params: parameter, queryParams: [:], strCustomValidation: "") { (response) in
+            print(response)
             objWebServiceManager.hideIndicator()
             let status = (response["status"] as? Int)
             let message = (response["message"] as? String)

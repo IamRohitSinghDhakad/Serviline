@@ -33,6 +33,7 @@ class AppSideMenuViewController: UIViewController {
     
     var selectedIndexpath = 0
     var strBadgeCount : Int?
+    var strBadgeCountForTicket : Int?
     
     private let menus: [SideMenuOptions] = [SideMenuOptions(menuName: "Inicio", menuImageName: "home", menuSelectedImageName: "home_selected"),
                                             SideMenuOptions(menuName: "Perfil", menuImageName: "profile", menuSelectedImageName: "user_selected"),
@@ -43,6 +44,7 @@ class AppSideMenuViewController: UIViewController {
                                             SideMenuOptions(menuName: "Ajuste Mensajes", menuImageName: "setting_msg", menuSelectedImageName: "setting_selected"),
                                             SideMenuOptions(menuName: "Denunciados", menuImageName: "report", menuSelectedImageName: "blog_selected"),
                                             SideMenuOptions(menuName: "Info", menuImageName: "adjust", menuSelectedImageName: "top2"),
+                                            SideMenuOptions(menuName: "Preguntas", menuImageName: "support_ticket", menuSelectedImageName: "top2"),
                                             SideMenuOptions(menuName: "Cerrar sesión", menuImageName: "logout", menuSelectedImageName: "logout_selected")]
     
     
@@ -67,8 +69,11 @@ class AppSideMenuViewController: UIViewController {
         if let badgeCount = UserDefaults.standard.value(forKey: "badge")as? Int{
             self.strBadgeCount = badgeCount
         }
-        print("badge count update\(self.strBadgeCount)")
         
+        if let badgeCountForTicket = UserDefaults.standard.value(forKey: "badgeTicket")as? Int{
+            self.strBadgeCountForTicket = badgeCountForTicket
+        }
+                
         let profilePic = objAppShareData.UserDetail.strProfilePicture
         if profilePic != "" {
             let url = URL(string: profilePic)
@@ -78,6 +83,7 @@ class AppSideMenuViewController: UIViewController {
         self.lblName.text = objAppShareData.UserDetail.strUserName
         
         self.tableView.updateRow(row: 4)
+        self.tableView.updateRow(row: 9)
         
 //        if let badgeCount = UserDefaults.standard.value(forKey: "badge")as? Int{
 //            
@@ -131,10 +137,12 @@ class AppSideMenuViewController: UIViewController {
         sideMenuController?.cache(viewControllerGenerator: {
             self.storyboard?.instantiateViewController(withIdentifier: "ReportNavigation")
         }, with: "7")
-        
         sideMenuController?.cache(viewControllerGenerator: {
             self.storyboard?.instantiateViewController(withIdentifier: "SettingNavigation")
         }, with: "8")
+        sideMenuController?.cache(viewControllerGenerator: {
+            self.storyboard?.instantiateViewController(withIdentifier: "PreguntasNavigation")
+        }, with: "9")
         
     }
     
@@ -198,22 +206,61 @@ extension AppSideMenuViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AppSideMenuTableViewCell", for: indexPath) as! AppSideMenuTableViewCell
         
+        cell.lblBadgeCount.isHidden = true
+        
+        switch indexPath.row {
+        case 4:
+            if self.strBadgeCount != 0 {
+                if self.strBadgeCount == nil{
+                    cell.lblBadgeCount.isHidden = true
+                }else{
+                    cell.lblBadgeCount.isHidden = false
+                    cell.lblBadgeCount.text = "\(self.strBadgeCount ?? 1)"
+                }
+            }else{
+                cell.lblBadgeCount.isHidden = true
+            }
+        case 9:
+            if self.strBadgeCountForTicket != 0 {
+                if self.strBadgeCountForTicket == nil{
+                    cell.lblBadgeCount.isHidden = true
+                }else{
+                    cell.lblBadgeCount.isHidden = false
+                    cell.lblBadgeCount.text = "\(self.strBadgeCountForTicket ?? 1)"
+                }
+            }else{
+                cell.lblBadgeCount.isHidden = true
+            }
+        default:
+            break
+        }
+       /*
         if indexPath.row == 4{
             if self.strBadgeCount != 0 {
                 if self.strBadgeCount == nil{
                     cell.lblBadgeCount.isHidden = true
                 }else{
-                cell.lblBadgeCount.isHidden = false
+                    cell.lblBadgeCount.isHidden = false
                     cell.lblBadgeCount.text = "\(self.strBadgeCount ?? 1)"
                 }
-                   
-                }else{
-                    cell.lblBadgeCount.isHidden = true
-                }
-        }else{
-            cell.lblBadgeCount.isHidden = true
+            }else{
+                cell.lblBadgeCount.isHidden = true
+            }
         }
         
+        if indexPath.row == 9{
+            if self.strBadgeCountForTicket != 0 {
+                if self.strBadgeCountForTicket == nil{
+                    cell.lblBadgeCount.isHidden = true
+                }else{
+                    cell.lblBadgeCount.isHidden = false
+                    cell.lblBadgeCount.text = "\(self.strBadgeCountForTicket ?? 1)"
+                }
+            }else{
+                cell.lblBadgeCount.isHidden = true
+            }
+        }
+        */
         cell.menuImage.image = UIImage(named: menus[indexPath.row].menuImageName)
         cell.menuName.text = menus[indexPath.row].menuName
         return cell
@@ -226,7 +273,7 @@ extension AppSideMenuViewController: UITableViewDelegate, UITableViewDataSource 
         
         self.selectedIndexpath = row
         
-        if row == 9 {
+        if row == 10 {
             sideMenuController?.hideMenu()
             
             objAlert.showAlertCallBack(alertLeftBtn: "SI", alertRightBtn: "NO", title: "Cerrar sesión?", message: "De verdad quieres Cerrar sesión?", controller: self) {

@@ -169,18 +169,31 @@ extension AppDelegate : MessagingDelegate{
         
         if let userInfo = notification.request.content.userInfo as? [String : Any]{
         print(userInfo)
-
-            //Update BadgeCount
-            if let badgeCount = UserDefaults.standard.value(forKey: "badge")as? Int{
-                let newCount  = badgeCount + 1
-                UserDefaults.standard.setValue(newCount, forKey: "badge")
+            
+            guard let  dictAPS = userInfo["aps"] as? [String:Any]else {return}
+            guard let dictAlert = dictAPS["alert"] as? [String:Any]else {return}
+            guard let strTitle = dictAlert["title"] as? String else{return}
+            
+            if strTitle == "Serviline respondio a su ticket."{
+                if let badgeCount = UserDefaults.standard.value(forKey: "badgeTicket")as? Int{
+                    let newCount  = badgeCount + 1
+                    UserDefaults.standard.setValue(newCount, forKey: "badgeTicket")
+                }else{
+                    UserDefaults.standard.setValue(1, forKey: "badgeTicket")
+                }
             }else{
-                UserDefaults.standard.setValue(1, forKey: "badge")
+                //Update BadgeCount
+                if let badgeCount = UserDefaults.standard.value(forKey: "badge")as? Int{
+                    let newCount  = badgeCount + 1
+                    UserDefaults.standard.setValue(newCount, forKey: "badge")
+                }else{
+                    UserDefaults.standard.setValue(1, forKey: "badge")
+                }
             }
             
+            //objAppShareData.notificationDict = userInfo
+            // self.navWithNotification(type: notificationType, bookingID: bookingID)
             
-         //   objAppShareData.notificationDict = userInfo
-//            self.navWithNotification(type: notificationType, bookingID: bookingID)
         }
         var notiStatus = Int()
         var notiSoundStatus = Int()
@@ -204,10 +217,35 @@ extension AppDelegate : MessagingDelegate{
         }
     }
     
-    
-    
     func navWithNotification(type:String,bookingID:String){
 
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        if let userInfo = userInfo as? [String : Any]{
+        print(userInfo)
+            
+            guard let  dictAPS = userInfo["aps"] as? [String:Any]else {return}
+            guard let dictAlert = dictAPS["alert"] as? [String:Any]else {return}
+            guard let strTitle = dictAlert["title"] as? String else{return}
+            
+            if strTitle == "Serviline respondio a su ticket."{
+                if let badgeCount = UserDefaults.standard.value(forKey: "badgeTicket")as? Int{
+                    let newCount  = badgeCount + 1
+                    UserDefaults.standard.setValue(newCount, forKey: "badgeTicket")
+                }else{
+                    UserDefaults.standard.setValue(1, forKey: "badgeTicket")
+                }
+            }else{
+                //Update BadgeCount
+                if let badgeCount = UserDefaults.standard.value(forKey: "badge")as? Int{
+                    let newCount  = badgeCount + 1
+                    UserDefaults.standard.setValue(newCount, forKey: "badge")
+                }else{
+                    UserDefaults.standard.setValue(1, forKey: "badge")
+                }
+            }
+        }
     }
 
     //TODO: called When you tap on the notification in background
